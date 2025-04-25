@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/IndexUsuarioAdmin';
 import ProtectedRoute from './utils/ProyectedRoute';
+
 
 export default function App() {
   return (
@@ -11,7 +12,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route 
-          path="/dashboard" 
+          path="/indexUsuarioAdmin" 
           element={
             <ProtectedRoute>
               <Dashboard />

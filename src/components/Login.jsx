@@ -15,7 +15,7 @@ export default function Login() {
       const endpoint = rol === 'admin' ? '/auth/loginAdmin' : '/auth/loginUser';
       const { data } = await axios.post(endpoint, { correo, pass });
       localStorage.setItem('token', data.token);
-      navigate('/dashboard');
+      navigate('/indexUsuarioAdmin');
     } catch {
       setMensaje('Credenciales incorrectas');
     }
