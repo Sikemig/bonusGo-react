@@ -1,0 +1,13 @@
+
+<svg width="500" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style type="text/css">
+      @import url('https://fonts.googleapis.com/css2?family=Georgia');
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="#2e2215"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        font-family="Georgia, serif" font-size="64" fill="gold" font-weight="bold">
+    BonusGo
+  </text>
+</svg>
