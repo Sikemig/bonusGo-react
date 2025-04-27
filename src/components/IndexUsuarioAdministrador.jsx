@@ -96,7 +96,9 @@ export default function IndexUsuarioAdministrador() {
                             </form>
 
                             {/* Saludo y botón de perfil */}
+                            <span class="saludo">Hola, {usuario}</span>
                             <div className="d-flex flex-column align-items-center justify-content-center">
+                            
                                 <button className="icon-btn" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
                                 <div className="text-white">Perfil</div>
                             </div>

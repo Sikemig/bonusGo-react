@@ -87,6 +87,7 @@ export default function IndexUsuario() {
                                 <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
                             </form>
                             
+                            <span class="saludo">Hola, {usuario}</span>
                             <div className="d-flex flex-column align-items-center justify-content-center">
                                 <button className="icon-btn" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
                                 <div className="text-white">Perfil</div>
