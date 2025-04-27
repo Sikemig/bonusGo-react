@@ -50,8 +50,7 @@ export default function ModoAdministrador() {
     };
 
     const handleGestionObjetivos = () => {
-        // Aquí en el futuro navegaremos a gestionar objetivos
-        // Ejemplo: navigate('/modoAdministradorObjetivos');
+        navigate('/modoAdministradorObjetivos')
     };
 
     const handleGestionProductos = () => {
