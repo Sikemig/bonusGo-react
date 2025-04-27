@@ -24,17 +24,17 @@ export default function IndexUsuario() {
                 Authorization: `Bearer ${token}`
             }
         })
-        .then(response => {
-            const user = response.data;
-            console.log("Datos recibidos:", user);
-            setUsuario(user.nombre);
-            setMonedas(user.moneda);
-        })
-        .catch(error => {
-            console.error('Error al obtener los datos del usuario:', error);
-            setUsuario('Usuario X');
-            setMonedas(0);
-        });
+            .then(response => {
+                const user = response.data;
+                console.log("Datos recibidos:", user);
+                setUsuario(user.nombre);
+                setMonedas(user.moneda);
+            })
+            .catch(error => {
+                console.error('Error al obtener los datos del usuario:', error);
+                setUsuario('Usuario X');
+                setMonedas(0);
+            });
 
         document.querySelectorAll('.section-appear').forEach((section, index) => {
             setTimeout(() => {
@@ -43,8 +43,17 @@ export default function IndexUsuario() {
         });
     }, []);
 
+
     const irPerfil = () => {
         navigate('/perfil');
+    };
+
+    const handleConsultarObjetivos = () => {
+        navigate('/objetivos')
+    };
+
+    const handleConsultarProductos = () => {
+        navigate('/productos')
     };
 
     return (
@@ -77,10 +86,10 @@ export default function IndexUsuario() {
                                 <input className="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar" />
                                 <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
                             </form>
-
-                            <div className="d-flex ms-auto align-items-center">
-                                <span className="saludo">Hola, {usuario}</span>
-                                <button className="icon-btn ms-3" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
+                            
+                            <div className="d-flex flex-column align-items-center justify-content-center">
+                                <button className="icon-btn" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
+                                <div className="text-white">Perfil</div>
                             </div>
                         </div>
                     </div>
@@ -97,6 +106,7 @@ export default function IndexUsuario() {
                             {/* Sección de objetivos */}
                             <div className="col-12 col-md-6">
                                 <div className="info-section section-appear">
+                                    <button className="btn-info" onClick={handleConsultarObjetivos}></button>
                                     <h3>🎯 CONSULTAR OBJETIVOS</h3>
                                     <p>¡Échale un vistazo a los objetivos disponibles en tu empresa y reclama tus PigCoins!</p>
                                 </div>
@@ -105,6 +115,7 @@ export default function IndexUsuario() {
                             {/* Sección de productos */}
                             <div className="col-12 col-md-6">
                                 <div className="info-section section-appear">
+                                    <button className="btn-info" onClick={handleConsultarProductos}></button>
                                     <h3>📦 CONSULTAR PRODUCTOS</h3>
                                     <p>¡Empieza a canjear todos esos PigCoins que has ido almacenando al cumplir objetivos!</p>
                                 </div>

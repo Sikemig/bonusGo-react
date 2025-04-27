@@ -22,16 +22,16 @@ export default function IndexUsuarioAdministrador() {
         axios.get(`http://localhost:8080/usuario/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
-        .then(response => {
-            const user = response.data;
-            setUsuario(user.nombre);
-            setMonedas(user.moneda);
-        })
-        .catch(error => {
-            console.error('Error al obtener los datos del usuario:', error);
-            setUsuario('Usuario X');
-            setMonedas(0);
-        });
+            .then(response => {
+                const user = response.data;
+                setUsuario(user.nombre);
+                setMonedas(user.moneda);
+            })
+            .catch(error => {
+                console.error('Error al obtener los datos del usuario:', error);
+                setUsuario('Usuario X');
+                setMonedas(0);
+            });
 
         document.querySelectorAll('.section-appear').forEach((section, index) => {
             setTimeout(() => {
@@ -40,8 +40,20 @@ export default function IndexUsuarioAdministrador() {
         });
     }, []);
 
+    const irModoAdministrador = () => {
+        navigate('/modoAdministrador');
+    };
+
     const irPerfil = () => {
         navigate('/perfil');
+    };
+
+    const handleConsultarObjetivos = () => {
+        navigate('/objetivos')
+    };
+
+    const handleConsultarProductos = () => {
+        navigate('/productos')
     };
 
     return (
@@ -72,7 +84,9 @@ export default function IndexUsuarioAdministrador() {
                                 <a className="nav-link" href="/historico_transacciones" target="_blank">HISTÓRICO</a>
                                 <a className="nav-link" href="/productos" target="_blank">PRODUCTOS</a>
                                 <a className="nav-link" href="/carrito" target="_blank">CARRITO</a>
-                                <a className="nav-link admin" href="/modo_administrador" target="_blank">MODO ADMINISTRADOR</a>
+                                <button className="nav-link admin" onClick={irModoAdministrador}>
+                                    MODO ADMINISTRADOR
+                                </button>
                             </div>
 
                             {/* Barra de búsqueda */}
@@ -82,9 +96,9 @@ export default function IndexUsuarioAdministrador() {
                             </form>
 
                             {/* Saludo y botón de perfil */}
-                            <div className="d-flex ms-auto align-items-center">
-                                <span className="saludo">Hola, {usuario}</span>
-                                <button className="icon-btn ms-3" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
+                            <div className="d-flex flex-column align-items-center justify-content-center">
+                                <button className="icon-btn" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
+                                <div className="text-white">Perfil</div>
                             </div>
                         </div>
                     </div>
@@ -98,17 +112,19 @@ export default function IndexUsuarioAdministrador() {
 
                     <div className="container my-4">
                         <div className="row g-4">
-                            {/* Sección objetivos */}
+                            {/* Sección de objetivos */}
                             <div className="col-12 col-md-6">
                                 <div className="info-section section-appear">
+                                    <button className="btn-info" onClick={handleConsultarObjetivos}></button>
                                     <h3>🎯 CONSULTAR OBJETIVOS</h3>
                                     <p>¡Échale un vistazo a los objetivos disponibles en tu empresa y reclama tus PigCoins!</p>
                                 </div>
                             </div>
 
-                            {/* Sección productos */}
+                            {/* Sección de productos */}
                             <div className="col-12 col-md-6">
                                 <div className="info-section section-appear">
+                                    <button className="btn-info" onClick={handleConsultarProductos}></button>
                                     <h3>📦 CONSULTAR PRODUCTOS</h3>
                                     <p>¡Empieza a canjear todos esos PigCoins que has ido almacenando al cumplir objetivos!</p>
                                 </div>
