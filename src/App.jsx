@@ -4,7 +4,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import IndexUsuario from './components/IndexUsuario';
 import IndexUsuarioAdministrador from './components/IndexUsuarioAdministrador';
-//import ModoAdministrador from './components/ModoAdministrador'
+import ModoAdministrador from './components/ModoAdministrador'
 import ProtectedRoute from './utils/ProtectedRoute';
 import ProtectedAdminRoute from './utils/ProtectedAdminRoute';
 
@@ -37,6 +37,14 @@ export default function App() {
           }
         />
 
+        <Route
+          path="/modoAdministrador"
+          element={
+            <ProtectedAdminRoute>
+              <ModoAdministrador />
+            </ProtectedAdminRoute>
+          }
+        />
 
         <Route path="*" element={<Index />} />
       </Routes>

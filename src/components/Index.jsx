@@ -87,13 +87,13 @@ export default function Index() {
                 <div className="row g-4">
                     <div className="col-12 col-md-6">
                         <div className="info-section section-appear">
-                            <h4>🎯 Info Objetivos</h4>
+                            <h3>🎯 INFO OBJETIVOS</h3>
                             <p>¡Todo lo que necesitas saber para conseguir tus recompensas!</p>
                         </div>
                     </div>
                     <div className="col-12 col-md-6">
                         <div className="info-section section-appear">
-                            <h4>📦 Info Productos</h4>
+                            <h3>📦 INFO PRODUCTOS</h3>
                             <p>Explora nuestros productos y consulta nuestros objetivos</p>
                         </div>
                     </div>
