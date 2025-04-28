@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // necesario para realizar las consultas a la API
+  assetsInclude: ['**/*.JPG'],
   server: {
     proxy: {
       '/auth': 'http://localhost:8080/',

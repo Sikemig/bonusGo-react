@@ -8,8 +8,10 @@ import ModoAdministrador from './components/ModoAdministrador';
 import ModoAdministradorObjetivos from './components/ModoAdministradorObjetivos';
 import ProtectedRoute from './utils/ProtectedRoute';
 import ProtectedAdminRoute from './utils/ProtectedAdminRoute';
-
-
+import ModoAdministradorProductos from './components/ModoAdministradorProductos';
+import ModoUsuarioProductos from './components/ModoUsuarioProductos';
+import ModoUsuarioObjetivos from './components/ModoUsuarioObjetivos';
+import Perfil from './components/Perfil';
 
 export default function App() {
   return (
@@ -55,6 +57,41 @@ export default function App() {
           </ProtectedAdminRoute>
         } />
 
+        <Route
+          path="/modoAdministradorProductos"
+          element={
+            <ProtectedAdminRoute>
+              <ModoAdministradorProductos />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/productos"
+          element={
+            <ProtectedRoute>
+              <ModoUsuarioProductos />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/objetivos"
+          element={
+            <ProtectedRoute>
+              <ModoUsuarioObjetivos />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/perfil"
+          element={
+            <ProtectedRoute>
+              <Perfil />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="*" element={<Index />} />
       </Routes>
