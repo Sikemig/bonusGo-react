@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
 import anadirImg from '../assets/images/anadir.jpg';
-import editImg from '../assets/images/edit.jpg';
-import borrarImg from '../assets/images/borrar.jpg';
 
 export default function ModoAdministradorObjetivos() {
     const [objetivos, setObjetivos] = useState([]);
@@ -20,6 +19,10 @@ export default function ModoAdministradorObjetivos() {
     const [categoria, setCategoria] = useState('');
     const [imagen, setImagen] = useState('');
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [objetivoAEliminar, setObjetivoAEliminar] = useState(null);
+    const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+
 
     useEffect(() => {
         fetchUsuario();
@@ -74,53 +77,61 @@ export default function ModoAdministradorObjetivos() {
                 });
                 setObjetivos(prev => [...prev, response.data]);
             } else {
-                const objetivoId = objetivos.find(obj => obj.id_objetivo === editarId)?.id_objetivo;
-                const response = await axios.put(`http://localhost:8080/objetivos/actualizar/${objetivoId}`, objetivoData, {
+                const response = await axios.put(`http://localhost:8080/objetivos/actualizar/${editarId}`, objetivoData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
-                setObjetivos(prev => prev.map(obj => obj.id_objetivo === editarId ? response.data : obj));
+                setObjetivos(prev => prev.map(objetivo => objetivo.id_objetivo === editarId ? response.data : objetivo));
                 setEditarId(null);
             }
-            setNombre('');
-            setDescripcion('');
-            setMonedasObjetivo('');
-            setCategoria('');
-            setImagen('');
-            const modalElement = document.getElementById('modalForm');
-            const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
-            modal.hide();
+
+
+            fetchObjetivos();
+            resetearFormulario();
+            setShowModal(false);
         } catch (error) {
             console.error('Error al guardar objetivo:', error);
         }
     };
 
-    const handlePrepararEdicion = () => {
-        if (editarId !== null) {
-            const objetivoSeleccionado = objetivos.find(obj => obj.id_objetivo === editarId);
-            if (objetivoSeleccionado) {
-                setNombre(objetivoSeleccionado.nombre);
-                setDescripcion(objetivoSeleccionado.descripcion);
-                setCategoria(objetivoSeleccionado.categoria);
-                setMonedasObjetivo(objetivoSeleccionado.monedas);
-                setImagen(objetivoSeleccionado.imagen);
-            }
-        } else {
-            setNombre('');
-            setDescripcion('');
-            setCategoria('');
-            setMonedasObjetivo('');
-            setImagen('');
-        }
+    const resetearFormulario = () => {
+        setEditarId(null);
+        setNombre('');
+        setDescripcion('');
+        setMonedasObjetivo(0);
+        setCategoria('');
+        setImagen('');
     };
 
-    const handleBorrar = () => {
-        const seleccionados = Array.from(document.querySelectorAll('.individual-checkbox:checked'))
-            .map(checkbox => parseInt(checkbox.getAttribute('data-index')));
-        const nuevosObjetivos = objetivos.filter((_, index) => !seleccionados.includes(index));
-        setObjetivos(nuevosObjetivos);
+    const handlePrepararEdicion = (objetivo) => {
+        setEditarId(objetivo.id_objetivo);
+        setNombre(objetivo.nombre);
+        setDescripcion(objetivo.descripcion);
+        setCategoria(objetivo.categoria);
+        setMonedasObjetivo(objetivo.monedas);
+        setImagen(objetivo.imagen);
+    };
+
+
+    const handlePrepararBorrado = (objetivo) => {
+        setObjetivoAEliminar(objetivo);
+        setMostrarConfirmacion(true);
+    };
+
+    const handleConfirmarBorrado = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            await axios.delete(`http://localhost:8080/objetivos/eliminar/${objetivoAEliminar.id_objetivo}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            fetchObjetivos();
+        } catch (error) {
+            console.error('Error al borrar objetivo:', error);
+        }
+        setMostrarConfirmacion(false);
+        setObjetivoAEliminar(null);
     };
 
     const abrirGestionUsuarios = (id) => {
@@ -144,7 +155,9 @@ export default function ModoAdministradorObjetivos() {
         modal.hide();
     };
 
-    const irPerfil = () => navigate('/perfil');
+    const irPerfil = () => {
+        navigate('/perfil');
+    };
 
     return (
         <>
@@ -194,87 +207,13 @@ export default function ModoAdministradorObjetivos() {
             {/* Boton superior */}
             <div className="col d-flex justify-content-start">
                 <div className="button-group">
-                    <button className="icon-btn" data-bs-toggle="modal" data-bs-target="#modalForm">
+                    <button className="icon-btn" onClick={() => { resetearFormulario(); setShowModal(true); }}>
                         <img src={anadirImg} width="50" height="50" alt="" /><br />
                         <span>Añadir</span>
                     </button>
                 </div>
             </div>
 
-
-            {/* Modal Formulario */}
-            <div className="modal fade" id="modalForm" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <form onSubmit={handleAnadirEditar}>
-                            <div className="modal-header">
-                                <h5 className="modal-title">{editarId ? 'Editar Objetivo' : 'Añadir Objetivo'}</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                <div className="mb-3">
-                                    <label className="form-label">Nombre Objetivo</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        required
-                                        value={nombre}
-                                        onChange={(e) => setNombre(e.target.value)}
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Descripción</label>
-                                    <textarea
-                                        className="form-control"
-                                        rows="3"
-                                        required
-                                        value={descripcion}
-                                        onChange={(e) => setDescripcion(e.target.value)}
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Categoría</label>
-                                    <select
-                                        className="form-select"
-                                        required
-                                        value={categoria}
-                                        onChange={(e) => setCategoria(e.target.value)}
-                                    >
-                                        <option value="" disabled>Seleccione una categoría</option>
-                                        <option value="ORO">ORO</option>
-                                        <option value="PLATA">PLATA</option>
-                                        <option value="BRONCE">BRONCE</option>
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Recompensa</label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        required
-                                        value={monedasObjetivo}
-                                        onChange={(e) => setMonedasObjetivo(e.target.value)}
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Imagen (URL)</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        required
-                                        value={imagen}
-                                        onChange={(e) => setImagen(e.target.value)}
-                                        placeholder="Pega la URL de la imagen"
-                                    />
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="submit" className="btn btn-primary">Guardar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
             {/* Tabla de objetivos */}
             <div className="table-responsive mt-4">
@@ -301,9 +240,9 @@ export default function ModoAdministradorObjetivos() {
                                     {objetivo.imagen && <img src={objetivo.imagen} alt={objetivo.nombre} width="80" />}
                                 </td>
                                 <td>
-                                    <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormProducto" onClick={() => handlePrepararEdicion(objetivo)}>Editar</button>
-                                    <button className="btn btn-danger ms-2" onClick={() => handleBorrar(objetivo.id_producto)}>Borrar</button>
-                                    <button className="btn btn-warning ms-2" onClick={() => handleToggleEstado(objetivo.id_producto, objetivo.enabled)}>
+                                    <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(objetivo); setShowModal(true) }} >Editar</button>
+                                    <button className="btn btn-danger ms-2" onClick={() => handlePrepararBorrado(objetivo)}>Borrar</button>
+                                    <button className="btn btn-warning ms-2" onClick={() => handleToggleEstado(objetivo.id_objetivo, objetivo.enabled)}>
                                         {objetivo.enabled ? 'Deshabilitar' : 'Habilitar'}
                                     </button>
                                 </td>
@@ -312,6 +251,86 @@ export default function ModoAdministradorObjetivos() {
                     </tbody>
                 </table>
             </div>
+
+            <Modal show={showModal} onHide={() => { setShowModal(false); resetearFormulario(); }}>
+                <Form onSubmit={handleAnadirEditar}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{editarId ? 'Editar Objetivo' : 'Añadir Objetivo'}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Nombre Objetivo</Form.Label>
+                            <Form.Control
+                                type="text"
+                                required
+                                value={nombre}
+                                onChange={(e) => setNombre(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Descripción</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                required
+                                value={descripcion}
+                                onChange={(e) => setDescripcion(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Categoría</Form.Label>
+                            <Form.Select
+                                required
+                                value={categoria}
+                                onChange={(e) => setCategoria(e.target.value)}
+                            >
+                                <option value="" disabled>Seleccione una categoría</option>
+                                <option value="ORO">ORO</option>
+                                <option value="PLATA">PLATA</option>
+                                <option value="BRONCE">BRONCE</option>
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Recompensa</Form.Label>
+                            <Form.Control
+                                type="number"
+                                required
+                                value={monedasObjetivo}
+                                onChange={(e) => setMonedasObjetivo(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Imagen (URL)</Form.Label>
+                            <Form.Control
+                                type="text"
+                                required
+                                value={imagen}
+                                onChange={(e) => setImagen(e.target.value)}
+                                placeholder="Pega la URL de la imagen"
+                            />
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+                        <Button type="submit" variant="success">Guardar</Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
+
+            <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmar Borrado</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    ¿Estás seguro de que deseas borrar el objetivo "<strong>{objetivoAEliminar?.nombre}</strong>"?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleConfirmarBorrado}>Borrar</Button>
+                    <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
+                </Modal.Footer>
+            </Modal>
+
+
 
             {/* Modal Gestionar Usuarios */}
             <div className="modal fade" id="modalGestionUsuarios" tabIndex="-1" aria-hidden="true">

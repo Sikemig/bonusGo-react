@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
 import anadirImg from '../assets/images/anadir.jpg';
-import editImg from '../assets/images/edit.jpg';
-import borrarImg from '../assets/images/borrar.jpg';
 
 export default function ModoAdministradorProductos() {
   const [productos, setProductos] = useState([]);
@@ -18,10 +17,14 @@ export default function ModoAdministradorProductos() {
   const [monedasUsuario, setMonedasUsuario] = useState(0);
   const [imagen, setImagen] = useState('');
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [productoAEliminar, setProductoAEliminar] = useState(null);
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+
 
   useEffect(() => {
-    fetchProductos();
     fetchUsuario();
+    fetchProductos();
   }, []);
 
   const fetchProductos = async () => {
@@ -40,16 +43,16 @@ export default function ModoAdministradorProductos() {
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     try {
-        const response = await axios.get(`http://localhost:8080/usuario/${id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const user = response.data;
-        setUsuario(user.nombre);
-        setMonedasUsuario(user.moneda);
+      const response = await axios.get(`http://localhost:8080/usuario/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const user = response.data;
+      setUsuario(user.nombre);
+      setMonedasUsuario(user.moneda);
     } catch (error) {
-        console.error('Error al obtener datos del usuario:', error);
+      console.error('Error al obtener datos del usuario:', error);
     }
-};
+  };
 
   const handleAnadirEditar = async (e) => {
     e.preventDefault();
@@ -60,56 +63,79 @@ export default function ModoAdministradorProductos() {
       descripcion,
       coste,
       tipo,
-      imagen, // Ahora es directamente la URL
+      imagen,
       enabled: true
     };
 
     try {
       if (editarId === null) {
-        await axios.post('http://localhost:8080/producto/registrar', productoData, {
+        const response = await axios.post('http://localhost:8080/producto/registrar', productoData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
+        setProductos(prev => [...prev, response.data]);
       } else {
-        await axios.put(`http://localhost:8080/producto/actualizar/${editarId}`, productoData, {
+        const response = await axios.put(`http://localhost:8080/producto/actualizar/${editarId}`, productoData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
+        setProductos(prev => prev.map(producto => producto.id_producto === editarId ? response.data : producto));
+        setEditarId(null);
       }
 
       fetchProductos();
-      resetForm();
-      closeModal();
+      resetearFormulario();
+      setShowModal(false);
     } catch (error) {
       console.error('Error al guardar producto:', error);
     }
   };
 
+  const resetearFormulario = () => {
+    setEditarId(null);
+    setNombre('');
+    setDescripcion('');
+    setCoste(0);
+    setTipo('EXPERIENCIA');
+    setImagen('');
+  };
+
 
 
   const handlePrepararEdicion = (producto) => {
-    setEditarId(producto.id_producto);
+    console.log("Producto a editar:", producto);
+    setEditarId(producto.id_Producto);
     setNombre(producto.nombre);
     setDescripcion(producto.descripcion);
     setCoste(producto.coste);
     setTipo(producto.tipo);
   };
 
-  const handleBorrar = async (id) => {
+
+  const handlePrepararBorrado = (producto) => {
+    setProductoAEliminar(producto);
+    setMostrarConfirmacion(true);
+  };
+
+  const handleConfirmarBorrado = async () => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:8080/producto/eliminar/${id}`, {
+      await axios.delete(`http://localhost:8080/producto/eliminar/${productoAEliminar.id_Producto}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchProductos();
     } catch (error) {
       console.error('Error al borrar producto:', error);
     }
+    setMostrarConfirmacion(false);
+    setProductoAEliminar(null);
   };
+
+
 
   const handleToggleEstado = async (id, enabled) => {
     const token = localStorage.getItem('token');
@@ -129,20 +155,6 @@ export default function ModoAdministradorProductos() {
     }
   };
 
-  const resetForm = () => {
-    setEditarId(null);
-    setNombre('');
-    setDescripcion('');
-    setCoste(0);
-    setTipo('EXPERIENCIA');
-    setImagen('');
-  };
-
-  const closeModal = () => {
-    const modalElement = document.getElementById('modalFormProducto');
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
-  };
 
   const handleImageChange = (e) => {
     setFile(e.target.files[0]);
@@ -200,7 +212,7 @@ export default function ModoAdministradorProductos() {
       <div className="row">
         <div className="col d-flex justify-content-start">
           <div className="button-group">
-            <button className="icon-btn" data-bs-toggle="modal" data-bs-target="#modalFormProducto" onClick={resetForm}>
+            <button className="icon-btn" onClick={() => { resetearFormulario(); setShowModal(true); }}>
               <img src={anadirImg} width="50" height="50" alt="Añadir" /><br />
               <span>Añadir</span>
             </button>
@@ -231,8 +243,8 @@ export default function ModoAdministradorProductos() {
                   {producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}
                 </td>
                 <td>
-                  <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormProducto" onClick={() => handlePrepararEdicion(producto)}>Editar</button>
-                  <button className="btn btn-danger ms-2" onClick={() => handleBorrar(producto.id_producto)}>Borrar</button>
+                  <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(producto); setShowModal(true); }}>Editar</button>
+                  <button className="btn btn-danger ms-2" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
                   <button className="btn btn-warning ms-2" onClick={() => handleToggleEstado(producto.id_producto, producto.enabled)}>
                     {producto.enabled ? 'Deshabilitar' : 'Habilitar'}
                   </button>
@@ -243,75 +255,85 @@ export default function ModoAdministradorProductos() {
         </table>
       </div>
 
-      <div className="modal fade" id="modalFormProducto" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <form onSubmit={handleAnadirEditar}>
-              <div className="modal-header">
-                <h5 className="modal-title">{editarId ? 'Editar Producto' : 'Añadir Producto'}</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <label className="form-label">Nombre Producto</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                    required />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Descripción</label>
-                  <textarea
-                    className="form-control"
-                    value={descripcion}
-                    onChange={(e) => setDescripcion(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Tipo</label>
-                  <select
-                    className="form-control"
-                    value={tipo}
-                    onChange={(e) => setTipo(e.target.value)}
-                    required
-                  >
-                    <option value="" disabled>Seleccione un tipo</option>
-                    <option value="EXPERIENCIA">EXPERIENCIA</option>
-                    <option value="ROPA">ROPA</option>
-                    <option value="TARJETAS">TARJETAS</option>
-                  </select>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Coste</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={coste}
-                    onChange={(e) => setCoste(parseInt(e.target.value))}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Imagen (URL)</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={imagen}
-                    onChange={(e) => setImagen(e.target.value)}
-                    placeholder="Pega la URL de la imagen"
-                  />
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button type="submit" className="btn btn-success">Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      <Modal show={showModal} onHide={() => { setShowModal(false); resetearFormulario(); }}>
+        <Modal.Header closeButton>
+          <Modal.Title>{editarId ? 'Editar Producto' : 'Añadir Producto'}</Modal.Title>
+        </Modal.Header>
+        <form onSubmit={handleAnadirEditar}>
+          <Modal.Body>
+            <div className="mb-3">
+              <label className="form-label">Nombre Producto</label>
+              <input
+                type="text"
+                className="form-control"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Descripción</label>
+              <textarea
+                className="form-control"
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Tipo</label>
+              <select
+                className="form-control"
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value)}
+                required
+              >
+                <option value="" disabled>Seleccione un tipo</option>
+                <option value="EXPERIENCIA">EXPERIENCIA</option>
+                <option value="ROPA">ROPA</option>
+                <option value="TARJETAS">TARJETAS</option>
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Coste</label>
+              <input
+                type="number"
+                className="form-control"
+                value={coste}
+                onChange={(e) => setCoste(parseInt(e.target.value))}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Imagen (URL)</label>
+              <input
+                type="text"
+                className="form-control"
+                value={imagen}
+                onChange={(e) => setImagen(e.target.value)}
+                placeholder="Pega la URL de la imagen"
+              />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+            <Button type="submit" variant="success">Guardar</Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+
+      <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar Borrado</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Estás seguro de que deseas borrar el producto "<strong>{productoAEliminar?.nombre}</strong>"?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleConfirmarBorrado}>Borrar</Button>
+          <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
+        </Modal.Footer>
+      </Modal>
 
       <footer className="footer">
         <p>📬 Info contacto empresa y administradores</p>
