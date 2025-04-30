@@ -67,6 +67,15 @@ export default function App() {
         />
 
         <Route
+          path="/modoAdministradorUsuarios"
+          element={
+            <ProtectedAdminRoute>
+              <ModoAdministradorUsuarios />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
           path="/productos"
           element={
             <ProtectedRoute>

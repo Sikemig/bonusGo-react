@@ -13,7 +13,9 @@ export default function ModoAdministradorProductos() {
   const [descripcion, setDescripcion] = useState('');
   const [coste, setCoste] = useState(0);
   const [tipo, setTipo] = useState('EXPERIENCIA');
+  const [file, setFile] = useState(null);
   const [usuario, setUsuario] = useState('');
+  const [imagen, setImagen] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,26 +51,33 @@ export default function ModoAdministradorProductos() {
   const handleAnadirEditar = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-
+  
     const productoData = {
       nombre,
       descripcion,
       coste,
       tipo,
+      imagen, // Ahora es directamente la URL
       enabled: true
     };
-
+  
     try {
       if (editarId === null) {
         await axios.post('http://localhost:8080/producto/registrar', productoData, {
-          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         });
       } else {
-        await axios.put(`http://localhost:8080/producto/actualizar/${editarId}?coste=${coste}`, {}, {
-          headers: { Authorization: `Bearer ${token}` }
+        await axios.put(`http://localhost:8080/producto/actualizar/${editarId}`, productoData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         });
       }
-
+  
       fetchProductos();
       resetForm();
       closeModal();
@@ -76,6 +85,8 @@ export default function ModoAdministradorProductos() {
       console.error('Error al guardar producto:', error);
     }
   };
+  
+  
 
   const handlePrepararEdicion = (producto) => {
     setEditarId(producto.id_producto);
@@ -121,12 +132,17 @@ export default function ModoAdministradorProductos() {
     setDescripcion('');
     setCoste(0);
     setTipo('EXPERIENCIA');
+    setImagen('');
   };
-
+  
   const closeModal = () => {
     const modalElement = document.getElementById('modalFormProducto');
     const modal = bootstrap.Modal.getInstance(modalElement);
     modal.hide();
+  };
+
+  const handleImageChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
   const irPerfil = () => {
@@ -135,7 +151,6 @@ export default function ModoAdministradorProductos() {
 
   return (
     <>
-      {/* NAV */}
       <nav className="navbar navbar-expand-lg custom-navbar">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
@@ -155,10 +170,8 @@ export default function ModoAdministradorProductos() {
         </div>
       </nav>
 
-      {/* Título */}
       <div className="bienvenida">MODO ADMINISTRADOR - PRODUCTOS</div>
 
-      {/* Botón añadir */}
       <div className="row">
         <div className="col d-flex justify-content-start">
           <div className="button-group">
@@ -170,7 +183,6 @@ export default function ModoAdministradorProductos() {
         </div>
       </div>
 
-      {/* Tabla productos */}
       <div className="table-responsive mt-4">
         <table className="table">
           <thead>
@@ -179,6 +191,7 @@ export default function ModoAdministradorProductos() {
               <th>Descripción</th>
               <th>Coste</th>
               <th>Tipo</th>
+              <th>Imagen</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
@@ -190,6 +203,9 @@ export default function ModoAdministradorProductos() {
                 <td>{producto.descripcion}</td>
                 <td>{producto.coste}</td>
                 <td>{producto.tipo}</td>
+                <td>
+                  {producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}
+                </td>
                 <td>{producto.enabled ? 'Activo' : 'Deshabilitado'}</td>
                 <td>
                   <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormProducto" onClick={() => handlePrepararEdicion(producto)}>Editar</button>
@@ -204,11 +220,10 @@ export default function ModoAdministradorProductos() {
         </table>
       </div>
 
-      {/* Modal Formulario */}
       <div className="modal fade" id="modalFormProducto" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
-            <form onSubmit={handleAnadirEditar}>
+            <form onSubmit={handleAnadirEditar} encType="multipart/form-data">
               <div className="modal-header">
                 <h5 className="modal-title">{editarId ? 'Editar Producto' : 'Añadir Producto'}</h5>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -234,6 +249,16 @@ export default function ModoAdministradorProductos() {
                     <option value="TARJETAS">TARJETAS</option>
                   </select>
                 </div>
+                <div className="mb-3">
+                <label className="form-label">Imagen (URL)</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={imagen}
+                  onChange={(e) => setImagen(e.target.value)}
+                  placeholder="Pega la URL de la imagen"
+                />
+                </div>
               </div>
               <div className="modal-footer">
                 <button type="submit" className="btn btn-success">Guardar</button>
@@ -243,7 +268,6 @@ export default function ModoAdministradorProductos() {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="footer">
         <p>📬 Info contacto empresa y administradores</p>
       </footer>
