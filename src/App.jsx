@@ -11,6 +11,7 @@ import ProtectedAdminRoute from './utils/ProtectedAdminRoute';
 import ModoAdministradorProductos from './components/ModoAdministradorProductos';
 import ModoUsuarioProductos from './components/ModoUsuarioProductos';
 import ModoUsuarioObjetivos from './components/ModoUsuarioObjetivos';
+import ModoAdministradorUsuarios from './components/ModoAdministradorUsuarios';
 import Perfil from './components/Perfil';
 
 export default function App() {

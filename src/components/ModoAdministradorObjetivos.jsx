@@ -6,7 +6,6 @@ import anadirImg from '../assets/images/anadir.jpg';
 import editImg from '../assets/images/edit.jpg';
 import borrarImg from '../assets/images/borrar.jpg';
 
-
 export default function ModoAdministradorObjetivos() {
     const [objetivos, setObjetivos] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
@@ -16,116 +15,87 @@ export default function ModoAdministradorObjetivos() {
     const [usuario, setUsuario] = useState('');
     const [monedasUsuario, setMonedasUsuario] = useState(0);
     const [monedasObjetivo, setMonedasObjetivo] = useState('');
-
-
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [categoria, setCategoria] = useState('');
     const [imagen, setImagen] = useState('');
-
-
     const navigate = useNavigate();
 
-    // useEffect para obtener los datos del usuario administrador
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const userId = localStorage.getItem('id'); // <-- aquí cambiamos 'userId' por 'id'
-
-        axios.get(`http://localhost:8080/usuario/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(response => {
-                const user = response.data;
-                setUsuario(user.nombre);
-                setMonedasUsuario(user.moneda);
-            })
-            .catch(error => {
-                console.error('Error al obtener datos del usuario conectado:', error);
-            });
+        fetchUsuario();
+        fetchObjetivos();
     }, []);
 
-
-    // useEffect para cargar los objetivos que hay en bbdd
-    useEffect(() => {
+    const fetchUsuario = async () => {
         const token = localStorage.getItem('token');
-
-        axios.get('http://localhost:8080/objetivos/getall', {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(response => {
-                console.log(response.data);
-                setObjetivos(response.data);
-            })
-            .catch(error => {
-                console.error('Error al obtener los objetivos:', error);
+        const id = localStorage.getItem('id');
+        try {
+            const response = await axios.get(`http://localhost:8080/usuario/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
-    }, []);
+            const user = response.data;
+            setUsuario(user.nombre);
+            setMonedasUsuario(user.moneda);
+        } catch (error) {
+            console.error('Error al obtener datos del usuario:', error);
+        }
+    };
 
+    const fetchObjetivos = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get('http://localhost:8080/objetivos/getall', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setObjetivos(response.data);
+        } catch (error) {
+            console.error('Error al obtener los objetivos:', error);
+        }
+    };
 
-    // submit del formulario de añadir y editar un objetivo en la API
     const handleAnadirEditar = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
-
         const objetivoData = {
-            nombre: nombre,
-            descripcion: descripcion,
+            nombre,
+            descripcion,
             monedas: parseInt(monedasObjetivo),
-            categoria: categoria,
-            imagen: imagen
+            categoria,
+            imagen
         };
 
         try {
             if (editarId === null) {
-                // Nuevo objetivo
-                const response = await axios.post(
-                    'http://localhost:8080/objetivos/registrar',
-                    objetivoData,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
+                const response = await axios.post('http://localhost:8080/objetivos/registrar', objetivoData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
-                );
+                });
                 setObjetivos(prev => [...prev, response.data]);
             } else {
-                // Editar objetivo
-                const objetivoSeleccionado = objetivos.find(obj => obj.id_objetivo === editarId);
-                const objetivoId = objetivoSeleccionado?.id_objetivo;
-
-                const response = await axios.put(
-                    `http://localhost:8080/objetivos/actualizar/${objetivoId}`,
-                    objetivoData,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
+                const objetivoId = objetivos.find(obj => obj.id_objetivo === editarId)?.id_objetivo;
+                const response = await axios.put(`http://localhost:8080/objetivos/actualizar/${objetivoId}`, objetivoData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
-                );
-                console.log('Objetivo actualizado:', response.data);
+                });
                 setObjetivos(prev => prev.map(obj => obj.id_objetivo === editarId ? response.data : obj));
                 setEditarId(null);
             }
-
-            // Limpiar formulario
             setNombre('');
             setDescripcion('');
             setMonedasObjetivo('');
             setCategoria('');
             setImagen('');
-
-            // Cerrar modal
             const modalElement = document.getElementById('modalForm');
             const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
             modal.hide();
-
         } catch (error) {
             console.error('Error al guardar objetivo:', error);
         }
     };
-
 
     const handlePrepararEdicion = () => {
         if (editarId !== null) {
@@ -145,7 +115,6 @@ export default function ModoAdministradorObjetivos() {
             setImagen('');
         }
     };
-
 
     const handleBorrar = () => {
         const seleccionados = Array.from(document.querySelectorAll('.individual-checkbox:checked'))
@@ -175,9 +144,7 @@ export default function ModoAdministradorObjetivos() {
         modal.hide();
     };
 
-    const irPerfil = () => {
-        navigate('/perfil');
-    };
+    const irPerfil = () => navigate('/perfil');
 
     return (
         <>
@@ -224,37 +191,24 @@ export default function ModoAdministradorObjetivos() {
 
             <div className="bienvenida">MODO ADMINISTRADOR - OBJETIVOS</div>
 
-            {/* Botones */}
-            <div className="row">
-                <div className="col d-flex justify-content-start">
-                    <div className="button-group">
-                        <button className="icon-btn" data-bs-toggle="modal" data-bs-target="#modalForm">
-                            <img src={anadirImg} width="50" height="50" alt="" /><br />
-                            <span>Añadir</span>
-                        </button>
-                    </div>
-                    <div className="button-group">
-                        <button className="icon-btn" data-bs-toggle="modal" data-bs-target="#modalForm" onClick={handlePrepararEdicion}>
-                            <img src={editImg} width="50" height="50" alt="" /><br />
-                            <span>Editar</span>
-                        </button>
-                    </div>
-                    <div className="button-group">
-                        <button className="icon-btn" id="borrarBtn" onClick={handleBorrar}>
-                            <img src={borrarImg} width="50" height="50" alt="" /><br />
-                            <span>Eliminar</span>
-                        </button>
-                    </div>
+            {/* Boton superior */}
+            <div className="col d-flex justify-content-start">
+                <div className="button-group">
+                    <button className="icon-btn" data-bs-toggle="modal" data-bs-target="#modalForm">
+                        <img src={anadirImg} width="50" height="50" alt="" /><br />
+                        <span>Añadir</span>
+                    </button>
                 </div>
             </div>
+
 
             {/* Modal Formulario */}
             <div className="modal fade" id="modalForm" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
-                        <form id="formularioObjetivo" onSubmit={handleAnadirEditar}>
+                        <form onSubmit={handleAnadirEditar}>
                             <div className="modal-header">
-                                <h5 className="modal-title">Formulario de Objetivo</h5>
+                                <h5 className="modal-title">{editarId ? 'Editar Objetivo' : 'Añadir Objetivo'}</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
@@ -263,7 +217,6 @@ export default function ModoAdministradorObjetivos() {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        id="nombreObjetivo"
                                         required
                                         value={nombre}
                                         onChange={(e) => setNombre(e.target.value)}
@@ -273,7 +226,6 @@ export default function ModoAdministradorObjetivos() {
                                     <label className="form-label">Descripción</label>
                                     <textarea
                                         className="form-control"
-                                        id="descripcionObjetivo"
                                         rows="3"
                                         required
                                         value={descripcion}
@@ -284,7 +236,6 @@ export default function ModoAdministradorObjetivos() {
                                     <label className="form-label">Categoría</label>
                                     <select
                                         className="form-select"
-                                        id="categoriaObjetivo"
                                         required
                                         value={categoria}
                                         onChange={(e) => setCategoria(e.target.value)}
@@ -295,27 +246,25 @@ export default function ModoAdministradorObjetivos() {
                                         <option value="BRONCE">BRONCE</option>
                                     </select>
                                 </div>
-
                                 <div className="mb-3">
-                                    <label className="form-label">Monedas</label>
+                                    <label className="form-label">Recompensa</label>
                                     <input
                                         type="number"
                                         className="form-control"
-                                        id="monedasObjetivo"
                                         required
                                         value={monedasObjetivo}
                                         onChange={(e) => setMonedasObjetivo(e.target.value)}
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <label className="form-label">Imagen</label>
+                                    <label className="form-label">Imagen (URL)</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        id="imagenObjetivo"
                                         required
                                         value={imagen}
                                         onChange={(e) => setImagen(e.target.value)}
+                                        placeholder="Pega la URL de la imagen"
                                     />
                                 </div>
                             </div>
@@ -332,32 +281,32 @@ export default function ModoAdministradorObjetivos() {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="seleccionarTodos" className="form-check-input" /></th>
-                            <th>Nº</th>
                             <th>Nombre</th>
                             <th>Descripcion</th>
                             <th>Categoría</th>
-                            <th>Monedas</th>
+                            <th>Recompensa</th>
                             <th>Imagen</th>
-                            <th>Usuarios</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
 
-                    <tbody id="objetivosFormulario">
-                        {objetivos.map((objetivo, index) => (
+                    <tbody>
+                        {objetivos.map(objetivo => (
                             <tr key={objetivo.id_objetivo}>
-                                <td><input
-                                    type="checkbox"
-                                    checked={editarId === objetivo.id_objetivo}
-                                    onChange={() => setEditarId(editarId === objetivo.id_objetivo ? null : objetivo.id_objetivo)}
-                                /></td>
-                                <td>{index + 1}</td>
                                 <td>{objetivo.nombre}</td>
-                                <td>{objetivo.descripcion.length > 20 ? objetivo.descripcion.substring(0, 20) + "..." : objetivo.descripcion}</td>
+                                <td>{objetivo.descripcion}</td>
                                 <td>{objetivo.categoria}</td>
                                 <td>{objetivo.monedas}</td>
-                                <td><img src={objetivo.imagen} width="50" height="50" alt="" /></td>
-                                <td><button className="btn btn-primary" onClick={() => abrirGestionUsuarios(objetivo.id_objetivo)}>Gestionar</button></td>
+                                <td>
+                                    {objetivo.imagen && <img src={objetivo.imagen} alt={objetivo.nombre} width="80" />}
+                                </td>
+                                <td>
+                                    <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormProducto" onClick={() => handlePrepararEdicion(objetivo)}>Editar</button>
+                                    <button className="btn btn-danger ms-2" onClick={() => handleBorrar(objetivo.id_producto)}>Borrar</button>
+                                    <button className="btn btn-warning ms-2" onClick={() => handleToggleEstado(objetivo.id_producto, objetivo.enabled)}>
+                                        {objetivo.enabled ? 'Deshabilitar' : 'Habilitar'}
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
