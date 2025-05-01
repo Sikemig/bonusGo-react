@@ -8,7 +8,6 @@ import anadirImg from '../assets/images/anadir.jpg';
 export default function ModoAdministradorObjetivos() {
     const [objetivos, setObjetivos] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
-    const [usuariosAsignadosPorObjetivo, setUsuariosAsignadosPorObjetivo] = useState({});
     const [objetivoActivo, setObjetivoActivo] = useState(null);
     const [editarId, setEditarId] = useState(null);
     const [usuario, setUsuario] = useState('');
@@ -22,6 +21,12 @@ export default function ModoAdministradorObjetivos() {
     const [showModal, setShowModal] = useState(false);
     const [objetivoAEliminar, setObjetivoAEliminar] = useState(null);
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+    const [usuariosFiltrados, setUsuariosFiltrados] = useState([]);
+    const [busquedaUsuario, setBusquedaUsuario] = useState('');
+    const [usuariosHabilitados, setUsuariosHabilitados] = useState([]);
+    const [showModalHabilitar, setShowModalHabilitar] = useState(false);
+
+
 
 
     useEffect(() => {
@@ -29,6 +34,7 @@ export default function ModoAdministradorObjetivos() {
         fetchObjetivos();
     }, []);
 
+    // busqueda de usuario logeado
     const fetchUsuario = async () => {
         const token = localStorage.getItem('token');
         const id = localStorage.getItem('id');
@@ -44,6 +50,7 @@ export default function ModoAdministradorObjetivos() {
         }
     };
 
+    // buscar objetivos
     const fetchObjetivos = async () => {
         const token = localStorage.getItem('token');
         try {
@@ -56,6 +63,35 @@ export default function ModoAdministradorObjetivos() {
         }
     };
 
+    // buscar usuarios
+    const fetchUsuarios = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get("http://localhost:8080/usuario/getTodos", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setUsuarios(response.data);
+            setUsuariosFiltrados(response.data);
+        } catch (error) {
+            console.error('Error al obtener usuarios:', error);
+        }
+    };
+
+    // para cargar los checks en el modal, segun esten los objetivos habilitados para cada usuario o no
+    const fetchUsuariosHabilitados = async (idObjetivo) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get(`http://localhost:8080/ganancia/habilitados?idObjetivo=${idObjetivo}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setUsuariosHabilitados(response.data); 
+        } catch (error) {
+            console.error('Error al obtener usuarios habilitados:', error);
+        }
+    };
+    
+
+    // boton de añadir y editar
     const handleAnadirEditar = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
@@ -96,6 +132,7 @@ export default function ModoAdministradorObjetivos() {
         }
     };
 
+    // resetear el formulario cuando añadamos o editemos
     const resetearFormulario = () => {
         setEditarId(null);
         setNombre('');
@@ -105,8 +142,9 @@ export default function ModoAdministradorObjetivos() {
         setImagen('');
     };
 
+    // buscamos el objetivo a editar por id
     const handlePrepararEdicion = (objetivo) => {
-        setEditarId(objetivo.id_objetivo);
+        setEditarId(objetivo.idObjetivo);
         setNombre(objetivo.nombre);
         setDescripcion(objetivo.descripcion);
         setCategoria(objetivo.categoria);
@@ -114,16 +152,17 @@ export default function ModoAdministradorObjetivos() {
         setImagen(objetivo.imagen);
     };
 
-
+    // buscamos el objetivo a eliminar por id
     const handlePrepararBorrado = (objetivo) => {
         setObjetivoAEliminar(objetivo);
         setMostrarConfirmacion(true);
     };
 
+    // confirmamos el borrado con mensaje de confirmacion
     const handleConfirmarBorrado = async () => {
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:8080/objetivos/eliminar/${objetivoAEliminar.id_objetivo}`, {
+            await axios.delete(`http://localhost:8080/objetivos/eliminar/${objetivoAEliminar.idObjetivo}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchObjetivos();
@@ -134,26 +173,53 @@ export default function ModoAdministradorObjetivos() {
         setObjetivoAEliminar(null);
     };
 
-    const abrirGestionUsuarios = (id) => {
-        setObjetivoActivo(id);
-        const modal = new bootstrap.Modal(document.getElementById('modalGestionUsuarios'));
-        modal.show();
+    // modal para habilitar
+    const abrirModalHabilitar = (objetivo) => {
+        setObjetivoActivo(objetivo);
+        fetchUsuarios();
+        fetchUsuariosHabilitados(objetivo.idObjetivo);
+        setShowModalHabilitar(true);
     };
 
-    const guardarCambiosUsuarios = () => {
-        const seleccionados = Array.from(document.querySelectorAll('.usuario-toggle'))
-            .filter(input => input.checked)
-            .map(input => input.getAttribute('data-email'));
 
-        setUsuariosAsignadosPorObjetivo(prev => ({
-            ...prev,
-            [objetivoActivo]: seleccionados
-        }));
 
-        const modalElement = document.getElementById('modalGestionUsuarios');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        modal.hide();
+    // busqueda de usuarios para la habilitacion
+    const handleBusquedaUsuarios = (e) => {
+        const valor = e.target.value.toLowerCase();
+        setBusquedaUsuario(valor);
+        setUsuariosFiltrados(
+            usuarios.filter(usuario =>
+                usuario.nombre.toLowerCase().includes(valor) || usuario.correo.toLowerCase().includes(valor)
+            )
+        );
     };
+
+    // habilitamos o deshabilitamos para cada usuario
+    const toggleHabilitacionObjetivo = async (id_Usuario, habilitar) => {
+        const token = localStorage.getItem('token');
+        try {
+            const body = {
+                usuario: { id_Usuario: id_Usuario },
+                objetivo: { idObjetivo: objetivoActivo.idObjetivo },
+                habilitado: habilitar
+            };
+    
+            await axios.post(`http://localhost:8080/ganancia/habilitar`, body, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            setUsuariosHabilitados(prev =>
+                habilitar ? [...prev, id_Usuario] : prev.filter(id => id !== id_Usuario)
+            );
+        } catch (error) {
+            console.error('Error al cambiar la habilitación de objetivo:', error);
+        }
+    };
+    
+
 
     const irPerfil = () => {
         navigate('/perfil');
@@ -242,9 +308,7 @@ export default function ModoAdministradorObjetivos() {
                                 <td>
                                     <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(objetivo); setShowModal(true) }} >Editar</button>
                                     <button className="btn btn-danger ms-2" onClick={() => handlePrepararBorrado(objetivo)}>Borrar</button>
-                                    <button className="btn btn-warning ms-2" onClick={() => handleToggleEstado(objetivo.id_objetivo, objetivo.enabled)}>
-                                        {objetivo.enabled ? 'Deshabilitar' : 'Habilitar'}
-                                    </button>
+                                    <button className="btn btn-warning ms-2" onClick={() => abrirModalHabilitar(objetivo)}>Habilitar</button>
                                 </td>
                             </tr>
                         ))}
@@ -333,41 +397,42 @@ export default function ModoAdministradorObjetivos() {
 
 
             {/* Modal Gestionar Usuarios */}
-            <div className="modal fade" id="modalGestionUsuarios" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Gestionar Usuarios</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <Modal show={showModalHabilitar} onHide={() => setShowModalHabilitar(false)} size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>Habilitar/Deshabilitar el objetivo "{objetivoActivo?.nombre}" para usuarios</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <input
+                        type="text"
+                        className="form-control mb-3"
+                        placeholder="Buscar usuario por nombre o correo"
+                        value={busquedaUsuario}
+                        onChange={handleBusquedaUsuarios}
+                    />
+
+                    {usuariosFiltrados.map(usuario => (
+                        <div key={usuario.id_Usuario} className="form-check form-switch border p-2 mb-2 d-flex justify-content-between align-items-center">
+                            <label className="form-check-label mb-0">
+                                <strong>{usuario.nombre}</strong> - {usuario.correo}
+                            </label>
+                            <input
+                                type="checkbox"
+                                className="form-check-input"
+                                checked={usuariosHabilitados.includes(usuario.id_Usuario)}
+                                onChange={(e) => toggleHabilitacionObjetivo(usuario.id_Usuario, e.target.checked)}
+                            />
                         </div>
-                        <div className="modal-body" id="usuariosModal">
-                            {usuarios.map(usuario => (
-                                <div key={usuario.email} className="mb-3 p-2 border rounded">
-                                    <div className="form-check form-switch d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>Nombre:</strong> {usuario.nombre}<br />
-                                            <strong>Email:</strong> {usuario.email}
-                                        </div>
-                                        <input
-                                            type="checkbox"
-                                            className="form-check-input usuario-toggle"
-                                            data-email={usuario.email}
-                                            defaultChecked={usuariosAsignadosPorObjetivo[objetivoActivo]?.includes(usuario.email)}
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="modal-footer">
-                            <button className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button className="btn btn-primary" onClick={guardarCambiosUsuarios}>Guardar cambios</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    ))}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModalHabilitar(false)}>Cerrar</Button>
+                </Modal.Footer>
+            </Modal>
+
+
 
             {/* Footer */}
-            <footer className="footer">
+            <footer className="footer" >
                 <p>📬 Info contacto empresa y administradores</p>
             </footer>
         </>
