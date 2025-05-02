@@ -64,7 +64,6 @@ export default function ModoAdministradorProductos() {
       coste,
       tipo,
       imagen,
-      enabled: true
     };
 
     try {
@@ -133,26 +132,6 @@ export default function ModoAdministradorProductos() {
     }
     setMostrarConfirmacion(false);
     setProductoAEliminar(null);
-  };
-
-
-
-  const handleToggleEstado = async (id, enabled) => {
-    const token = localStorage.getItem('token');
-    try {
-      if (enabled) {
-        await axios.put(`http://localhost:8080/producto/deshabilitar/${id}`, {}, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      } else {
-        await axios.put(`http://localhost:8080/producto/habilitar/${id}`, {}, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      }
-      fetchProductos();
-    } catch (error) {
-      console.error('Error al cambiar estado del producto:', error);
-    }
   };
 
 
@@ -245,9 +224,6 @@ export default function ModoAdministradorProductos() {
                 <td>
                   <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(producto); setShowModal(true); }}>Editar</button>
                   <button className="btn btn-danger ms-2" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
-                  <button className="btn btn-warning ms-2" onClick={() => handleToggleEstado(producto.id_producto, producto.enabled)}>
-                    {producto.enabled ? 'Deshabilitar' : 'Habilitar'}
-                  </button>
                 </td>
               </tr>
             ))}
