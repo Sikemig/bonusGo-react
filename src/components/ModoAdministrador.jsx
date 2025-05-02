@@ -58,8 +58,7 @@ export default function ModoAdministrador() {
     };
 
     const handleGestionUsuarios = () => {
-        // Aquí en el futuro navegaremos a gestionar productos
-        // Ejemplo: navigate('/modoAdministradorProductos');
+            navigate('/modoAdministradorUsuarios');
     };
 
     return (

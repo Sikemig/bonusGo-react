@@ -26,9 +26,6 @@ export default function ModoAdministradorObjetivos() {
     const [usuariosHabilitados, setUsuariosHabilitados] = useState([]);
     const [showModalHabilitar, setShowModalHabilitar] = useState(false);
 
-
-
-
     useEffect(() => {
         fetchUsuario();
         fetchObjetivos();

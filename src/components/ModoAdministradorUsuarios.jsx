@@ -1,34 +1,33 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { Modal, Button, Form } from 'react-bootstrap';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
 
 export default function ModoAdministradorUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
+  const [adminNombre, setAdminNombre] = useState('');
   const [editarId, setEditarId] = useState(null);
   const [nombre, setNombre] = useState('');
-  const [email, setEmail] = useState('');
-  const [rol, setRol] = useState('USUARIO');
+  const [apellido, setApellido] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [telefono, setTelefono] = useState('');
   const [monedas, setMonedas] = useState(0);
-  const [adminNombre, setAdminNombre] = useState('');
+  const [rolSeleccionado, setRolSeleccionado] = useState('');
+  const [busqueda, setBusqueda] = useState('');
+  const [usuariosFiltrados, setUsuariosFiltrados] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [usuarioAEliminar, setUsuarioAEliminar] = useState(null);
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+  const [roles, setRoles] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchUsuarios();
     fetchAdmin();
+    fetchUsuarios();
+    fetchRoles();
   }, []);
-
-  const fetchUsuarios = async () => {
-    const token = localStorage.getItem('token');
-    try {
-      const res = await axios.get('http://localhost:8080/usuario/getall', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setUsuarios(res.data);
-    } catch (err) {
-      console.error('Error al obtener usuarios:', err);
-    }
-  };
 
   const fetchAdmin = async () => {
     const token = localStorage.getItem('token');
@@ -43,12 +42,70 @@ export default function ModoAdministradorUsuarios() {
     }
   };
 
+  const fetchUsuarios = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const res = await axios.get('http://localhost:8080/usuario/getTodos', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUsuarios(res.data);
+      setUsuariosFiltrados(res.data);
+    } catch (err) {
+      console.error('Error al obtener usuarios:', err);
+    }
+  };
+
+  const fetchRoles = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const res = await axios.get('http://localhost:8080/roles/getAll', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setRoles(res.data);
+    } catch (err) {
+      console.error('Error al obtener roles:', err);
+    }
+  };
+
+  const obtenerNombreRol = (idRol) => {
+    const rol = roles.find(r => r.id_Rol === idRol);
+    if (!rol) return 'Desconocido';
+    switch (rol.nombre) {
+      case 'ROLE_ADMIN': return 'Administrador';
+      case 'ROLE_USER': return 'Usuario';
+      default: return rol.nombre;
+    }
+  };
+
+  const handleBuscar = (e) => {
+    const valor = e.target.value.toLowerCase();
+    setBusqueda(valor);
+    setUsuariosFiltrados(
+      usuarios.filter(u =>
+        u.nombre.toLowerCase().includes(valor) ||
+        u.correo.toLowerCase().includes(valor)
+      )
+    );
+  };
+
   const prepararEdicion = (usuario) => {
-    setEditarId(usuario.id_usuario);
+    setEditarId(usuario.id_Usuario);
     setNombre(usuario.nombre);
-    setEmail(usuario.email);
-    setRol(usuario.rol);
+    setApellido(usuario.apellido || '');
+    setCorreo(usuario.correo);
+    setTelefono(usuario.telefono || '');
     setMonedas(usuario.moneda);
+    setRolSeleccionado(usuario.id_Rol?.toString() || '');
+    setShowModal(true);
+  };
+
+  const limpiarFormulario = () => {
+    setNombre('');
+    setApellido('');
+    setCorreo('');
+    setTelefono('');
+    setMonedas(0);
+    setRolSeleccionado('');
   };
 
   const handleGuardar = async (e) => {
@@ -57,27 +114,43 @@ export default function ModoAdministradorUsuarios() {
     try {
       await axios.put(`http://localhost:8080/usuario/actualizar/${editarId}`, {
         nombre,
-        email,
-        rol,
-        moneda: monedas
+        apellido,
+        correo,
+        telefono,
+        moneda: monedas,
+        rol: { id_Rol: parseInt(rolSeleccionado) }
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      setShowModal(false);
       fetchUsuarios();
-      cerrarModal();
+      limpiarFormulario();
     } catch (err) {
       console.error('Error al actualizar usuario:', err);
     }
   };
 
-  const cerrarModal = () => {
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditarUsuario'));
-    modal.hide();
-    setEditarId(null);
-    setNombre('');
-    setEmail('');
-    setRol('USUARIO');
-    setMonedas(0);
+  const prepararBorrado = (usuario) => {
+    setUsuarioAEliminar(usuario);
+    setMostrarConfirmacion(true);
+  };
+
+  const confirmarBorrado = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:8080/usuario/eliminar/${usuarioAEliminar.id_Usuario}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchUsuarios();
+    } catch (err) {
+      console.error('Error al eliminar usuario:', err);
+    }
+    setMostrarConfirmacion(false);
+    setUsuarioAEliminar(null);
+  };
+
+  const irPerfil = () => {
+    navigate('/perfil');
   };
 
   return (
@@ -92,26 +165,41 @@ export default function ModoAdministradorUsuarios() {
 
       <div className="bienvenida">MODO ADMINISTRADOR - USUARIOS</div>
 
-      <div className="table-responsive mt-4">
+      <div className="container mt-3">
+        <input
+          type="text"
+          className="form-control mb-3"
+          placeholder="Buscar usuario por nombre o correo"
+          value={busqueda}
+          onChange={handleBuscar}
+        />
+      </div>
+
+      <div className="table-responsive mt-2">
         <table className="table">
           <thead>
             <tr>
               <th>Nombre</th>
-              <th>Email</th>
+              <th>Apellido</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
               <th>Rol</th>
               <th>Monedas</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {usuarios.map(usuario => (
-              <tr key={usuario.id_usuario}>
+            {usuariosFiltrados.map(usuario => (
+              <tr key={usuario.id_Usuario}>
                 <td>{usuario.nombre}</td>
-                <td>{usuario.email}</td>
-                <td>{usuario.rol}</td>
+                <td>{usuario.apellido}</td>
+                <td>{usuario.correo}</td>
+                <td>{usuario.telefono}</td>
+                <td>{obtenerNombreRol(usuario.id_Rol)}</td>
                 <td>{usuario.moneda}</td>
                 <td>
-                  <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario" onClick={() => prepararEdicion(usuario)}>Editar</button>
+                  <button className="btn btn-primary me-2" onClick={() => prepararEdicion(usuario)}>Editar</button>
+                  <button className="btn btn-danger" onClick={() => prepararBorrado(usuario)}>Eliminar</button>
                 </td>
               </tr>
             ))}
@@ -119,43 +207,67 @@ export default function ModoAdministradorUsuarios() {
         </table>
       </div>
 
-      {/* Modal de edición */}
-      <div className="modal fade" id="modalEditarUsuario" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <form onSubmit={handleGuardar}>
-              <div className="modal-header">
-                <h5 className="modal-title">Editar Usuario</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <label className="form-label">Nombre</label>
-                  <input type="text" className="form-control" value={nombre} onChange={e => setNombre(e.target.value)} required />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input type="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Rol</label>
-                  <select className="form-select" value={rol} onChange={e => setRol(e.target.value)}>
-                    <option value="USUARIO">USUARIO</option>
-                    <option value="ADMIN">ADMIN</option>
-                  </select>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Monedas</label>
-                  <input type="number" className="form-control" value={monedas} onChange={e => setMonedas(parseInt(e.target.value))} required />
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button type="submit" className="btn btn-success">Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Form onSubmit={handleGuardar}>
+          <Modal.Header closeButton>
+            <Modal.Title>Editar Usuario</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group className="mb-3">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Apellido</Form.Label>
+              <Form.Control type="text" value={apellido} onChange={e => setApellido(e.target.value)} required />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Correo</Form.Label>
+              <Form.Control type="email" value={correo} onChange={e => setCorreo(e.target.value)} required />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Teléfono</Form.Label>
+              <Form.Control type="text" value={telefono} onChange={e => setTelefono(e.target.value)} />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Monedas</Form.Label>
+              <Form.Control type="number" value={monedas} onChange={e => setMonedas(parseInt(e.target.value))} required />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Rol</Form.Label>
+              <Form.Select
+                value={rolSeleccionado}
+                onChange={e => setRolSeleccionado(e.target.value)}
+                required
+              >
+                <option value="">Seleccione un rol</option>
+                {roles.map(rol => (
+                  <option key={rol.id_Rol} value={rol.id_Rol.toString()}>
+                    {rol.nombre}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+            <Button type="submit" variant="success">Guardar</Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+
+      <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar eliminación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Estás seguro de que deseas eliminar a <strong>{usuarioAEliminar?.nombre}</strong>?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={confirmarBorrado}>Eliminar</Button>
+          <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
+        </Modal.Footer>
+      </Modal>
 
       <footer className="footer">
         <p>📬 Info contacto empresa y administradores</p>
