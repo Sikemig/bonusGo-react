@@ -67,15 +67,14 @@ export default function ModoAdministradorUsuarios() {
     }
   };
 
-  const obtenerNombreRol = (idRol) => {
-    const rol = roles.find(r => r.id_Rol === idRol);
+  const obtenerNombreRol = (rol) => {
     if (!rol) return 'Desconocido';
     switch (rol.nombre) {
       case 'ROLE_ADMIN': return 'Administrador';
       case 'ROLE_USER': return 'Usuario';
       default: return rol.nombre;
     }
-  };
+  };  
 
   const handleBuscar = (e) => {
     const valor = e.target.value.toLowerCase();
@@ -95,7 +94,7 @@ export default function ModoAdministradorUsuarios() {
     setCorreo(usuario.correo);
     setTelefono(usuario.telefono || '');
     setMonedas(usuario.moneda);
-    setRolSeleccionado(usuario.id_Rol?.toString() || '');
+    setRolSeleccionado(usuario.rol?.id_Rol.toString() || '');
     setShowModal(true);
   };
 
@@ -112,23 +111,30 @@ export default function ModoAdministradorUsuarios() {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`http://localhost:8080/usuario/actualizar/${editarId}`, {
-        nombre,
-        apellido,
-        correo,
-        telefono,
-        moneda: monedas,
-        rol: { id_Rol: parseInt(rolSeleccionado) }
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setShowModal(false);
-      fetchUsuarios();
-      limpiarFormulario();
+      const response = await axios.put(
+        `http://localhost:8080/usuario/actualizar/${editarId}`,
+        {
+          nombre,
+          apellido,
+          correo,
+          telefono,
+          moneda: monedas,
+          rol: { id_Rol: parseInt(rolSeleccionado) }
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+        fetchUsuarios();
+        limpiarFormulario();
+        setShowModal(false);
+
     } catch (err) {
-      console.error('Error al actualizar usuario:', err);
+    console.error('Error al actualizar usuario:', err);
     }
   };
+  
 
   const prepararBorrado = (usuario) => {
     setUsuarioAEliminar(usuario);
@@ -195,7 +201,7 @@ export default function ModoAdministradorUsuarios() {
                 <td>{usuario.apellido}</td>
                 <td>{usuario.correo}</td>
                 <td>{usuario.telefono}</td>
-                <td>{obtenerNombreRol(usuario.id_Rol)}</td>
+                <td>{obtenerNombreRol(usuario.rol)}</td>
                 <td>{usuario.moneda}</td>
                 <td>
                   <button className="btn btn-primary me-2" onClick={() => prepararEdicion(usuario)}>Editar</button>
