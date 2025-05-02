@@ -179,7 +179,6 @@ export default function ModoAdministradorObjetivos() {
     };
 
 
-
     // busqueda de usuarios para la habilitacion
     const handleBusquedaUsuarios = (e) => {
         const valor = e.target.value.toLowerCase();
