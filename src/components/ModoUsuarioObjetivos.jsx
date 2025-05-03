@@ -64,19 +64,19 @@ export default function ModoUsuarioObjetivos() {
     }
   };
 
-  const handleCanjearObjetivo = async (idObjetivo) => {
+  const handleReclamarObjetivo = async (idObjetivo) => {
     const token = localStorage.getItem('token');
     const idUsuario = localStorage.getItem('id');
     try {
-      await axios.put(`http://localhost:8080/objetivos/canjear/${idObjetivo}?idUsuario=${idUsuario}`, {}, {
+      await axios.post(`http://localhost:8080/ganancia/reclamar?idObjetivo=${idObjetivo}&idUsuario=${idUsuario}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Objetivo canjeado con éxito!');
       fetchObjetivos().then(fetchObjetivosHabilitadosParaUsuario);
       fetchUsuario();
     } catch (error) {
-      console.error('Error al canjear objetivo:', error);
-      alert('Error al canjear objetivo. Revisa tus PigCoins.');
+      console.error('Error al reclamar objetivo:', error);
+      alert('Error al reclamar objetivo. Revisa tus PigCoins.');
     }
   };
 
@@ -115,13 +115,13 @@ export default function ModoUsuarioObjetivos() {
             const estaHabilitado = objetivosHabilitados.includes(objetivo.idObjetivo);
             return (
               <div className="col-md-4 mb-4" key={objetivo.idObjetivo}>
-                <div className={`card h-100 shadow-sm ${!estaHabilitado ? 'bg-light text-muted' : ''}`}>
+                <div className={`card h-100 shadow-sm ${!estaHabilitado ? 'disabled' : ''}`} style={!estaHabilitado? { opacity: 0.5 } : {}}>
                   {objetivo.imagen && (
                     <img
                       src={objetivo.imagen}
                       className="card-img-top"
                       alt={objetivo.nombre}
-                      style={{ filter: !estaHabilitado ? 'grayscale(100%) brightness(70%)' : 'none' }}
+                      style={{ opacity: !estaHabilitado ? 0.5 : 1 }}
                     />
                   )}
                   <div className="card-body d-flex flex-column justify-content-between">
@@ -132,10 +132,10 @@ export default function ModoUsuarioObjetivos() {
                     </div>
                     <button
                       className="btn btn-success mt-3"
-                      onClick={() => handleCanjearObjetivo(objetivo.idObjetivo)}
+                      onClick={() => handleReclamarObjetivo(objetivo.idObjetivo)}
                       disabled={!estaHabilitado}
                     >
-                      Canjear
+                      Reclamar
                     </button>
                   </div>
                 </div>

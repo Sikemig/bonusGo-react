@@ -17,15 +17,37 @@ export default function ModoUsuarioProductos() {
   const fetchProductos = async () => {
     const token = localStorage.getItem('token');
     const idUsuario = localStorage.getItem('id');
+  
     try {
-      const response = await axios.get(`http://localhost:8080/producto/disponibles/${idUsuario}`, {
+      const responseProductos = await axios.get(`http://localhost:8080/producto/getall`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setProductos(response.data);
+      const productos = responseProductos.data;
+  
+      // Verificar los productos canjeados del backend
+      const responseCanjeados = await axios.get(`http://localhost:8080/transacciones/canjeados/${idUsuario}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+  
+      // Asegurarse de que responseCanjeados.data sea un array
+      const productosCanjeadosIds = Array.isArray(responseCanjeados.data)
+        ? responseCanjeados.data.map(producto => producto.id_Producto)
+        : [];  // Si no es un array, asignar un array vacío
+  
+      // Marcar los productos canjeados
+      const productosConEstado = productos.map(producto => ({
+        ...producto,
+        canjeado: productosCanjeadosIds.includes(producto.id_Producto)
+      }));
+  
+      setProductos(productosConEstado);
+  
     } catch (error) {
-      console.error('Error al obtener productos disponibles:', error);
+      console.error('Error al obtener productos:', error);
     }
   };
+  
+
 
   const fetchUsuario = async () => {
     const token = localStorage.getItem('token');
@@ -41,19 +63,20 @@ export default function ModoUsuarioProductos() {
     }
   };
 
-  const handleCanjearProducto = async (idProducto) => {
+  const handleCanjearProducto = async (id_Producto) => {
     const token = localStorage.getItem('token');
     const idUsuario = localStorage.getItem('id');
     try {
-      await axios.put(`http://localhost:8080/producto/canjear/${idProducto}?idUsuario=${idUsuario}`, {}, {
+      await axios.post(`http://localhost:8080/transacciones/canjear?idProducto=${id_Producto}&idUsuario=${idUsuario}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert('Producto canjeado con éxito!');
+      alert('¡Producto canjeado con éxito!');
       fetchProductos();
       fetchUsuario();
+      fetchProductosCanjeados();
     } catch (error) {
       console.error('Error al canjear producto:', error);
-      alert('Error al canjear producto. Revisa tus PigCoins.');
+      alert(error.response.data);
     }
   };
 
@@ -69,12 +92,10 @@ export default function ModoUsuarioProductos() {
           <Link className="navbar-brand" to="/">
             <img src={pigCoinLogo} width="50" height="50" alt="PigCoin Logo" /> {usuario} ({monedas} PigCoins)
           </Link>
-
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav">
               <Link className="nav-link" to="/indexUsuario">Inicio</Link>
             </div>
-
             <div className="d-flex ms-auto">
               <button className="icon-btn" title="Perfil" onClick={irPerfil}>👤</button>
             </div>
@@ -85,34 +106,38 @@ export default function ModoUsuarioProductos() {
       {/* Título */}
       <div className="bienvenida">PRODUCTOS DISPONIBLES</div>
 
-      {/* Tabla productos */}
-      <div className="table-responsive mt-4">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Coste</th>
-              <th>Tipo</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productos.map(producto => (
-              <tr key={producto.id_producto}>
-                <td>{producto.nombre}</td>
-                <td>{producto.descripcion}</td>
-                <td>{producto.coste}</td>
-                <td>{producto.tipo}</td>
-                <td>
-                  <button className="btn btn-success" onClick={() => handleCanjearProducto(producto.id_producto)}>
+      {/* Tarjetas de productos */}
+      <div className="container mt-4">
+        <div className="row">
+          {productos.map((producto) => (
+            <div className="col-md-4 mb-4" key={producto.id_Producto}>
+              <div className={`card h-100 shadow-sm ${producto.canjeado ? 'disabled' : ''}`} style={producto.canjeado ? { opacity: 0.5 } : {}}>
+                {producto.imagen && (
+                  <img
+                    src={producto.imagen}
+                    className="card-img-top"
+                    alt={producto.nombre}
+                  />
+                )}
+                <div className="card-body d-flex flex-column justify-content-between">
+                  <div>
+                    <h5 className="card-title">{producto.nombre}</h5>
+                    <p className="card-text">{producto.descripcion}</p>
+                    <p className="card-text"><strong>Coste:</strong> {producto.coste} PigCoins</p>
+                    <p className="card-text"><strong>Tipo:</strong> {producto.tipo}</p>
+                  </div>
+                  <button
+                    className="btn btn-success mt-3"
+                    onClick={() => handleCanjearProducto(producto.id_Producto)}
+                    disabled={producto.canjeado}
+                  >
                     Canjear
                   </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Footer */}
