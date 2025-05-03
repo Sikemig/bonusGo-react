@@ -12,7 +12,13 @@ export default function ObjetivosUsuario() {
   const [usuario, setUsuario] = useState('');
   const [monedas, setMonedas] = useState(0);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
   const [objetivosHabilitados, setObjetivosHabilitados] = useState([]);
   const navigate = useNavigate();
 >>>>>>> Stashed changes
@@ -32,7 +38,17 @@ export default function ObjetivosUsuario() {
       return response.data;
     } catch (error) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
       console.error('Error al obtener objetivos:', error);
+=======
+      console.error('Error al obtener todos los objetivos:', error);
+      return [];
+>>>>>>> Stashed changes
+=======
+      console.error('Error al obtener todos los objetivos:', error);
+      return [];
+>>>>>>> Stashed changes
 =======
       console.error('Error al obtener todos los objetivos:', error);
       return [];
@@ -55,9 +71,59 @@ export default function ObjetivosUsuario() {
   };
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   const marcarObjetivo = async (idObjetivo, nombre, pigcoins) => {
 =======
   const fetchObjetivosHabilitadosParaUsuario = async (listaObjetivos) => {
+=======
+  const fetchObjetivosHabilitadosParaUsuario = async (listaObjetivos) => {
+=======
+  const fetchObjetivosHabilitadosParaUsuario = async (listaObjetivos) => {
+    const token = localStorage.getItem('token');
+    const idUsuario = localStorage.getItem('id');
+    try {
+      const habilitados = [];
+  
+      for (const obj of listaObjetivos) {
+        const response = await axios.get(`http://localhost:8080/ganancia/habilitados?idObjetivo=${obj.idObjetivo}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.includes(parseInt(idUsuario))) {
+          habilitados.push(obj.idObjetivo);
+        }
+      }
+  
+      setObjetivosHabilitados(habilitados);
+    } catch (error) {
+      console.error('Error al verificar objetivos habilitados para usuario:', error);
+    }
+  };
+
+  const handleCanjearObjetivo = async (idObjetivo) => {
+>>>>>>> Stashed changes
+    const token = localStorage.getItem('token');
+    const idUsuario = localStorage.getItem('id');
+    try {
+      const habilitados = [];
+  
+      for (const obj of listaObjetivos) {
+        const response = await axios.get(`http://localhost:8080/ganancia/habilitados?idObjetivo=${obj.idObjetivo}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.includes(parseInt(idUsuario))) {
+          habilitados.push(obj.idObjetivo);
+        }
+      }
+  
+      setObjetivosHabilitados(habilitados);
+    } catch (error) {
+      console.error('Error al verificar objetivos habilitados para usuario:', error);
+    }
+  };
+
+  const handleCanjearObjetivo = async (idObjetivo) => {
+>>>>>>> Stashed changes
     const token = localStorage.getItem('token');
     const idUsuario = localStorage.getItem('id');
     try {
@@ -88,6 +154,8 @@ export default function ObjetivosUsuario() {
         headers: { Authorization: `Bearer ${token}` }
       });
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
       await MySwal.fire({
         title: '🎉 ¡Buen trabajo!',
@@ -113,6 +181,14 @@ export default function ObjetivosUsuario() {
       });
 
       fetchObjetivos();
+=======
+      alert('Objetivo canjeado con éxito!');
+      fetchObjetivos().then(fetchObjetivosHabilitadosParaUsuario);
+>>>>>>> Stashed changes
+=======
+      alert('Objetivo canjeado con éxito!');
+      fetchObjetivos().then(fetchObjetivosHabilitadosParaUsuario);
+>>>>>>> Stashed changes
 =======
       alert('Objetivo canjeado con éxito!');
       fetchObjetivos().then(fetchObjetivosHabilitadosParaUsuario);
@@ -249,6 +325,12 @@ export default function ObjetivosUsuario() {
             );
           })}
         </div>
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       </div>
     </div>
