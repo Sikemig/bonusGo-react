@@ -11,21 +11,32 @@ export default function ObjetivosUsuario() {
   const [objetivos, setObjetivos] = useState([]);
   const [usuario, setUsuario] = useState('');
   const [monedas, setMonedas] = useState(0);
+<<<<<<< Updated upstream
+=======
+  const [objetivosHabilitados, setObjetivosHabilitados] = useState([]);
+  const navigate = useNavigate();
+>>>>>>> Stashed changes
 
   useEffect(() => {
-    fetchObjetivos();
+    fetchObjetivos().then((listaObjetivos) => fetchObjetivosHabilitadosParaUsuario(listaObjetivos));
     fetchUsuario();
   }, []);
 
   const fetchObjetivos = async () => {
-    const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://localhost:8080/objetivos/habilitados', {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:8080/objetivos/getall', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setObjetivos(response.data);
+      return response.data;
     } catch (error) {
+<<<<<<< Updated upstream
       console.error('Error al obtener objetivos:', error);
+=======
+      console.error('Error al obtener todos los objetivos:', error);
+      return [];
+>>>>>>> Stashed changes
     }
   };
 
@@ -43,7 +54,32 @@ export default function ObjetivosUsuario() {
     }
   };
 
+<<<<<<< Updated upstream
   const marcarObjetivo = async (idObjetivo, nombre, pigcoins) => {
+=======
+  const fetchObjetivosHabilitadosParaUsuario = async (listaObjetivos) => {
+    const token = localStorage.getItem('token');
+    const idUsuario = localStorage.getItem('id');
+    try {
+      const habilitados = [];
+  
+      for (const obj of listaObjetivos) {
+        const response = await axios.get(`http://localhost:8080/ganancia/habilitados?idObjetivo=${obj.idObjetivo}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.includes(parseInt(idUsuario))) {
+          habilitados.push(obj.idObjetivo);
+        }
+      }
+  
+      setObjetivosHabilitados(habilitados);
+    } catch (error) {
+      console.error('Error al verificar objetivos habilitados para usuario:', error);
+    }
+  };
+
+  const handleCanjearObjetivo = async (idObjetivo) => {
+>>>>>>> Stashed changes
     const token = localStorage.getItem('token');
     const idUsuario = localStorage.getItem('id');
 
@@ -51,6 +87,7 @@ export default function ObjetivosUsuario() {
       await axios.put(`http://localhost:8080/objetivos/canjear/${idObjetivo}?idUsuario=${idUsuario}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
+<<<<<<< Updated upstream
 
       await MySwal.fire({
         title: '🎉 ¡Buen trabajo!',
@@ -76,6 +113,10 @@ export default function ObjetivosUsuario() {
       });
 
       fetchObjetivos();
+=======
+      alert('Objetivo canjeado con éxito!');
+      fetchObjetivos().then(fetchObjetivosHabilitadosParaUsuario);
+>>>>>>> Stashed changes
       fetchUsuario();
 
     } catch (error) {
@@ -164,7 +205,51 @@ export default function ObjetivosUsuario() {
               </div>
             </div>
           </div>
+<<<<<<< Updated upstream
         ))}
+=======
+        </div>
+      </nav>
+
+      {/* Título */}
+      <div className="bienvenida">OBJETIVOS DISPONIBLES</div>
+
+      {/* Tabla objetivos */}
+      <div className="container mt-4">
+        <div className="row">
+          {objetivos.map((objetivo) => {
+            const estaHabilitado = objetivosHabilitados.includes(objetivo.idObjetivo);
+            return (
+              <div className="col-md-4 mb-4" key={objetivo.idObjetivo}>
+                <div className={`card h-100 shadow-sm ${!estaHabilitado ? 'bg-light text-muted' : ''}`}>
+                  {objetivo.imagen && (
+                    <img
+                      src={objetivo.imagen}
+                      className="card-img-top"
+                      alt={objetivo.nombre}
+                      style={{ filter: !estaHabilitado ? 'grayscale(100%) brightness(70%)' : 'none' }}
+                    />
+                  )}
+                  <div className="card-body d-flex flex-column justify-content-between">
+                    <div>
+                      <h5 className="card-title">{objetivo.nombre}</h5>
+                      <p className="card-text">{objetivo.descripcion}</p>
+                      <p className="card-text"><strong>Coste:</strong> {objetivo.valor} PigCoins</p>
+                    </div>
+                    <button
+                      className="btn btn-success mt-3"
+                      onClick={() => handleCanjearObjetivo(objetivo.idObjetivo)}
+                      disabled={!estaHabilitado}
+                    >
+                      Canjear
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+>>>>>>> Stashed changes
       </div>
     </div>
   );
