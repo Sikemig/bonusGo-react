@@ -1,11 +1,14 @@
 /* Estilo general */
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f8f9fa;
-    color: #222;
-    margin: 0;
-  }
-  
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #D6D4BE;
+  color: #222222;
+}
+
+
   /* Contenedor principal centrado y ancho completo */
   .container-fluid {
     max-width: 100%;

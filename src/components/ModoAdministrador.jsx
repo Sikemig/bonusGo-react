@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
-import '../assets/styles/ModoAdministrador.css';
+import '../assets/styles/modoAdministrador.css';
+
 
 export default function ModoAdministrador() {
     const [usuario, setUsuario] = useState('');
@@ -42,7 +43,7 @@ export default function ModoAdministrador() {
     return (
         <>
             {/* Navbar */}
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
                 <div className="container-fluid">
                     <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
                         <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
@@ -99,11 +100,11 @@ export default function ModoAdministrador() {
             </nav>
 
             {/* Contenido principal centrado */}
-            <div className="container-fluid d-flex flex-column align-items-center px-4 mt-4">
+            <div className="container-fluid align-items-center px-4 position-fixed start-50 translate-middle">
                 <div className="text-center mt-5 mb-4 w-100">
-                    <h2 className="fw-bold">
+                    <h1 className="fw-bold">
                         🛠 Estás en el <span className="text-primary">Modo Administrador</span>
-                    </h2>
+                    </h1>
                     <p className="text-muted">Desde aquí puedes gestionar usuarios, objetivos y recompensas del sistema BonusGo.</p>
                 </div>
 
@@ -130,7 +131,7 @@ export default function ModoAdministrador() {
             </div>
 
             {/* Footer */}
-            <footer className="footer mt-5">
+            <footer className="footer mt-5 fixed-bottom">
                 <p className="mb-0">📬 Info contacto empresa y administradores</p>
             </footer>
         </>
