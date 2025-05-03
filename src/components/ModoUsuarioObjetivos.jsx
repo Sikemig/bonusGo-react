@@ -128,7 +128,7 @@ export default function ModoUsuarioObjetivos() {
                     <div>
                       <h5 className="card-title">{objetivo.nombre}</h5>
                       <p className="card-text">{objetivo.descripcion}</p>
-                      <p className="card-text"><strong>Coste:</strong> {objetivo.valor} PigCoins</p>
+                      <p className="card-text"><strong>Coste:</strong> {objetivo.monedas} PigCoins</p>
                     </div>
                     <button
                       className="btn btn-success mt-3"
