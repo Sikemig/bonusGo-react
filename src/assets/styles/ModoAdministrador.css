@@ -1,0 +1,113 @@
+/* Estilo general */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    color: #222;
+    margin: 0;
+  }
+  
+  /* Contenedor principal centrado y ancho completo */
+  .container-fluid {
+    max-width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  /* Bienvenida centrada */
+  .text-center h2 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  .text-muted {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Tarjetas de administración */
+  .card-admin {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    text-align: left;
+  }
+  
+  .card-admin:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Colores por tipo de tarjeta */
+  .bg-light-blue {
+    background-color: #eaf4ff;
+  }
+  
+  .bg-light-green {
+    background-color: #e4fbe8;
+  }
+  
+  .bg-light-gray {
+    background-color: #f0f0f0;
+  }
+  
+  /* Animación de aparición */
+  .section-appear {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+  }
+  
+  .section-appear:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .section-appear:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+  .section-appear:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Perfil navbar */
+  .perfil-navbar {
+    flex-shrink: 0;
+    align-items: center;
+  }
+  
+  /* Botón perfil */
+  .btn-perfil {
+    background-color: #e0dcf9;
+    color: #2c2c2c;
+    border: none;
+    border-radius: 30px;
+    font-weight: 500;
+    padding: 5px 12px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease;
+  }
+  
+  .btn-perfil:hover {
+    background-color: #c8c0f0;
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #232220;
+    color: #F2EAE4;
+    padding: 1rem;
+    text-align: center;
+    margin-top: auto;
+  }
+  

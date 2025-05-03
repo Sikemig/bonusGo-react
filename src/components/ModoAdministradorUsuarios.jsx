@@ -15,6 +15,7 @@ export default function ModoAdministradorUsuarios() {
   const [monedas, setMonedas] = useState(0);
   const [rolSeleccionado, setRolSeleccionado] = useState('');
   const [busqueda, setBusqueda] = useState('');
+  const [filtroRol, setFiltroRol] = useState('');
   const [usuariosFiltrados, setUsuariosFiltrados] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [usuarioAEliminar, setUsuarioAEliminar] = useState(null);
@@ -28,6 +29,10 @@ export default function ModoAdministradorUsuarios() {
     fetchUsuarios();
     fetchRoles();
   }, []);
+
+  useEffect(() => {
+    filtrarUsuarios();
+  }, [busqueda, filtroRol, usuarios]);
 
   const fetchAdmin = async () => {
     const token = localStorage.getItem('token');
@@ -49,7 +54,6 @@ export default function ModoAdministradorUsuarios() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsuarios(res.data);
-      setUsuariosFiltrados(res.data);
     } catch (err) {
       console.error('Error al obtener usuarios:', err);
     }
@@ -67,6 +71,16 @@ export default function ModoAdministradorUsuarios() {
     }
   };
 
+  const filtrarUsuarios = () => {
+    const texto = busqueda.toLowerCase();
+    const filtrados = usuarios.filter(u => {
+      const correoCoincide = u.correo.toLowerCase().includes(texto);
+      const rolCoincide = filtroRol === '' || u.rol?.nombre === filtroRol;
+      return correoCoincide && rolCoincide;
+    });
+    setUsuariosFiltrados(filtrados);
+  };
+
   const obtenerNombreRol = (rol) => {
     if (!rol) return 'Desconocido';
     switch (rol.nombre) {
@@ -74,17 +88,6 @@ export default function ModoAdministradorUsuarios() {
       case 'ROLE_USER': return 'Usuario';
       default: return rol.nombre;
     }
-  };  
-
-  const handleBuscar = (e) => {
-    const valor = e.target.value.toLowerCase();
-    setBusqueda(valor);
-    setUsuariosFiltrados(
-      usuarios.filter(u =>
-        u.nombre.toLowerCase().includes(valor) ||
-        u.correo.toLowerCase().includes(valor)
-      )
-    );
   };
 
   const prepararEdicion = (usuario) => {
@@ -111,7 +114,7 @@ export default function ModoAdministradorUsuarios() {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.put(
+      await axios.put(
         `http://localhost:8080/usuario/actualizar/${editarId}`,
         {
           nombre,
@@ -125,16 +128,13 @@ export default function ModoAdministradorUsuarios() {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-
-        fetchUsuarios();
-        limpiarFormulario();
-        setShowModal(false);
-
+      fetchUsuarios();
+      limpiarFormulario();
+      setShowModal(false);
     } catch (err) {
-    console.error('Error al actualizar usuario:', err);
+      console.error('Error al actualizar usuario:', err);
     }
   };
-  
 
   const prepararBorrado = (usuario) => {
     setUsuarioAEliminar(usuario);
@@ -155,10 +155,6 @@ export default function ModoAdministradorUsuarios() {
     setUsuarioAEliminar(null);
   };
 
-  const irPerfil = () => {
-    navigate('/perfil');
-  };
-
   return (
     <>
       <nav className="navbar navbar-expand-lg custom-navbar">
@@ -171,14 +167,27 @@ export default function ModoAdministradorUsuarios() {
 
       <div className="bienvenida">MODO ADMINISTRADOR - USUARIOS</div>
 
-      <div className="container mt-3">
-        <input
-          type="text"
-          className="form-control mb-3"
-          placeholder="Buscar usuario por nombre o correo"
-          value={busqueda}
-          onChange={handleBuscar}
-        />
+      <div className="container mt-3 row">
+        <div className="col-md-6">
+          <input
+            type="text"
+            className="form-control mb-3"
+            placeholder="Buscar usuario por correo"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+          />
+        </div>
+        <div className="col-md-6">
+          <select
+            className="form-select mb-3"
+            value={filtroRol}
+            onChange={(e) => setFiltroRol(e.target.value)}
+          >
+            <option value="">Todos los roles</option>
+            <option value="ROLE_USER">Usuarios</option>
+            <option value="ROLE_ADMIN">Administradores</option>
+          </select>
+        </div>
       </div>
 
       <div className="table-responsive mt-2">
@@ -213,6 +222,7 @@ export default function ModoAdministradorUsuarios() {
         </table>
       </div>
 
+      {/* Modal Edición */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Form onSubmit={handleGuardar}>
           <Modal.Header closeButton>
@@ -241,15 +251,14 @@ export default function ModoAdministradorUsuarios() {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Rol</Form.Label>
-              <Form.Select
-                value={rolSeleccionado}
-                onChange={e => setRolSeleccionado(e.target.value)}
-                required
-              >
-                <option value="">Seleccione un rol</option>
+              <Form.Select value={rolSeleccionado} onChange={e => setRolSeleccionado(e.target.value)} required>
                 {roles.map(rol => (
                   <option key={rol.id_Rol} value={rol.id_Rol.toString()}>
-                    {rol.nombre}
+                    {rol.nombre === 'ROLE_ADMIN'
+                      ? 'Administrador'
+                      : rol.nombre === 'ROLE_USER'
+                      ? 'Usuario'
+                      : rol.nombre}
                   </option>
                 ))}
               </Form.Select>
@@ -262,6 +271,7 @@ export default function ModoAdministradorUsuarios() {
         </Form>
       </Modal>
 
+      {/* Modal Confirmación */}
       <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmar eliminación</Modal.Title>

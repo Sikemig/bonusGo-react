@@ -12,15 +12,17 @@ export default function ModoAdministradorProductos() {
   const [descripcion, setDescripcion] = useState('');
   const [coste, setCoste] = useState(0);
   const [tipo, setTipo] = useState('EXPERIENCIA');
-  const [file, setFile] = useState(null);
+  const [imagen, setImagen] = useState('');
   const [usuario, setUsuario] = useState('');
   const [monedasUsuario, setMonedasUsuario] = useState(0);
-  const [imagen, setImagen] = useState('');
-  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [productoAEliminar, setProductoAEliminar] = useState(null);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+  const [busquedaNombre, setBusquedaNombre] = useState('');
+  const [tipoFiltro, setTipoFiltro] = useState('');
+  const [ordenCosteAsc, setOrdenCosteAsc] = useState(true);
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUsuario();
@@ -58,34 +60,18 @@ export default function ModoAdministradorProductos() {
     e.preventDefault();
     const token = localStorage.getItem('token');
 
-    const productoData = {
-      nombre,
-      descripcion,
-      coste,
-      tipo,
-      imagen,
-    };
+    const productoData = { nombre, descripcion, coste, tipo, imagen };
 
     try {
       if (editarId === null) {
-        const response = await axios.post('http://localhost:8080/producto/registrar', productoData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+        await axios.post('http://localhost:8080/producto/registrar', productoData, {
+          headers: { Authorization: `Bearer ${token}` }
         });
-        setProductos(prev => [...prev, response.data]);
       } else {
-        const response = await axios.put(`http://localhost:8080/producto/actualizar/${editarId}`, productoData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+        await axios.put(`http://localhost:8080/producto/actualizar/${editarId}`, productoData, {
+          headers: { Authorization: `Bearer ${token}` }
         });
-        setProductos(prev => prev.map(producto => producto.id_producto === editarId ? response.data : producto));
-        setEditarId(null);
       }
-
       fetchProductos();
       resetearFormulario();
       setShowModal(false);
@@ -103,17 +89,15 @@ export default function ModoAdministradorProductos() {
     setImagen('');
   };
 
-
-
   const handlePrepararEdicion = (producto) => {
-    console.log("Producto a editar:", producto);
     setEditarId(producto.id_Producto);
     setNombre(producto.nombre);
     setDescripcion(producto.descripcion);
     setCoste(producto.coste);
     setTipo(producto.tipo);
+    setImagen(producto.imagen);
+    setShowModal(true);
   };
-
 
   const handlePrepararBorrado = (producto) => {
     setProductoAEliminar(producto);
@@ -134,72 +118,61 @@ export default function ModoAdministradorProductos() {
     setProductoAEliminar(null);
   };
 
+  const productosFiltrados = productos
+    .filter(p =>
+      (tipoFiltro === '' || p.tipo === tipoFiltro) &&
+      p.nombre.toLowerCase().includes(busquedaNombre.toLowerCase())
+    )
+    .sort((a, b) => ordenCosteAsc ? a.coste - b.coste : b.coste - a.coste);
 
-  const handleImageChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const irPerfil = () => {
-    navigate('/perfil');
-  };
+  const irPerfil = () => navigate('/perfil');
 
   return (
     <>
-      {/* Barra de navegación */}
       <nav className="navbar navbar-expand-lg custom-navbar">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
             <img src={pigCoinLogo} width="50" height="50" alt="PigCoin Logo" /> {monedasUsuario} PigCoins
           </Link>
-
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
-              <a className="nav-link" href="/registro" target="_blank">REGISTRO</a>
-              <a className="nav-link" href="/login" target="_blank">LOGIN</a>
-              <a className="nav-link" href="/index_usuario" target="_blank">RODAJE</a>
-              <a className="nav-link" href="/index_usuario_administrador" target="_blank">usuario</a>
-              <a className="nav-link" href="/index_modo_administrador" target="_blank">admin</a>
-              <a className="nav-link" href="/mi_perfil" target="_blank">MI PERFIL</a>
-              <a className="nav-link" href="/modo_administrador_objetivo" target="_blank">objetivo</a>
-              <a className="nav-link" href="/modo_administrador_productos" target="_blank">productos</a>
-              <a className="nav-link" href="/catalogo_objetivos" target="_blank">CATÁLOGO</a>
-              <a className="nav-link" href="/historico_transacciones" target="_blank">HISTÓRICO</a>
-              <a className="nav-link" href="/productos" target="_blank">PRODUCTOS</a>
-              <a className="nav-link" href="/carrito" target="_blank">CARRITO</a>
-            </div>
-
-            <form className="form-inline mt-3 ms-3">
-              <input className="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar" />
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-            </form>
-
-            <span className="saludo">Hola, {usuario}</span>
-            <div className="d-flex flex-column align-items-center justify-content-center">
-              <button className="icon-btn" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
-              <div className="text-white">Perfil</div>
-            </div>
-          </div>
+          <span className="saludo">Hola, {usuario}</span>
+          <button className="icon-btn" onClick={irPerfil}>👤 Perfil</button>
         </div>
       </nav>
 
       <div className="bienvenida">MODO ADMINISTRADOR - PRODUCTOS</div>
 
-      <div className="row">
-        <div className="col d-flex justify-content-start">
-          <div className="button-group">
-            <button className="icon-btn" onClick={() => { resetearFormulario(); setShowModal(true); }}>
-              <img src={anadirImg} width="50" height="50" alt="Añadir" /><br />
-              <span>Añadir</span>
-            </button>
-          </div>
-        </div>
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-3 px-3">
+        <input
+          type="text"
+          className="form-control me-2"
+          placeholder="Buscar por nombre"
+          value={busquedaNombre}
+          onChange={(e) => setBusquedaNombre(e.target.value)}
+          style={{ maxWidth: '200px' }}
+        />
+        <select
+          className="form-select me-2"
+          value={tipoFiltro}
+          onChange={(e) => setTipoFiltro(e.target.value)}
+          style={{ maxWidth: '200px' }}
+        >
+          <option value="">Todos los tipos</option>
+          <option value="EXPERIENCIA">EXPERIENCIA</option>
+          <option value="ROPA">ROPA</option>
+          <option value="TARJETAS">TARJETAS</option>
+        </select>
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => setOrdenCosteAsc(!ordenCosteAsc)}
+        >
+          Ordenar por coste {ordenCosteAsc ? '⬆️' : '⬇️'}
+        </button>
+        <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
+          Añadir Producto
+        </button>
       </div>
 
-      <div className="table-responsive mt-4">
+      <div className="table-responsive mt-2">
         <table className="table">
           <thead>
             <tr>
@@ -212,18 +185,16 @@ export default function ModoAdministradorProductos() {
             </tr>
           </thead>
           <tbody>
-            {productos.map(producto => (
-              <tr key={producto.id_producto}>
+            {productosFiltrados.map(producto => (
+              <tr key={producto.id_Producto}>
                 <td>{producto.nombre}</td>
                 <td>{producto.descripcion}</td>
                 <td>{producto.tipo}</td>
                 <td>{producto.coste}</td>
+                <td>{producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}</td>
                 <td>
-                  {producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}
-                </td>
-                <td>
-                  <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(producto); setShowModal(true); }}>Editar</button>
-                  <button className="btn btn-danger ms-2" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
+                  <button className="btn btn-primary me-2" onClick={() => handlePrepararEdicion(producto)}>Editar</button>
+                  <button className="btn btn-danger" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
                 </td>
               </tr>
             ))}
@@ -231,71 +202,42 @@ export default function ModoAdministradorProductos() {
         </table>
       </div>
 
-      <Modal show={showModal} onHide={() => { setShowModal(false); resetearFormulario(); }}>
-        <Modal.Header closeButton>
-          <Modal.Title>{editarId ? 'Editar Producto' : 'Añadir Producto'}</Modal.Title>
-        </Modal.Header>
-        <form onSubmit={handleAnadirEditar}>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Form onSubmit={handleAnadirEditar}>
+          <Modal.Header closeButton>
+            <Modal.Title>{editarId ? 'Editar Producto' : 'Añadir Producto'}</Modal.Title>
+          </Modal.Header>
           <Modal.Body>
-            <div className="mb-3">
-              <label className="form-label">Nombre Producto</label>
-              <input
-                type="text"
-                className="form-control"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Descripción</label>
-              <textarea
-                className="form-control"
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Tipo</label>
-              <select
-                className="form-control"
-                value={tipo}
-                onChange={(e) => setTipo(e.target.value)}
-                required
-              >
-                <option value="" disabled>Seleccione un tipo</option>
+            <Form.Group className="mb-3">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Descripción</Form.Label>
+              <Form.Control as="textarea" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Tipo</Form.Label>
+              <Form.Select value={tipo} onChange={e => setTipo(e.target.value)} required>
                 <option value="EXPERIENCIA">EXPERIENCIA</option>
                 <option value="ROPA">ROPA</option>
                 <option value="TARJETAS">TARJETAS</option>
-              </select>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Coste</label>
-              <input
-                type="number"
-                className="form-control"
-                value={coste}
-                onChange={(e) => setCoste(parseInt(e.target.value))}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Imagen (URL)</label>
-              <input
-                type="text"
-                className="form-control"
-                value={imagen}
-                onChange={(e) => setImagen(e.target.value)}
-                placeholder="Pega la URL de la imagen"
-              />
-            </div>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Coste</Form.Label>
+              <Form.Control type="number" value={coste} onChange={e => setCoste(parseInt(e.target.value))} required />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Imagen (URL)</Form.Label>
+              <Form.Control type="text" value={imagen} onChange={e => setImagen(e.target.value)} />
+            </Form.Group>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
             <Button type="submit" variant="success">Guardar</Button>
           </Modal.Footer>
-        </form>
+        </Form>
       </Modal>
 
       <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
@@ -311,7 +253,7 @@ export default function ModoAdministradorProductos() {
         </Modal.Footer>
       </Modal>
 
-      <footer className="footer">
+      <footer className="footer mt-4">
         <p>📬 Info contacto empresa y administradores</p>
       </footer>
     </>
