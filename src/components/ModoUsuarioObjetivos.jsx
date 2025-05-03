@@ -50,11 +50,11 @@ export default function ModoUsuarioObjetivos() {
       const habilitados = [];
   
       for (const obj of listaObjetivos) {
-        const response = await axios.get(`http://localhost:8080/ganancia/habilitados?idObjetivo=${obj.id_objetivo}`, {
+        const response = await axios.get(`http://localhost:8080/ganancia/habilitados?idObjetivo=${obj.idObjetivo}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.includes(parseInt(idUsuario))) {
-          habilitados.push(obj.id_objetivo);
+          habilitados.push(obj.idObjetivo);
         }
       }
   
@@ -112,9 +112,9 @@ export default function ModoUsuarioObjetivos() {
       <div className="container mt-4">
         <div className="row">
           {objetivos.map((objetivo) => {
-            const estaHabilitado = objetivosHabilitados.includes(objetivo.id_objetivo);
+            const estaHabilitado = objetivosHabilitados.includes(objetivo.idObjetivo);
             return (
-              <div className="col-md-4 mb-4" key={objetivo.id_objetivo}>
+              <div className="col-md-4 mb-4" key={objetivo.idObjetivo}>
                 <div className={`card h-100 shadow-sm ${!estaHabilitado ? 'bg-light text-muted' : ''}`}>
                   {objetivo.imagen && (
                     <img
@@ -132,7 +132,7 @@ export default function ModoUsuarioObjetivos() {
                     </div>
                     <button
                       className="btn btn-success mt-3"
-                      onClick={() => handleCanjearObjetivo(objetivo.id_objetivo)}
+                      onClick={() => handleCanjearObjetivo(objetivo.idObjetivo)}
                       disabled={!estaHabilitado}
                     >
                       Canjear
