@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
-import anadirImg from '../assets/images/anadir.jpg';
 
 export default function ModoAdministradorProductos() {
   const [productos, setProductos] = useState([]);
@@ -19,8 +18,8 @@ export default function ModoAdministradorProductos() {
   const [productoAEliminar, setProductoAEliminar] = useState(null);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
   const [busquedaNombre, setBusquedaNombre] = useState('');
-  const [tipoFiltro, setTipoFiltro] = useState('');
-  const [ordenCosteAsc, setOrdenCosteAsc] = useState(true);
+  const [ordenAsc, setOrdenAsc] = useState(true);
+  const [filtroTipo, setFiltroTipo] = useState('');
 
   const navigate = useNavigate();
 
@@ -120,10 +119,16 @@ export default function ModoAdministradorProductos() {
 
   const productosFiltrados = productos
     .filter(p =>
-      (tipoFiltro === '' || p.tipo === tipoFiltro) &&
+      (filtroTipo === '' || p.tipo === filtroTipo) &&
       p.nombre.toLowerCase().includes(busquedaNombre.toLowerCase())
     )
-    .sort((a, b) => ordenCosteAsc ? a.coste - b.coste : b.coste - a.coste);
+    .sort((a, b) => ordenAsc ? a.coste - b.coste : b.coste - a.coste);
+
+  const resetearFiltros = () => {
+    setBusquedaNombre('');
+    setFiltroTipo('');
+    setOrdenAsc(true);
+  };
 
   const irPerfil = () => navigate('/perfil');
 
@@ -152,8 +157,8 @@ export default function ModoAdministradorProductos() {
         />
         <select
           className="form-select me-2"
-          value={tipoFiltro}
-          onChange={(e) => setTipoFiltro(e.target.value)}
+          value={filtroTipo}
+          onChange={(e) => setFiltroTipo(e.target.value)}
           style={{ maxWidth: '200px' }}
         >
           <option value="">Todos los tipos</option>
@@ -163,9 +168,12 @@ export default function ModoAdministradorProductos() {
         </select>
         <button
           className="btn btn-outline-primary"
-          onClick={() => setOrdenCosteAsc(!ordenCosteAsc)}
+          onClick={() => setOrdenAsc(!ordenAsc)}
         >
-          Ordenar por coste {ordenCosteAsc ? '⬆️' : '⬇️'}
+          Ordenar por coste {ordenAsc ? '⬆️' : '⬇️'}
+        </button>
+        <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
+          Restablecer filtros
         </button>
         <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
           Añadir Producto

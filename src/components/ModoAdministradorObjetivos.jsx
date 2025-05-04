@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
-import anadirImg from '../assets/images/anadir.jpg';
 
 export default function ModoAdministradorObjetivos() {
   const [objetivos, setObjetivos] = useState([]);
@@ -130,7 +129,7 @@ export default function ModoAdministradorObjetivos() {
   };
 
   const handlePrepararEdicion = (objetivo) => {
-    setEditarId(objetivo.id_objetivo);
+    setEditarId(objetivo.idObjetivo);
     setNombre(objetivo.nombre);
     setDescripcion(objetivo.descripcion);
     setCategoria(objetivo.categoria);
@@ -147,7 +146,7 @@ export default function ModoAdministradorObjetivos() {
   const handleConfirmarBorrado = async () => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:8080/objetivos/eliminar/${objetivoAEliminar.id_objetivo}`, {
+      await axios.delete(`http://localhost:8080/objetivos/eliminar/${objetivoAEliminar.idObjetivo}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchObjetivos();
@@ -281,7 +280,7 @@ export default function ModoAdministradorObjetivos() {
           </thead>
           <tbody>
             {objetivosFiltrados.map(objetivo => (
-              <tr key={objetivo.id_objetivo}>
+              <tr key={objetivo.idObjetivo}>
                 <td>{objetivo.nombre}</td>
                 <td>{objetivo.descripcion}</td>
                 <td>{objetivo.categoria}</td>
