@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import bonusGoLogo from "../assets/images/BonusGo_logo.svg";
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
+import '../assets/styles/Index.css';
+import { Navbar, Nav, NavDropdown, Container, Form, Button, Row, Col } from 'react-bootstrap';
 
 export default function Index() {
     // para navegar entre paginas
@@ -30,68 +31,37 @@ export default function Index() {
     return (
         <>
             {/* Barra de navegación */}
-            <nav className="navbar navbar-expand-lg custom-navbar">
-                <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">
-                        <img src={pigCoinLogo} width="50" height="50" alt="BonusGo Logo" className="d-inline-block align-top" /> BonusGo
-                    </Link>
-
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                        <div className="navbar-nav">
-                            <a className="nav-link" href="registro.html" target="_blank">REGISTRO</a>
-                            <a className="nav-link" href="login.html" target="_blank">LOGIN</a>
-                            <a className="nav-link" href="index_usuario.html" target="_blank">RODAJE</a>
-                            <a className="nav-link" href="index_usuario_administrador.html" target="_blank">usuario</a>
-                            <a className="nav-link" href="index_modo_administrador.html" target="_blank">admin</a>
-                            <a className="nav-link" href="mi_perfil.html" target="_blank">MI PERFIL</a>
-                            <a className="nav-link" href="modo_administrador_objetivo.html" target="_blank">objetivo</a>
-                            <a className="nav-link" href="modo_administrador_productos.html" target="_blank">productos</a>
-                            <a className="nav-link" href="catalogo_objetivos.html" target="_blank">CATALOGO</a>
-                            <a className="nav-link" href="historico_transacciones.html" target="_blank">HISTÓRICO</a>
-                            <a className="nav-link" href="productos.html" target="_blank">PRODUCTOS</a>
-                            <a className="nav-link" href="carrito.html" target="_blank">CARRITO</a>
-                        </div>
-
-                        <form className="form-inline mt-3">
-                            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                        </form>
-
-                        <div className="d-flex ms-auto">
-                            <div className="text-center">
-                                <button className="icon-btn" title="Login" onClick={loginClick}>👤</button>
-                                <div className="text-white">Login</div>
-                            </div>
-
-                            <div className="text-center">
-                                <button className="icon-btn" title="Registro" onClick={registerClick}>👥</button>
-                                <div className="text-white">Registro</div>
-                            </div>
-                        </div>
+            <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
+                <Container fluid>
+                    <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+                        <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+                        <strong>BonusGo</strong>
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="navbar-nav" />
+                    <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                        <button className="btn-perfil" onClick={loginClick}>👤 Login</button>
+                        <button className="btn-perfil" onClick={registerClick}>👥 Registro</button>
                     </div>
-                </div>
-            </nav>
+                </Container>
+            </Navbar>
 
             {/* Presentación */}
             <div className="hero section-appear">
-                <h1><img src={bonusGoLogo} alt="BonusGo" /></h1>
+                <h1>BonusGo</h1>
                 <p>Tu dosis diaria de productividad 😎</p>
             </div>
 
             {/* Sección de lo que ofrece la APP */}
-            <div className="container my-4">
-                <div className="row g-4">
-                    <div className="col-12 col-md-6">
+            <div className="container-fluid my-4">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-md-6 justify-content-center">
                         <div className="info-section section-appear">
                             <h3>🎯 INFO OBJETIVOS</h3>
                             <p>¡Todo lo que necesitas saber para conseguir tus recompensas!</p>
                         </div>
                     </div>
-                    <div className="col-12 col-md-6">
+
+                    <div className="col-12 col-md-6 justify-content-center">
                         <div className="info-section section-appear">
                             <h3>📦 INFO PRODUCTOS</h3>
                             <p>Explora nuestros productos y consulta nuestros objetivos</p>
@@ -100,9 +70,25 @@ export default function Index() {
                 </div>
             </div>
 
+
             {/* Footer */}
-            <footer className="footer">
-                <p>📬 Info contacto empresa y administradores</p>
+            <footer className="footer mt-5">
+                <h4>📬 BonusGo - 2025</h4>
+                <div className="d-flex justify-content-center gap-4">
+                    <span>
+                        Manual de usuario -{" "}
+                        <a
+                            href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Notion BonusGo
+                        </a>
+                    </span>
+                    <span>
+                        Contacto - <a href="mailto:BonusGo@BonusGo.es">BonusGo@BonusGo.es</a>
+                    </span>
+                </div>
             </footer>
         </>
     );
