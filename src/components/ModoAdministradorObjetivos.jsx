@@ -27,6 +27,7 @@ export default function ModoAdministradorObjetivos() {
   const [busquedaUsuario, setBusquedaUsuario] = useState('');
   const [usuariosHabilitados, setUsuariosHabilitados] = useState([]);
   const [showModalHabilitar, setShowModalHabilitar] = useState(false);
+  const [mensajeError, setMensajeError] = useState('');
 
   const navigate = useNavigate();
 
@@ -196,8 +197,9 @@ export default function ModoAdministradorObjetivos() {
       setUsuariosHabilitados(prev =>
         habilitar ? [...prev, id_Usuario] : prev.filter(id => id !== id_Usuario)
       );
+      setMensajeError('');
     } catch (error) {
-      console.error('Error al cambiar la habilitación de objetivo:', error);
+      setMensajeError(error.response.data);
     }
   };
 
@@ -349,8 +351,7 @@ export default function ModoAdministradorObjetivos() {
       </Modal>
 
 
-      {/* Modal Gestionar Usuarios */}
-      <Modal show={showModalHabilitar} onHide={() => setShowModalHabilitar(false)} size="lg">
+      <Modal show={showModalHabilitar} onHide={() => {setShowModalHabilitar(false); setMensajeError('');}} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>Habilitar/Deshabilitar el objetivo "{objetivoActivo?.nombre}" para usuarios</Modal.Title>
         </Modal.Header>
@@ -362,6 +363,12 @@ export default function ModoAdministradorObjetivos() {
             value={busquedaUsuario}
             onChange={handleBusquedaUsuarios}
           />
+
+          {mensajeError && (
+            <div className="alert alert-danger" role="alert">
+              {mensajeError}
+            </div>
+          )}
 
           {usuariosFiltrados.map(usuario => (
             <div key={usuario.id_Usuario} className="form-check form-switch border p-2 mb-2 d-flex justify-content-between align-items-center">
