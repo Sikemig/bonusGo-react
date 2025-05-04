@@ -1,0 +1,22 @@
+.hero {
+    background-color: #312608;
+    color: #DEA726;
+    text-align: center;
+    padding: 4rem 1rem;
+    width: 100vw;
+  }
+  
+
+.info-section {
+    background-color: #8C8669;
+    padding: 2rem;
+    margin: 3rem auto 2rem auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 28px;
+    text-align: center;
+    position: relative;
+    justify-content: center;
+    max-width: 700px;
+    width: 100%;
+  }

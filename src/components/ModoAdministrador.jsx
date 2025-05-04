@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
 import '../assets/styles/modoadministrador.css';
-
 import { Navbar, Nav, NavDropdown, Container, Form, Button, Row, Col } from 'react-bootstrap';
 
 export default function ModoAdministrador() {
