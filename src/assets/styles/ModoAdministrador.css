@@ -1,116 +1,98 @@
-/* Estilo general */
-body {
-  display: flex;
-  min-height: 100vh;
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #D6D4BE;
-  color: #222222;
+/* ========== TÍTULOS Y DESCRIPCIÓN ========== */
+.contenido-admin {
+  padding-bottom: 4rem;
 }
 
+.bienvenida h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+}
 
-  /* Contenedor principal centrado y ancho completo */
-  .container-fluid {
-    max-width: 100%;
-    padding-left: 2rem;
-    padding-right: 2rem;
+.texto-admin {
+  color: #DEA726;
+}
+
+.descripcion-admin {
+  color: #444;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* ========== GRID FIJO Y CENTRADO (3 CARTAS) ========== */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* ========== RESPONSIVE: 2 columnas tablet, 1 columna móvil ========== */
+@media (max-width: 1199px) {
+  .admin-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  /* Bienvenida centrada */
-  .text-center h2 {
-    font-size: 2rem;
-    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .text-muted {
-    font-size: 1rem;
-    margin-top: 0.5rem;
+}
+
+/* ========== CARTAS GLASS ========== */
+.card-admin-glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  cursor: pointer;
+  max-width: 300px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.card-admin-glass:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.icon-glass {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.card-glass-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.card-glass-desc {
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.4;
+}
+
+/* ========== ANIMACIÓN DE ENTRADA ========== */
+.section-appear {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Tarjetas de administración */
-  .card-admin {
-    min-height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease-in-out;
-    cursor: pointer;
-    text-align: left;
-  }
-  
-  .card-admin:hover {
-    transform: translateY(-5px);
-  }
-  
-  /* Colores por tipo de tarjeta */
-  .bg-light-blue {
-    background-color: #eaf4ff;
-  }
-  
-  .bg-light-green {
-    background-color: #e4fbe8;
-  }
-  
-  .bg-light-gray {
-    background-color: #f0f0f0;
-  }
-  
-  /* Animación de aparición */
-  .section-appear {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.6s ease forwards;
-  }
-  
-  .section-appear:nth-child(1) {
-    animation-delay: 0.1s;
-  }
-  .section-appear:nth-child(2) {
-    animation-delay: 0.3s;
-  }
-  .section-appear:nth-child(3) {
-    animation-delay: 0.5s;
-  }
-  
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Perfil navbar */
-  .perfil-navbar {
-    flex-shrink: 0;
-    align-items: center;
-  }
-  
-  /* Botón perfil */
-  .btn-perfil {
-    background-color: #e0dcf9;
-    color: #2c2c2c;
-    border: none;
-    border-radius: 30px;
-    font-weight: 500;
-    padding: 5px 12px;
-    font-size: 0.9rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: background-color 0.2s ease;
-  }
-  
-  .btn-perfil:hover {
-    background-color: #c8c0f0;
-  }
-  
-  /* Footer */
-  .footer {
-    background-color: #232220;
-    color: #F2EAE4;
-    padding: 1rem;
-    text-align: center;
-    margin-top: auto;
-  }
-  
+}
