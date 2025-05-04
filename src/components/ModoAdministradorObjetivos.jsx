@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
 
@@ -34,6 +34,13 @@ export default function ModoAdministradorObjetivos() {
     fetchUsuario();
     fetchObjetivos();
   }, []);
+
+  const irPerfil = () => navigate('/perfil');
+  const handleGestionUsuarios = () => navigate('/ModoAdministradorUsuarios');
+  const handleGestionProductos = () => navigate('/modoAdministradorProductos');
+  const handleGestion = () => navigate('/modoAdministrador');
+  const handleUsuarioObjetivos = () => navigate('/modoUsuarioObjetivos');
+  const handleUsuarioProducto = () => navigate('/modoUsuarioProducto');
 
   const fetchUsuario = async () => {
     const token = localStorage.getItem('token');
@@ -215,19 +222,38 @@ export default function ModoAdministradorObjetivos() {
     setOrdenAsc(true);
   };
 
-  const irPerfil = () => navigate('/perfil');
-
   return (
     <>
-      <nav className="navbar navbar-expand-lg custom-navbar">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
-            <img src={pigCoinLogo} width="50" height="50" alt="PigCoin Logo" /> {monedasUsuario} PigCoins
-          </Link>
-          <span className="saludo">Hola, {usuario}</span>
-          <button className="icon-btn" onClick={irPerfil}>👤 Perfil</button>
-        </div>
-      </nav>
+
+           {/* Navbar */}
+            <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
+              <Container fluid>
+                <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+                  <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+                  <strong>BonusGo</strong>
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="navbar-nav" />
+                <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+                  <Nav>
+                  <Nav.Link onClick={handleGestion}>Menú Administrador</Nav.Link>
+                    <NavDropdown title="Gestión" id="gestion-dropdown">
+                      <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
+                      <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
+                    </NavDropdown>
+                    <NavDropdown title="Ver" id="ver-dropdown">
+                      <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
+                      <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
+                    </NavDropdown>
+                  </Nav>
+                  <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                  <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
+                    <Button className="btn-perfil" onClick={irPerfil}>
+                      Mi Perfil
+                    </Button>
+                  </div>
+                </Navbar.Collapse>
+              </Container>
+            </Navbar>
 
       <div className="bienvenida">MODO ADMINISTRADOR - OBJETIVOS</div>
 
@@ -388,8 +414,24 @@ export default function ModoAdministradorObjetivos() {
         </Modal.Footer>
       </Modal>
 
-      <footer className="footer mt-4">
-        <p>📬 Info contacto empresa y administradores</p>
+      {/* Footer */}
+      <footer className="footer mt-5">
+        <h4>📬 BonusGo - 2025</h4>
+        <div className="d-flex justify-content-center gap-4">
+          <span>
+            Manual de usuario -{" "}
+            <a
+              href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Notion BonusGo
+            </a>
+          </span>
+          <span>
+            Contacto - <a href="mailto:BonusGo@BonusGo.es">BonusGo@BonusGo.es</a>
+          </span>
+        </div>
       </footer>
     </>
   );
