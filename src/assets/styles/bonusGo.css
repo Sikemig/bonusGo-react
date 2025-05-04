@@ -1,87 +1,68 @@
-html, body {
+html,
+body {
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #e6e3d3 0%, #d6d4be 100%);
 }
 
 .navbar {
-    background-color: #232220;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
-    height: auto;
-  }
+  background-color: #232220;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: auto;
+}
 
-  .navbar .navbar-brand {
-    color: #DEA726 !important;
-    justify-content: center;
-    text-align: center;
-  }
+.navbar .navbar-brand {
+  color: #DEA726 !important;
+  justify-content: center;
+  text-align: center;
+}
 
-  .navbar .navbar-nav .nav-link {
-    color: #F5F2E7 !important;
-  }
+.navbar .navbar-nav .nav-link {
+  color: #F5F2E7 !important;
+}
 
-  .navbar-nav .nav-link:hover {
-    color: #DEA726 !important;
-  }
+.navbar-nav .nav-link:hover {
+  color: #DEA726 !important;
+}
 
-  .btn-perfil {
-    background-color: #DEA726 !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 30px;
-    font-weight: 500;
-    padding: 5px 12px;
-    font-size: 0.9rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: background-color 0.2s ease;
-  }
+.btn-perfil {
+  background-color: #DEA726 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 30px;
+  font-weight: 500;
+  padding: 5px 12px;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
 
-  .btn-perfil:hover {
-    background-color: #c9911b !important;
-    color: #ffffff !important; 
-  }
+.btn-perfil:hover {
+  background-color: #c9911b !important;
+  color: #ffffff !important;
+}
 
-  .perfil-navbar {
-    flex-shrink: 0;
-    align-items: center;
-  }
+.perfil-navbar {
+  flex-shrink: 0;
+  align-items: center;
+}
 
-  .form-busqueda {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
 
-  .input-busqueda {
-    border-radius: 30px;
-    border: 1px solid #ccc;
-    padding: 6px 16px;
-    font-size: 0.9rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
+.btn-perfil {
+  background-color: #DEA726 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 30px;
+  font-weight: 500;
+  padding: 6px 20px;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
 
-  .input-busqueda:focus {
-    border-color: #DEA726;
-    outline: none;
-    box-shadow: 0 0 5px rgba(222, 167, 38, 0.5);
-  }
-  
-  .btn-buscar, .btn-perfil {
-    background-color: #DEA726 !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 30px;
-    font-weight: 500;
-    padding: 6px 20px;
-    font-size: 0.9rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s ease, transform 0.1s ease;
-  }
-
-  .btn-buscar:hover, .btn-perfil:hover {
+.btn-perfil:hover {
   background-color: #c9911b !important;
   transform: translateY(-2px);
 }
