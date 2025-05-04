@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
-import '../assets/styles/modoAdministrador.css';
+import '../assets/styles/modoadministrador.css';
 
 import { Navbar, Nav, NavDropdown, Container, Form, Button, Row, Col } from 'react-bootstrap';
 
@@ -41,6 +41,8 @@ export default function ModoAdministrador() {
   const handleGestionObjetivos = () => navigate('/modoAdministradorObjetivos');
   const handleGestionProductos = () => navigate('/modoAdministradorProductos');
   const handleGestionUsuarios = () => navigate('/modoAdministradorUsuarios');
+  const handleUsuarioObjetivos = () => navigate('/modoUsuarioObjetivos');
+  const handleUsuarioProducto = () => navigate('/modoUsuarioProducto');
 
   return (
     <>
@@ -49,7 +51,7 @@ export default function ModoAdministrador() {
         <Container fluid>
           <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
             <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-            <strong>{monedas} PigCoins</strong>
+            <strong>BonusGo</strong>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar-nav" />
           <Navbar.Collapse id="navbar-nav" className="justify-content-between">
@@ -60,8 +62,8 @@ export default function ModoAdministrador() {
                 <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="Ver" id="ver-dropdown">
-                <NavDropdown.Item href="/catalogo_objetivos" target="_blank">Ver Objetivos</NavDropdown.Item>
-                <NavDropdown.Item href="/productos" target="_blank">Ver Productos</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">

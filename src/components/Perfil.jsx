@@ -73,7 +73,7 @@ export default function Perfil() {
         <Container fluid>
           <Navbar.Brand className="d-flex align-items-center gap-2">
             <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-            <strong>{detalleUsuario.moneda} PigCoins</strong>
+            <strong>BonusGo</strong>
           </Navbar.Brand>
           <div className="d-flex align-items-center gap-3">
             <span className="text-white fw-semibold">Hola, {detalleUsuario.nombre}</span>
@@ -101,6 +101,7 @@ export default function Perfil() {
               <tr><th>Apellido</th><td>{detalleUsuario.apellido}</td></tr>
               <tr><th>Email</th><td>{detalleUsuario.correo}</td></tr>
               <tr><th>Teléfono</th><td>{detalleUsuario.telefono}</td></tr>
+              <tr><th>Teléfono</th><td>{detalleUsuario.moneda}</td></tr>
             </tbody>
           </table>
         </div>
