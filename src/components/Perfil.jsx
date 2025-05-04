@@ -3,6 +3,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
+import '../assets/styles/perfil.css';
+
+import { Navbar, Container, Button } from 'react-bootstrap';
 
 export default function Perfil() {
   const { user, logout, token } = useAuth();
@@ -61,43 +64,50 @@ export default function Perfil() {
     }
   };
 
-  if (!detalleUsuario) return <p>Cargando perfil...</p>;
+  if (!detalleUsuario) return <p className="text-center mt-5">Cargando perfil...</p>;
 
   return (
     <>
-      {/* NAV */}
-      <nav className="navbar navbar-expand-lg custom-navbar">
-        <div className="container-fluid">
-          <img src={pigCoinLogo} width="50" height="50" alt="PigCoin Logo" />
+      {/* Navbar */}
+      <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
+        <Container fluid>
+          <Navbar.Brand className="d-flex align-items-center gap-2">
+            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+            <strong>{detalleUsuario.moneda} PigCoins</strong>
+          </Navbar.Brand>
+          <div className="d-flex align-items-center gap-3">
+            <span className="text-white fw-semibold">Hola, {detalleUsuario.nombre}</span>
+            <Button className="btn-perfil" onClick={handleLogout}>Cerrar sesión</Button>
+          </div>
+        </Container>
+      </Navbar>
+
+      <div className="perfil-container">
+        {/* Título */}
+        <div className="bienvenida">PERFIL DE USUARIO</div>
+
+        {/* Mensaje de éxito */}
+        {successMessage && (
+          <div className="alert alert-success text-center" role="alert">
+            {successMessage}
+          </div>
+        )}
+
+        {/* Información de perfil */}
+        <div className="perfil-card mt-4 table-responsive">
+          <table className="table">
+            <tbody>
+              <tr><th>Nombre</th><td>{detalleUsuario.nombre}</td></tr>
+              <tr><th>Apellido</th><td>{detalleUsuario.apellido}</td></tr>
+              <tr><th>Email</th><td>{detalleUsuario.correo}</td></tr>
+              <tr><th>Teléfono</th><td>{detalleUsuario.telefono}</td></tr>
+            </tbody>
+          </table>
         </div>
-      </nav>
-
-      <div className="bienvenida">PERFIL DE USUARIO</div>
-
-      {/* Mensaje de éxito */}
-      {successMessage && (
-        <div className="alert alert-success text-center" role="alert">
-          {successMessage}
-        </div>
-      )}
-
-      {/* Tabla de perfil */}
-      <div className="table-responsive mt-4">
-        <table className="table">
-          <tbody>
-            <tr><th>Nombre</th><td>{detalleUsuario.nombre}</td></tr>
-            <tr><th>Apellido</th><td>{detalleUsuario.apellido}</td></tr>
-            <tr><th>Email</th><td>{detalleUsuario.correo}</td></tr>
-            <tr><th>Teléfono</th><td>{detalleUsuario.telefono}</td></tr>
-            <tr><th>PigCoins</th><td>{detalleUsuario.moneda}</td></tr>
-          </tbody>
-        </table>
+        {/* Botón Editar */}
+      <div className="d-flex justify-content-center gap-3 my-4">
+        <Button variant="primary" onClick={() => setShowModal(true)}>Editar Perfil</Button>
       </div>
-
-      {/* Botones */}
-      <div className="d-flex justify-content-center gap-2">
-        <button className="btn btn-danger" onClick={handleLogout}>Cerrar sesión</button>
-        <button className="btn btn-primary" onClick={() => setShowModal(true)}>Editar</button>
       </div>
 
       {/* Modal */}
@@ -128,8 +138,8 @@ export default function Perfil() {
                 </div>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancelar</button>
-                <button className="btn btn-success" onClick={handleGuardar}>Guardar cambios</button>
+                <Button className="btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</Button>
+                <Button variant="success" onClick={handleGuardar}>Guardar cambios</Button>
               </div>
             </div>
           </div>
@@ -138,7 +148,7 @@ export default function Perfil() {
 
       {/* Footer */}
       <footer className="footer mt-4">
-        <p>📬 Info contacto empresa y administradores</p>
+        <p className="mb-0">📬 Info contacto empresa y administradores</p>
       </footer>
     </>
   );
