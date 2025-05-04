@@ -7,6 +7,8 @@ import anadirImg from '../assets/images/anadir.jpg';
 
 export default function ModoAdministradorObjetivos() {
   const [objetivos, setObjetivos] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
+  const [objetivoActivo, setObjetivoActivo] = useState(null);
   const [editarId, setEditarId] = useState(null);
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -21,6 +23,10 @@ export default function ModoAdministradorObjetivos() {
   const [busquedaNombre, setBusquedaNombre] = useState('');
   const [filtroCategoria, setFiltroCategoria] = useState('');
   const [ordenAsc, setOrdenAsc] = useState(true);
+  const [usuariosFiltrados, setUsuariosFiltrados] = useState([]);
+  const [busquedaUsuario, setBusquedaUsuario] = useState('');
+  const [usuariosHabilitados, setUsuariosHabilitados] = useState([]);
+  const [showModalHabilitar, setShowModalHabilitar] = useState(false);
 
   const navigate = useNavigate();
 
@@ -53,6 +59,33 @@ export default function ModoAdministradorObjetivos() {
       setObjetivos(response.data);
     } catch (error) {
       console.error('Error al obtener objetivos:', error);
+    }
+  };
+
+  // buscar usuarios
+  const fetchUsuarios = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.get("http://localhost:8080/usuario/getTodos", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUsuarios(response.data);
+      setUsuariosFiltrados(response.data);
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+    }
+  };
+
+  // para cargar los checks en el modal, segun esten los objetivos habilitados para cada usuario o no
+  const fetchUsuariosHabilitados = async (idObjetivo) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.get(`http://localhost:8080/ganancia/habilitados?idObjetivo=${idObjetivo}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUsuariosHabilitados(response.data);
+    } catch (error) {
+      console.error('Error al obtener usuarios habilitados:', error);
     }
   };
 
@@ -122,6 +155,50 @@ export default function ModoAdministradorObjetivos() {
     }
     setMostrarConfirmacion(false);
     setObjetivoAEliminar(null);
+  };
+
+  // modal para habilitar
+  const abrirModalHabilitar = (objetivo) => {
+    setObjetivoActivo(objetivo);
+    fetchUsuarios();
+    fetchUsuariosHabilitados(objetivo.idObjetivo);
+    setShowModalHabilitar(true);
+  };
+
+  // busqueda de usuarios para la habilitacion
+  const handleBusquedaUsuarios = (e) => {
+    const valor = e.target.value.toLowerCase();
+    setBusquedaUsuario(valor);
+    setUsuariosFiltrados(
+      usuarios.filter(usuario =>
+        usuario.nombre.toLowerCase().includes(valor) || usuario.correo.toLowerCase().includes(valor)
+      )
+    );
+  };
+
+  // habilitamos o deshabilitamos para cada usuario
+  const toggleHabilitacionObjetivo = async (id_Usuario, habilitar) => {
+    const token = localStorage.getItem('token');
+    try {
+      const body = {
+        usuario: { id_Usuario: id_Usuario },
+        objetivo: { idObjetivo: objetivoActivo.idObjetivo },
+        habilitado: habilitar
+      };
+
+      await axios.post(`http://localhost:8080/ganancia/habilitar`, body, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      setUsuariosHabilitados(prev =>
+        habilitar ? [...prev, id_Usuario] : prev.filter(id => id !== id_Usuario)
+      );
+    } catch (error) {
+      console.error('Error al cambiar la habilitación de objetivo:', error);
+    }
   };
 
   const objetivosFiltrados = objetivos
@@ -209,8 +286,9 @@ export default function ModoAdministradorObjetivos() {
                 <td>{objetivo.monedas}</td>
                 <td>{objetivo.imagen && <img src={objetivo.imagen} alt={objetivo.nombre} width="80" />}</td>
                 <td>
-                  <button className="btn btn-primary me-2" onClick={() => handlePrepararEdicion(objetivo)}>Editar</button>
+                  <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(objetivo); setShowModal(true) }}>Editar</button>
                   <button className="btn btn-danger" onClick={() => handlePrepararBorrado(objetivo)}>Borrar</button>
+                  <button className="btn btn-warning ms-2" onClick={() => abrirModalHabilitar(objetivo)}>Habilitar</button>
                 </td>
               </tr>
             ))}
@@ -218,7 +296,7 @@ export default function ModoAdministradorObjetivos() {
         </table>
       </div>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={() => { setShowModal(false); resetearFormulario(); }}>
         <Form onSubmit={handleAnadirEditar}>
           <Modal.Header closeButton>
             <Modal.Title>{editarId ? 'Editar Objetivo' : 'Añadir Objetivo'}</Modal.Title>
@@ -267,6 +345,40 @@ export default function ModoAdministradorObjetivos() {
         <Modal.Footer>
           <Button variant="danger" onClick={handleConfirmarBorrado}>Borrar</Button>
           <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
+        </Modal.Footer>
+      </Modal>
+
+
+      {/* Modal Gestionar Usuarios */}
+      <Modal show={showModalHabilitar} onHide={() => setShowModalHabilitar(false)} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Habilitar/Deshabilitar el objetivo "{objetivoActivo?.nombre}" para usuarios</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <input
+            type="text"
+            className="form-control mb-3"
+            placeholder="Buscar usuario por nombre o correo"
+            value={busquedaUsuario}
+            onChange={handleBusquedaUsuarios}
+          />
+
+          {usuariosFiltrados.map(usuario => (
+            <div key={usuario.id_Usuario} className="form-check form-switch border p-2 mb-2 d-flex justify-content-between align-items-center">
+              <label className="form-check-label mb-0">
+                <strong>{usuario.nombre}</strong> - {usuario.correo}
+              </label>
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={usuariosHabilitados.includes(usuario.id_Usuario)}
+                onChange={(e) => toggleHabilitacionObjetivo(usuario.id_Usuario, e.target.checked)}
+              />
+            </div>
+          ))}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModalHabilitar(false)}>Cerrar</Button>
         </Modal.Footer>
       </Modal>
 
