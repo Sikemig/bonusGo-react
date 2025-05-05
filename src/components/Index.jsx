@@ -39,36 +39,42 @@ export default function Index() {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbar-nav" />
                     <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
-                        <button className="btn-perfil" onClick={loginClick}>👤 Login</button>
-                        <button className="btn-perfil" onClick={registerClick}>👥 Registro</button>
+                        <button className="btn-perfil" onClick={loginClick}>Login</button>
+                        <button className="btn-perfil" onClick={registerClick}>Registro</button>
                     </div>
                 </Container>
             </Navbar>
 
             {/* Presentación */}
-            <div className="hero section-appear">
-                <h1>BonusGo</h1>
-                <p>Tu dosis diaria de productividad 😎</p>
+            <div className="hero section-appear d-flex flex-column justify-content-center align-items-center text-center">
+                <h1 className="display-3 fw-bold mb-3">BonusGo</h1>
+                <p className="lead fs-4 fst-italic">Tu dosis diaria de productividad</p>
             </div>
-
             {/* Sección de lo que ofrece la APP */}
-            <div className="container-fluid my-4">
-                <div className="row justify-content-center">
-                    <div className="col-12 col-md-6 justify-content-center">
-                        <div className="info-section section-appear">
-                            <h3>🎯 INFO OBJETIVOS</h3>
-                            <p>¡Todo lo que necesitas saber para conseguir tus recompensas!</p>
+            <div className="container my-5">
+                <div className="row gy-5 gx-4 justify-content-center">
+                    <div className="col-12 col-md-6">
+                        <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
+                            <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
+                                <div className="icon-box mb-4">🎯</div>
+                                <h4 className="card-title fw-bold mb-3">INFO OBJETIVOS</h4>
+                                <p className="card-text fs-5">¡Todo lo que necesitas saber para conseguir tus recompensas!</p>
+                            </div>
                         </div>
                     </div>
-
-                    <div className="col-12 col-md-6 justify-content-center">
-                        <div className="info-section section-appear">
-                            <h3>📦 INFO PRODUCTOS</h3>
-                            <p>Explora nuestros productos y consulta nuestros objetivos</p>
+                    <div className="col-12 col-md-6">
+                        <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
+                            <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
+                                <div className="icon-box mb-4">📦</div>
+                                <h4 className="card-title fw-bold mb-3">INFO PRODUCTOS</h4>
+                                <p className="card-text fs-5">Explora nuestros productos y consulta nuestros objetivos</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
 
 
             {/* Footer */}

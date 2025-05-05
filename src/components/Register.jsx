@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { Navbar, Nav, NavDropdown, Container, Form, Button, Row, Col } from 'react-bootstrap';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
 
 export default function Register() {
@@ -49,30 +50,30 @@ export default function Register() {
     });
   }, []);
 
+  const loginClick = () => {
+    navigate('/login');
+  };
+
+  const indexClick = () => {
+    navigate('/index');
+  };
+
   return (
     <>
-      {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div className="container">
-          <Link className="navbar-brand d-flex align-items-center" to="/">
-            <img src={pigCoinLogo} width="40" height="40" className="me-2 rounded-circle" alt="PigCoin" />
+      {/* Barra de navegación */}
+      <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
+        <Container fluid>
+          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
             <strong>BonusGo</strong>
-          </Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/register">Registro</Link>
-              </li>
-            </ul>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbar-nav" />
+          <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+            <button className="btn-perfil" onClick={loginClick}>Login</button>
+            <button className="btn-perfil" onClick={indexClick}>Volver</button>
           </div>
-        </div>
-      </nav>
+        </Container>
+      </Navbar>
 
       {/* Registro */}
       <div className="container d-flex justify-content-center align-items-center min-vh-100">
@@ -110,8 +111,23 @@ export default function Register() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-dark text-light text-center py-3 mt-5">
-        <small>📬 Contacto: soporte@bonusgo.com | Todos los derechos reservados © {new Date().getFullYear()}</small>
+      <footer className="footer mt-5">
+        <h4>📬 BonusGo - 2025</h4>
+        <div className="d-flex justify-content-center gap-4">
+          <span>
+            Manual de usuario -{" "}
+            <a
+              href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Notion BonusGo
+            </a>
+          </span>
+          <span>
+            Contacto - <a href="mailto:BonusGo@BonusGo.es">BonusGo@BonusGo.es</a>
+          </span>
+        </div>
       </footer>
     </>
   );

@@ -4,19 +4,42 @@
     text-align: center;
     padding: 4rem 1rem;
     width: 100vw;
+    height: 15vw;
   }
   
-
-.info-section {
-    background-color: #8C8669;
-    padding: 2rem;
-    margin: 3rem auto 2rem auto;
-    border-radius: 10px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    font-size: 28px;
-    text-align: center;
+  .info-card {
+    background: linear-gradient(135deg, #8C8669 0%, #7b755c 100%);
+    color: #fff;
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+    border: 2px solid transparent;
+    overflow: hidden;
     position: relative;
-    justify-content: center;
-    max-width: 700px;
-    width: 100%;
+    min-height: 280px;
+    
   }
+  
+  .info-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    border: 2px solid #DEA726;
+  }
+  
+  .icon-box {
+    font-size: 2.8rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 1rem;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .info-card:hover .icon-box {
+    transform: scale(1.2) rotate(5deg);
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+  
