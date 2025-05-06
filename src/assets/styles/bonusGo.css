@@ -1,4 +1,4 @@
-body, #root  {
+html, body, #root  {
   font-family: 'Segoe UI', sans-serif;
   background-color: #D6D4BE;
   margin: 0;
@@ -11,9 +11,8 @@ body, #root  {
 }
 
 .main-content {
-  flex: 1; /* Ocupa todo el espacio disponible */
+  flex: 1;
 }
-
 
 .navbar {
   background-color: #232220;

@@ -64,7 +64,7 @@ export default function Login() {
   return (
     <>
       {/* Barra de navegación */}
-      <Navbar expand="lg" variant="dark" fixed="top" className="shadow-sm">
+      <Navbar expand="lg" variant="dark" className="shadow-sm">
         <Container fluid>
           <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
             <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />

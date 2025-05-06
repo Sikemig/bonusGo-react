@@ -76,7 +76,7 @@ export default function Index() {
                 </div>
             </div>
             {/* Footer */}
-            <footer className="footer mt-5">
+            <footer className="footer">
                 <h4>📬 BonusGo - 2025</h4>
                 <div className="d-flex justify-content-center gap-4">
                     <span>
