@@ -63,6 +63,10 @@ export default function Perfil() {
       console.error("Error al actualizar usuario:", error.response?.data || error.message);
     }
   };
+  
+  const historial = () => {
+    navigate('/historial');
+  };
 
   if (!detalleUsuario) return <p className="text-center mt-5">Cargando perfil...</p>;
 
@@ -108,6 +112,7 @@ export default function Perfil() {
         {/* Botón Editar */}
       <div className="d-flex justify-content-center gap-3 my-4">
         <Button variant="primary" onClick={() => setShowModal(true)}>Editar Perfil</Button>
+        <Button variant="secondary" onClick={() => navigate('/historial')}>Consultar historial de productos</Button>
       </div>
       </div>
 

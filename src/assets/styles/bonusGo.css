@@ -1,6 +1,11 @@
-body {
+html, body, #root  {
   font-family: 'Segoe UI', sans-serif;
   background-color: #D6D4BE;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .navbar {
