@@ -13,6 +13,7 @@ import ModoUsuarioProductos from './components/ModoUsuarioProductos';
 import ModoUsuarioObjetivos from './components/ModoUsuarioObjetivos';
 import ModoAdministradorUsuarios from './components/ModoAdministradorUsuarios';
 import Perfil from './components/Perfil';
+import Historial from './components/Historial';
 
 export default function App() {
   return (
@@ -50,13 +51,13 @@ export default function App() {
           }
         />
 
-        <Route 
-        path="/modoAdministradorObjetivos" 
-        element={
-          <ProtectedAdminRoute>
-            <ModoAdministradorObjetivos />
-          </ProtectedAdminRoute>
-        } />
+        <Route
+          path="/modoAdministradorObjetivos"
+          element={
+            <ProtectedAdminRoute>
+              <ModoAdministradorObjetivos />
+            </ProtectedAdminRoute>
+          } />
 
         <Route
           path="/modoAdministradorProductos"
@@ -99,6 +100,15 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Perfil />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/historial"
+          element={
+            <ProtectedRoute>
+              <Historial />
             </ProtectedRoute>
           }
         />
