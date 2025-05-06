@@ -30,50 +30,51 @@ export default function Index() {
 
     return (
         <>
-            {/* Barra de navegación */}
-            <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
-                <Container fluid>
-                    <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
-                        <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-                        <strong>BonusGo</strong>
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="navbar-nav" />
-                    <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
-                        <button className="btn-perfil" onClick={loginClick}>Login</button>
-                        <button className="btn-perfil" onClick={registerClick}>Registro</button>
-                    </div>
-                </Container>
-            </Navbar>
+            <div className="main-content">
+                {/* Barra de navegación */}
+                <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+                    <Container fluid>
+                        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+                            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+                            <strong>BonusGo</strong>
+                        </Navbar.Brand>
+                        <Navbar.Toggle aria-controls="navbar-nav" />
+                        <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                            <button className="btn-perfil" onClick={loginClick}>Login</button>
+                            <button className="btn-perfil" onClick={registerClick}>Registro</button>
+                        </div>
+                    </Container>
+                </Navbar>
 
-            {/* Presentación */}
-            <div className="hero section-appear d-flex flex-column justify-content-center align-items-center text-center">
-                <h1 className="display-3 fw-bold mb-3">BonusGo</h1>
-                <p className="lead fs-4 fst-italic">Tu dosis diaria de productividad</p>
-            </div>
-            {/* Sección de lo que ofrece la APP */}
-            <div className="container my-5">
-                <div className="row gy-5 gx-4 justify-content-center">
-                    <div className="col-12 col-md-6">
-                        <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
-                            <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
-                                <div className="icon-box mb-4">🎯</div>
-                                <h4 className="card-title fw-bold mb-3">INFO OBJETIVOS</h4>
-                                <p className="card-text fs-5">¡Todo lo que necesitas saber para conseguir tus recompensas!</p>
+                {/* Presentación */}
+                <div className="hero section-appear d-flex flex-column justify-content-center align-items-center text-center">
+                    <h1 className="display-3 fw-bold mb-3">BonusGo</h1>
+                    <p className="lead fs-4 fst-italic">Tu dosis diaria de productividad</p>
+                </div>
+                {/* Sección de lo que ofrece la APP */}
+                <div className="container my-5">
+                    <div className="row gy-5 gx-4 justify-content-center">
+                        <div className="col-12 col-md-6">
+                            <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
+                                <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
+                                    <div className="icon-box mb-4">🎯</div>
+                                    <h4 className="card-title fw-bold mb-3">INFO OBJETIVOS</h4>
+                                    <p className="card-text fs-5">¡Todo lo que necesitas saber para conseguir tus recompensas!</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-12 col-md-6">
-                        <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
-                            <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
-                                <div className="icon-box mb-4">📦</div>
-                                <h4 className="card-title fw-bold mb-3">INFO PRODUCTOS</h4>
-                                <p className="card-text fs-5">Explora nuestros productos y consulta nuestros objetivos</p>
+                        <div className="col-12 col-md-6">
+                            <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
+                                <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
+                                    <div className="icon-box mb-4">📦</div>
+                                    <h4 className="card-title fw-bold mb-3">INFO PRODUCTOS</h4>
+                                    <p className="card-text fs-5">Explora nuestros productos y consulta nuestros objetivos</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             {/* Footer */}
             <footer className="footer mt-5">
                 <h4>📬 BonusGo - 2025</h4>

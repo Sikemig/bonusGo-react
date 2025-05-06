@@ -1,4 +1,4 @@
-html, body, #root  {
+body, #root  {
   font-family: 'Segoe UI', sans-serif;
   background-color: #D6D4BE;
   margin: 0;
@@ -6,7 +6,14 @@ html, body, #root  {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
+
+.main-content {
+  flex: 1; /* Ocupa todo el espacio disponible */
+}
+
 
 .navbar {
   background-color: #232220;
@@ -75,10 +82,9 @@ html, body, #root  {
   color: white;
   padding: 0.75rem 0;
   text-align: center;
-  position: fixed;
-  bottom: 0;
   width: 100%;
   z-index: 100;
+  margin: 0;
 }
 
 footer.footer a {
