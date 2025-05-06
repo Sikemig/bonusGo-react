@@ -98,7 +98,7 @@ export default function IndexUsuarioAdministrador() {
                             {/* Saludo y botón de perfil */}
                             <span class="saludo">Hola, {usuario}</span>
                             <div className="d-flex flex-column align-items-center justify-content-center">
-                            
+
                                 <button className="icon-btn" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
                                 <div className="text-white">Perfil</div>
                             </div>
@@ -137,7 +137,21 @@ export default function IndexUsuarioAdministrador() {
 
                 {/* Footer */}
                 <footer className="footer">
-                    <p>📬 Info contacto empresa y administradores</p>
+                    <h4>📬 BonusGo - 2025</h4>
+                    <div className="d-flex justify-content-center gap-4">
+                        <span>
+                            Manual de usuario -{" "}
+                            <a
+                                href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+                                target="_blank"
+                            >
+                                Notion BonusGo
+                            </a>
+                        </span>
+                        <span>
+                            Contacto - <a href="mailto:BonusGo@BonusGo.es">BonusGo@BonusGo.es</a>
+                        </span>
+                    </div>
                 </footer>
             </div>
         </>

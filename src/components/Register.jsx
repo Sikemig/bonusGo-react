@@ -81,23 +81,23 @@ export default function Register() {
           <div className="card p-4 shadow-lg w-100 section-appear" style={{ maxWidth: '500px', margin:'1%' }}>
             <h3 className="text-center">Crea tu cuenta</h3>
             <form onSubmit={handleRegister}>
-              <div className="mb-2">
+              <div className="mb-0">
                 <label className="form-label">Nombre</label>
                 <input type="text" className="form-control" name="nombre" value={form.nombre} onChange={handleChange} required />
               </div>
-              <div className="mb-2">
+              <div className="mb-0">
                 <label className="form-label">Apellidos</label>
                 <input type="text" className="form-control" name="apellidos" value={form.apellidos} onChange={handleChange} required />
               </div>
-              <div className="mb-2">
+              <div className="mb-0">
                 <label className="form-label">Correo electrónico</label>
                 <input type="email" className="form-control" name="usuario" value={form.usuario} onChange={handleChange} required />
               </div>
-              <div className="mb-2">
+              <div className="mb-0">
                 <label className="form-label">Contraseña</label>
                 <input type="password" className="form-control" name="password" value={form.password} onChange={handleChange} required />
               </div>
-              <div className="mb-2">
+              <div className="mb-0">
                 <label className="form-label">Confirmar Contraseña</label>
                 <input type="password" className="form-control" name="password2" value={form.password2} onChange={handleChange} required />
               </div>
@@ -120,7 +120,6 @@ export default function Register() {
             <a
               href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
               target="_blank"
-              rel="noopener noreferrer"
             >
               Notion BonusGo
             </a>

@@ -80,58 +80,58 @@ export default function Login() {
         </Navbar>
 
         <div className="container d-flex justify-content-center align-items-center custom-position">
-        <div className="card shadow w-100 section-appear" style={{ maxWidth: '400px', margin:'1%'}}>
-          <div className="card-body">
-            <h3 className="text-center mb-4">Iniciar Sesión</h3>
-            <form onSubmit={handleLogin}>
-              <div className="mb-3">
-                <label htmlFor="usuario" className="form-label">Email:</label>
-                <input
-                  type="email"
-                  id="usuario"
-                  className="form-control"
-                  value={correo}
-                  onChange={(e) => setCorreo(e.target.value)}
-                  required
-                />
-              </div>
+          <div className="card shadow w-100 section-appear" style={{ maxWidth: '400px', margin: '1%' }}>
+            <div className="card-body">
+              <h3 className="text-center mb-4">Iniciar Sesión</h3>
+              <form onSubmit={handleLogin}>
+                <div className="mb-3">
+                  <label htmlFor="usuario" className="form-label">Email:</label>
+                  <input
+                    type="email"
+                    id="usuario"
+                    className="form-control"
+                    value={correo}
+                    onChange={(e) => setCorreo(e.target.value)}
+                    required
+                  />
+                </div>
 
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">Contraseña:</label>
-                <input
-                  type="password"
-                  id="password"
-                  className="form-control"
-                  value={pass}
-                  onChange={(e) => setPass(e.target.value)}
-                  required
-                />
-              </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Contraseña:</label>
+                  <input
+                    type="password"
+                    id="password"
+                    className="form-control"
+                    value={pass}
+                    onChange={(e) => setPass(e.target.value)}
+                    required
+                  />
+                </div>
 
-              <div className="mb-3">
-                <label htmlFor="rol" className="form-label">Rol:</label>
-                <select
-                  id="rol"
-                  className="form-select"
-                  value={rol}
-                  onChange={(e) => setRol(e.target.value)}
-                >
-                  <option value="user">Usuario</option>
-                  <option value="admin">Administrador</option>
-                </select>
-              </div>
+                <div className="mb-3">
+                  <label htmlFor="rol" className="form-label">Rol:</label>
+                  <select
+                    id="rol"
+                    className="form-select"
+                    value={rol}
+                    onChange={(e) => setRol(e.target.value)}
+                  >
+                    <option value="user">Usuario</option>
+                    <option value="admin">Administrador</option>
+                  </select>
+                </div>
 
-              <button type="submit" className="btn btn-warning w-100">Ingresar</button>
+                <button type="submit" className="btn btn-warning w-100">Ingresar</button>
 
-              {mensaje && <div className="alert alert-danger mt-3 text-center">{mensaje}</div>}
-            </form>
+                {mensaje && <div className="alert alert-danger mt-3 text-center">{mensaje}</div>}
+              </form>
+            </div>
           </div>
         </div>
       </div>
-      </div>
 
       {/* Footer */}
-      <footer className="footer mt-5">
+      <footer className="footer">
         <h4>📬 BonusGo - 2025</h4>
         <div className="d-flex justify-content-center gap-4">
           <span>
@@ -139,7 +139,6 @@ export default function Login() {
             <a
               href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
               target="_blank"
-              rel="noopener noreferrer"
             >
               Notion BonusGo
             </a>
@@ -149,6 +148,7 @@ export default function Login() {
           </span>
         </div>
       </footer>
+
     </>
   );
 }

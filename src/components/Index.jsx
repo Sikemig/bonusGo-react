@@ -57,8 +57,8 @@ export default function Index() {
                         <div className="col-12 col-md-6">
                             <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
                                 <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
-                                    <div className="icon-box">🎯</div>
-                                    <h4 className="card-title fw-bold">-OBJETIVOS-</h4>
+                                    <div className="icon-box mb-0">🎯</div>
+                                    <h4 className="card-title fw-bold mb-0">-OBJETIVOS-</h4>
                                     <p className="card-text fs-5">
                                         En BonusGo se definirán una serie de misiones y tareas por parte de tu empresa que 
                                         te permitirán acumular la moneda principal de la aplicación (PigCoins) como recompensa
@@ -73,8 +73,8 @@ export default function Index() {
                         <div className="col-12 col-md-6">
                             <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
                                 <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
-                                    <div className="icon-box">📦</div>
-                                    <h4 className="card-title fw-bold">-PRODUCTOS-</h4>
+                                    <div className="icon-box mb-0">📦</div>
+                                    <h4 className="card-title fw-bold mb-0">-PRODUCTOS-</h4>
                                     <p className="card-text fs-5">
                                         Preparate para canjear todos esos PigCoins acumulados en distintos productos
                                         ofertados por tu empresa como recompensa a tu ardua labor. Echale un vistazo a todas
@@ -98,7 +98,6 @@ export default function Index() {
                         <a
                             href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
                             target="_blank"
-                            rel="noopener noreferrer"
                         >
                             Notion BonusGo
                         </a>
