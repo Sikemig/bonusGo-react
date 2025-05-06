@@ -52,23 +52,37 @@ export default function Index() {
                     <p className="lead fs-4 fst-italic">Tu dosis diaria de productividad</p>
                 </div>
                 {/* Sección de lo que ofrece la APP */}
-                <div className="container my-5">
+                <div className="container my-2">
                     <div className="row gy-5 gx-4 justify-content-center">
                         <div className="col-12 col-md-6">
                             <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
                                 <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
-                                    <div className="icon-box mb-4">🎯</div>
-                                    <h4 className="card-title fw-bold mb-3">INFO OBJETIVOS</h4>
-                                    <p className="card-text fs-5">¡Todo lo que necesitas saber para conseguir tus recompensas!</p>
+                                    <div className="icon-box">🎯</div>
+                                    <h4 className="card-title fw-bold">-OBJETIVOS-</h4>
+                                    <p className="card-text fs-5">
+                                        En BonusGo se definirán una serie de misiones y tareas por parte de tu empresa que 
+                                        te permitirán acumular la moneda principal de la aplicación (PigCoins) como recompensa
+                                        para posteriormente darte algun capricho o facilitarte tu desempeño laboral.
+                                    </p>
+                                    <p className="card-text fs-5">
+                                        ¡Empieza a acumular esos PigCoins!
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div className="col-12 col-md-6">
                             <div className="info-card section-appear card text-center shadow-lg border-0 h-100">
                                 <div className="card-body d-flex flex-column justify-content-center align-items-center p-5">
-                                    <div className="icon-box mb-4">📦</div>
-                                    <h4 className="card-title fw-bold mb-3">INFO PRODUCTOS</h4>
-                                    <p className="card-text fs-5">Explora nuestros productos y consulta nuestros objetivos</p>
+                                    <div className="icon-box">📦</div>
+                                    <h4 className="card-title fw-bold">-PRODUCTOS-</h4>
+                                    <p className="card-text fs-5">
+                                        Preparate para canjear todos esos PigCoins acumulados en distintos productos
+                                        ofertados por tu empresa como recompensa a tu ardua labor. Echale un vistazo a todas
+                                        las posibilidades ofertadas por los administradores a través de esta plataforma.
+                                    </p>
+                                    <p className="card-text fs-5">
+                                        ¡Canjea tus PigCoins por recompensas!
+                                    </p>
                                 </div>
                             </div>
                         </div>
