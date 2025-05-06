@@ -63,88 +63,72 @@ export default function Login() {
 
   return (
     <>
-      {/* Barra de navegación */}
-      <Navbar expand="lg" variant="dark" className="shadow-sm">
-        <Container fluid>
-          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
-            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-            <strong>BonusGo</strong>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbar-nav" />
-          <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
-            <button className="btn-perfil" onClick={registerClick}>Registro</button>
-            <button className="btn-perfil" onClick={indexClick}>Volver</button>
+      <div className="contenido">
+        {/* Barra de navegación */}
+        <Navbar expand="lg" variant="dark" className="shadow-sm">
+          <Container fluid>
+            <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+              <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+              <strong>BonusGo</strong>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+              <button className="btn-perfil" onClick={registerClick}>Registro</button>
+              <button className="btn-perfil" onClick={indexClick}>Volver</button>
+            </div>
+          </Container>
+        </Navbar>
+
+        <div className="container d-flex justify-content-center align-items-center custom-position">
+        <div className="card shadow w-100 section-appear" style={{ maxWidth: '400px', margin:'1%'}}>
+          <div className="card-body">
+            <h3 className="text-center mb-4">Iniciar Sesión</h3>
+            <form onSubmit={handleLogin}>
+              <div className="mb-3">
+                <label htmlFor="usuario" className="form-label">Email:</label>
+                <input
+                  type="email"
+                  id="usuario"
+                  className="form-control"
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">Contraseña:</label>
+                <input
+                  type="password"
+                  id="password"
+                  className="form-control"
+                  value={pass}
+                  onChange={(e) => setPass(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="rol" className="form-label">Rol:</label>
+                <select
+                  id="rol"
+                  className="form-select"
+                  value={rol}
+                  onChange={(e) => setRol(e.target.value)}
+                >
+                  <option value="user">Usuario</option>
+                  <option value="admin">Administrador</option>
+                </select>
+              </div>
+
+              <button type="submit" className="btn btn-warning w-100">Ingresar</button>
+
+              {mensaje && <div className="alert alert-danger mt-3 text-center">{mensaje}</div>}
+            </form>
           </div>
-        </Container>
-      </Navbar>
-
-      {/* Sección de login centrada debajo del navbar */}
-<div
-  style={{
-    minHeight: '100vh',
-    paddingTop: '80px', // para compensar el Navbar fixed
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }}
->
-  <div
-    className="card shadow"
-    style={{
-      maxWidth: '400px',
-      width: '100%',
-      margin: '0 1rem', // para pantallas pequeñas
-    }}
-  >
-    <div className="card-body">
-      <h3 className="text-center mb-4">Iniciar Sesión</h3>
-      <form onSubmit={handleLogin}>
-        <div className="mb-3">
-          <label htmlFor="usuario" className="form-label">Email:</label>
-          <input
-            type="email"
-            id="usuario"
-            className="form-control"
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
-            required
-          />
         </div>
-
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            className="form-control"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="rol" className="form-label">Rol:</label>
-          <select
-            id="rol"
-            className="form-select"
-            value={rol}
-            onChange={(e) => setRol(e.target.value)}
-          >
-            <option value="user">Usuario</option>
-            <option value="admin">Administrador</option>
-          </select>
-        </div>
-
-        <button type="submit" className="btn btn-warning w-100">Ingresar</button>
-
-        {mensaje && <div className="alert alert-danger mt-3 text-center">{mensaje}</div>}
-      </form>
-    </div>
-  </div>
-</div>
-
-
+      </div>
+      </div>
 
       {/* Footer */}
       <footer className="footer mt-5">
