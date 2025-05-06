@@ -74,9 +74,6 @@ export default function Index() {
                 </div>
             </div>
 
-
-
-
             {/* Footer */}
             <footer className="footer mt-5">
                 <h4>📬 BonusGo - 2025</h4>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, Container, Form, Button, Row, Col } from 'react-bootstrap';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
+import '../assets/styles/register.css';
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -76,7 +77,7 @@ export default function Register() {
       </Navbar>
 
       {/* Registro */}
-      <div className="container d-flex justify-content-center align-items-center min-vh-100">
+      <div className="container d-flex justify-content-center align-items-center min-vh-100 mt-5 mt-md-0 custom-position">
         <div className="card p-4 shadow-lg w-100 section-appear" style={{ maxWidth: '500px' }}>
           <h3 className="text-center mb-4">Crea tu cuenta</h3>
           <form onSubmit={handleRegister}>
