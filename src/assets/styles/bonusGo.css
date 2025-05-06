@@ -10,7 +10,7 @@ html, body, #root  {
   flex-direction: column;
 }
 
-.main-content {
+.contenido {
   flex: 1;
 }
 

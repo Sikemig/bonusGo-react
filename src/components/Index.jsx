@@ -30,7 +30,7 @@ export default function Index() {
 
     return (
         <>
-            <div className="main-content">
+            <div className="contenido">
                 {/* Barra de navegación */}
                 <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
                     <Container fluid>
