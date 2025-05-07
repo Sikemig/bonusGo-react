@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
+import '../assets/styles/modoAdministradorGestiones.css';
 
 export default function ModoAdministradorObjetivos() {
   const [objetivos, setObjetivos] = useState([]);
@@ -224,104 +225,108 @@ export default function ModoAdministradorObjetivos() {
 
   return (
     <>
+        {/* Navbar */}
+        <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+          <Container fluid>
+            <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+              <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+              <strong>BonusGo</strong>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+              <Nav>
+                <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
+                <NavDropdown title="Gestión" id="gestion-dropdown">
+                  <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown title="Ver" id="ver-dropdown">
+                  <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+              <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
+                <Button className="btn-perfil" onClick={irPerfil}>
+                  Mi Perfil
+                </Button>
+              </div>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+        <div className="admin-usuarios-wrapper">
+          <div className="bienvenida mt-5">MODO ADMINISTRADOR - OBJETIVOS</div>
 
-           {/* Navbar */}
-            <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
-              <Container fluid>
-                <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
-                  <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-                  <strong>BonusGo</strong>
-                </Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbar-nav" />
-                <Navbar.Collapse id="navbar-nav" className="justify-content-between">
-                  <Nav>
-                  <Nav.Link onClick={handleGestion}>Menú Administrador</Nav.Link>
-                    <NavDropdown title="Gestión" id="gestion-dropdown">
-                      <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
-                      <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
-                    </NavDropdown>
-                    <NavDropdown title="Ver" id="ver-dropdown">
-                      <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
-                      <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
-                    </NavDropdown>
-                  </Nav>
-                  <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
-                  <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
-                    <Button className="btn-perfil" onClick={irPerfil}>
-                      Mi Perfil
-                    </Button>
-                  </div>
-                </Navbar.Collapse>
-              </Container>
-            </Navbar>
+          {/* Controles */}
+          <div className="busqueda-filtros">
+            <input
+              type="text"
+              className="form-control me-2"
+              placeholder="Buscar por nombre"
+              value={busquedaNombre}
+              onChange={(e) => setBusquedaNombre(e.target.value)}
+              style={{ maxWidth: '200px' }}
+            />
+            <select
+              className="form-select me-2"
+              value={filtroCategoria}
+              onChange={(e) => setFiltroCategoria(e.target.value)}
+              style={{ maxWidth: '200px' }}
+            >
+              <option value="">Todas las categorías</option>
+              <option value="ORO">ORO</option>
+              <option value="PLATA">PLATA</option>
+              <option value="BRONCE">BRONCE</option>
+            </select>
+            <button
+              className="btn btn-outline-primary me-2"
+              onClick={() => setOrdenAsc(!ordenAsc)}
+            >
+              Ordenar por recompensa {ordenAsc ? '⬆️' : '⬇️'}
+            </button>
+            <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
+              Restablecer filtros
+            </button>
+            <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
+              Añadir Objetivo
+            </button>
+          </div>
 
-      <div className="bienvenida">MODO ADMINISTRADOR - OBJETIVOS</div>
 
-      {/* Controles */}
-      <div className="d-flex flex-wrap justify-content-between align-items-center mb-3 px-3">
-        <input
-          type="text"
-          className="form-control me-2"
-          placeholder="Buscar por nombre"
-          value={busquedaNombre}
-          onChange={(e) => setBusquedaNombre(e.target.value)}
-          style={{ maxWidth: '200px' }}
-        />
-        <select
-          className="form-select me-2"
-          value={filtroCategoria}
-          onChange={(e) => setFiltroCategoria(e.target.value)}
-          style={{ maxWidth: '200px' }}
-        >
-          <option value="">Todas las categorías</option>
-          <option value="ORO">ORO</option>
-          <option value="PLATA">PLATA</option>
-          <option value="BRONCE">BRONCE</option>
-        </select>
-        <button
-          className="btn btn-outline-primary me-2"
-          onClick={() => setOrdenAsc(!ordenAsc)}
-        >
-          Ordenar por recompensa {ordenAsc ? '⬆️' : '⬇️'}
-        </button>
-        <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
-          Restablecer filtros
-        </button>
-        <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
-          Añadir Objetivo
-        </button>
-      </div>
-
-      <div className="table-responsive mt-2">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Categoría</th>
-              <th>Recompensa</th>
-              <th>Imagen</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {objetivosFiltrados.map(objetivo => (
-              <tr key={objetivo.idObjetivo}>
-                <td>{objetivo.nombre}</td>
-                <td>{objetivo.descripcion}</td>
-                <td>{objetivo.categoria}</td>
-                <td>{objetivo.monedas}</td>
-                <td>{objetivo.imagen && <img src={objetivo.imagen} alt={objetivo.nombre} width="80" />}</td>
-                <td>
-                  <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(objetivo); setShowModal(true) }}>Editar</button>
-                  <button className="btn btn-danger" onClick={() => handlePrepararBorrado(objetivo)}>Borrar</button>
-                  <button className="btn btn-warning ms-2" onClick={() => abrirModalHabilitar(objetivo)}>Habilitar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          <div className="tabla-gestion">
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Categoría</th>
+                    <th>Recompensa</th>
+                    <th>Imagen</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {objetivosFiltrados.map(objetivo => (
+                    <tr key={objetivo.idObjetivo}>
+                      <td>{objetivo.nombre}</td>
+                      <td>{objetivo.descripcion}</td>
+                      <td>{objetivo.categoria}</td>
+                      <td>{objetivo.monedas}</td>
+                      <td>{objetivo.imagen && <img src={objetivo.imagen} alt={objetivo.nombre} width="80" />}</td>
+                      <td>
+                        <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(objetivo); setShowModal(true) }}>Editar</button>
+                        <button className="btn btn-danger ms-2" onClick={() => handlePrepararBorrado(objetivo)}>Borrar</button>
+                        <button className="btn btn-warning ms-2" onClick={() => abrirModalHabilitar(objetivo)}>Habilitar</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+     
 
       <Modal show={showModal} onHide={() => { setShowModal(false); resetearFormulario(); }}>
         <Form onSubmit={handleAnadirEditar}>
@@ -376,7 +381,7 @@ export default function ModoAdministradorObjetivos() {
       </Modal>
 
 
-      <Modal show={showModalHabilitar} onHide={() => {setShowModalHabilitar(false); setMensajeError('');}} size="lg">
+      <Modal show={showModalHabilitar} onHide={() => { setShowModalHabilitar(false); setMensajeError(''); }} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>Habilitar/Deshabilitar el objetivo "{objetivoActivo?.nombre}" para usuarios</Modal.Title>
         </Modal.Header>
@@ -414,8 +419,10 @@ export default function ModoAdministradorObjetivos() {
         </Modal.Footer>
       </Modal>
 
+
+
       {/* Footer */}
-      <footer className="footer mt-5">
+      <footer className="footer">
         <h4>📬 BonusGo - 2025</h4>
         <div className="d-flex justify-content-center gap-4">
           <span>

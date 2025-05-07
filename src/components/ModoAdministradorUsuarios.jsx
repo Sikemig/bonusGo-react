@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
-import '../assets/styles/modoAdministradorUsuarios.css';
+import '../assets/styles/modoAdministradorGestiones.css';
 
 import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 
@@ -175,7 +175,7 @@ export default function ModoAdministradorUsuarios() {
           <Navbar.Toggle aria-controls="navbar-nav" />
           <Navbar.Collapse id="navbar-nav" className="justify-content-between">
             <Nav>
-              <Nav.Link onClick={handleGestion}>Menú Administrador</Nav.Link>
+              <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
               <NavDropdown title="Gestión" id="gestion-dropdown">
                 <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
@@ -186,7 +186,7 @@ export default function ModoAdministradorUsuarios() {
               </NavDropdown>
             </Nav>
             <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
-              <span className="text-white fw-semibold m-0">¡Hola, {adminNombre || 'Usuario'}!</span>
+              <span className="text-white fw-semibold">¡Hola, {adminNombre || 'Usuario'}!</span>
               <Button className="btn-perfil" onClick={irPerfil}>
                 Mi Perfil
               </Button>
@@ -218,7 +218,7 @@ export default function ModoAdministradorUsuarios() {
           </select>
         </div>
 
-        <div className="tabla-usuarios">
+        <div className="tabla-gestion">
           <div className="table-responsive">
             <table className="table table-hover">
               <thead>

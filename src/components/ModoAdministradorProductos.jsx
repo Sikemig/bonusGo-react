@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
+import '../assets/styles/modoAdministradorGestiones.css';
 
 export default function ModoAdministradorProductos() {
   const [productos, setProductos] = useState([]);
@@ -140,99 +141,103 @@ export default function ModoAdministradorProductos() {
   return (
     <>
       {/* Navbar */}
-      <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
-              <Container fluid>
-                <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
-                  <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-                  <strong>BonusGo</strong>
-                </Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbar-nav" />
-                <Navbar.Collapse id="navbar-nav" className="justify-content-between">
-                  <Nav>
-                  <Nav.Link onClick={handleGestion}>Menú Administrador</Nav.Link>
-                    <NavDropdown title="Gestión" id="gestion-dropdown">
-                      <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
-                      <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
-                    </NavDropdown>
-                    <NavDropdown title="Ver" id="ver-dropdown">
-                      <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
-                      <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
-                    </NavDropdown>
-                  </Nav>
-                  <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
-                  <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
-                    <Button className="btn-perfil" onClick={irPerfil}>
-                      Mi Perfil
-                    </Button>
-                  </div>
-                </Navbar.Collapse>
-              </Container>
-        </Navbar>
+      <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+        <Container fluid>
+          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+            <strong>BonusGo</strong>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbar-nav" />
+          <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+            <Nav>
+              <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
+              <NavDropdown title="Gestión" id="gestion-dropdown">
+                <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown title="Ver" id="ver-dropdown">
+                <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+              <span className="text-white fw-semibold">¡Hola, {usuario || 'Usuario'}!</span>
+              <Button className="btn-perfil" onClick={irPerfil}>
+                Mi Perfil
+              </Button>
+            </div>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
-      <div className="bienvenida">MODO ADMINISTRADOR - PRODUCTOS</div>
+      <div className="admin-usuarios-wrapper">
+        <div className="bienvenida mt-5">MODO ADMINISTRADOR - PRODUCTOS</div>
 
-      <div className="d-flex flex-wrap justify-content-between align-items-center mb-3 px-3">
-        <input
-          type="text"
-          className="form-control me-2"
-          placeholder="Buscar por nombre"
-          value={busquedaNombre}
-          onChange={(e) => setBusquedaNombre(e.target.value)}
-          style={{ maxWidth: '200px' }}
-        />
-        <select
-          className="form-select me-2"
-          value={filtroTipo}
-          onChange={(e) => setFiltroTipo(e.target.value)}
-          style={{ maxWidth: '200px' }}
-        >
-          <option value="">Todos los tipos</option>
-          <option value="EXPERIENCIA">EXPERIENCIA</option>
-          <option value="ROPA">ROPA</option>
-          <option value="TARJETAS">TARJETAS</option>
-        </select>
-        <button
-          className="btn btn-outline-primary"
-          onClick={() => setOrdenAsc(!ordenAsc)}
-        >
-          Ordenar por coste {ordenAsc ? '⬆️' : '⬇️'}
-        </button>
-        <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
-          Restablecer filtros
-        </button>
-        <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
-          Añadir Producto
-        </button>
-      </div>
+        <div className="busqueda-filtros">
+          <input
+            type="text"
+            className="form-control me-2"
+            placeholder="Buscar por nombre"
+            value={busquedaNombre}
+            onChange={(e) => setBusquedaNombre(e.target.value)}
+            style={{ maxWidth: '200px' }}
+          />
+          <select
+            className="form-select me-2"
+            value={filtroTipo}
+            onChange={(e) => setFiltroTipo(e.target.value)}
+            style={{ maxWidth: '200px' }}
+          >
+            <option value="">Todos los tipos</option>
+            <option value="EXPERIENCIA">EXPERIENCIA</option>
+            <option value="ROPA">ROPA</option>
+            <option value="TARJETAS">TARJETAS</option>
+          </select>
+          <button
+            className="btn btn-outline-primary me-2"
+            onClick={() => setOrdenAsc(!ordenAsc)}
+          >
+            Ordenar por coste {ordenAsc ? '⬆️' : '⬇️'}
+          </button>
+          <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
+            Restablecer filtros
+          </button>
+          <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
+            Añadir Producto
+          </button>
+        </div>
 
-      <div className="table-responsive mt-2">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Tipo</th>
-              <th>Coste</th>
-              <th>Imagen</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productosFiltrados.map(producto => (
-              <tr key={producto.id_Producto}>
-                <td>{producto.nombre}</td>
-                <td>{producto.descripcion}</td>
-                <td>{producto.tipo}</td>
-                <td>{producto.coste}</td>
-                <td>{producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}</td>
-                <td>
-                  <button className="btn btn-primary me-2" onClick={() => handlePrepararEdicion(producto)}>Editar</button>
-                  <button className="btn btn-danger" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="tabla-gestion">
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Tipo</th>
+                  <th>Coste</th>
+                  <th>Imagen</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productosFiltrados.map(producto => (
+                  <tr key={producto.id_Producto}>
+                    <td>{producto.nombre}</td>
+                    <td>{producto.descripcion}</td>
+                    <td>{producto.tipo}</td>
+                    <td>{producto.coste}</td>
+                    <td>{producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}</td>
+                    <td>
+                      <button className="btn btn-primary me-2" onClick={() => handlePrepararEdicion(producto)}>Editar</button>
+                      <button className="btn btn-danger" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -286,8 +291,8 @@ export default function ModoAdministradorProductos() {
         </Modal.Footer>
       </Modal>
 
-        {/* Footer */}
-        <footer className="footer mt-5">
+      {/* Footer */}
+      <footer className="footer mt-5">
         <h4>📬 BonusGo - 2025</h4>
         <div className="d-flex justify-content-center gap-4">
           <span>

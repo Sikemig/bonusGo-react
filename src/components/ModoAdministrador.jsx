@@ -9,6 +9,7 @@ import { Navbar, Nav, NavDropdown, Container, Form, Button, Row, Col } from 'rea
 export default function ModoAdministrador() {
   const [usuario, setUsuario] = useState('');
   const [monedas, setMonedas] = useState(0);
+  const [rol, setRol] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function ModoAdministrador() {
         const user = response.data;
         setUsuario(user.nombre);
         setMonedas(user.moneda);
+        setRol(Number(response.data.rol.id_Rol));
       })
       .catch(error => {
         console.error('Error al obtener los datos del usuario:', error);
@@ -51,7 +53,7 @@ export default function ModoAdministrador() {
           <Container fluid>
             <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
               <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-              <strong>BonusGo</strong>
+              <strong>BonusGo Administración</strong>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav" className="justify-content-between">
@@ -65,6 +67,9 @@ export default function ModoAdministrador() {
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
                 </NavDropdown>
+                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                  Inicio
+                </Link>
               </Nav>
               <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
                 <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
