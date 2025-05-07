@@ -63,7 +63,7 @@ export default function Perfil() {
       console.error("Error al actualizar usuario:", error.response?.data || error.message);
     }
   };
-  
+
   const historial = () => {
     navigate('/historial');
   };
@@ -72,89 +72,106 @@ export default function Perfil() {
 
   return (
     <>
-      {/* Navbar */}
-      <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
-        <Container fluid>
-          <Navbar.Brand className="d-flex align-items-center gap-2">
-            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-            <strong>BonusGo</strong>
-          </Navbar.Brand>
-          <div className="d-flex align-items-center gap-3">
-            <span className="text-white fw-semibold">Hola, {detalleUsuario.nombre}</span>
-            <Button className="btn-perfil" onClick={handleLogout}>Cerrar sesión</Button>
+      <div className="contenido">
+        {/* Navbar */}
+        <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+          <Container fluid>
+            <Navbar.Brand className="d-flex align-items-center gap-2">
+              <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+              <strong>BonusGo</strong>
+            </Navbar.Brand>
+            <div className="d-flex align-items-center gap-3">
+              <span className="text-white fw-semibold">Hola, {detalleUsuario.nombre}</span>
+              <Button className="btn-perfil" onClick={handleLogout}>Cerrar sesión</Button>
+            </div>
+          </Container>
+        </Navbar>
+
+        <div className="perfil-container">
+          {/* Título */}
+          <div className="bienvenida">PERFIL DE USUARIO</div>
+
+          {/* Mensaje de éxito */}
+          {successMessage && (
+            <div className="alert alert-success text-center" role="alert">
+              {successMessage}
+            </div>
+          )}
+
+          {/* Información de perfil */}
+          <div className="perfil-card mt-4 table-responsive">
+            <table className="table">
+              <tbody>
+                <tr><th>Nombre</th><td>{detalleUsuario.nombre}</td></tr>
+                <tr><th>Apellido</th><td>{detalleUsuario.apellido}</td></tr>
+                <tr><th>Email</th><td>{detalleUsuario.correo}</td></tr>
+                <tr><th>Teléfono</th><td>{detalleUsuario.telefono}</td></tr>
+                <tr><th>PigCoins</th><td>{detalleUsuario.moneda}</td></tr>
+              </tbody>
+            </table>
           </div>
-        </Container>
-      </Navbar>
-
-      <div className="perfil-container">
-        {/* Título */}
-        <div className="bienvenida">PERFIL DE USUARIO</div>
-
-        {/* Mensaje de éxito */}
-        {successMessage && (
-          <div className="alert alert-success text-center" role="alert">
-            {successMessage}
+          {/* Botón Editar */}
+          <div className="d-flex justify-content-center gap-3 my-4">
+            <Button variant="primary" onClick={() => setShowModal(true)}>Editar Perfil</Button>
+            <Button variant="secondary" onClick={() => navigate('/historial')}>Consultar historial de productos</Button>
           </div>
-        )}
-
-        {/* Información de perfil */}
-        <div className="perfil-card mt-4 table-responsive">
-          <table className="table">
-            <tbody>
-              <tr><th>Nombre</th><td>{detalleUsuario.nombre}</td></tr>
-              <tr><th>Apellido</th><td>{detalleUsuario.apellido}</td></tr>
-              <tr><th>Email</th><td>{detalleUsuario.correo}</td></tr>
-              <tr><th>Teléfono</th><td>{detalleUsuario.telefono}</td></tr>
-              <tr><th>Teléfono</th><td>{detalleUsuario.moneda}</td></tr>
-            </tbody>
-          </table>
         </div>
-        {/* Botón Editar */}
-      <div className="d-flex justify-content-center gap-3 my-4">
-        <Button variant="primary" onClick={() => setShowModal(true)}>Editar Perfil</Button>
-        <Button variant="secondary" onClick={() => navigate('/historial')}>Consultar historial de productos</Button>
-      </div>
-      </div>
 
-      {/* Modal */}
-      {showModal && (
-        <div className="modal show fade d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Editar Perfil</h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <label className="form-label">Nombre</label>
-                  <input type="text" className="form-control" name="nombre" value={formData.nombre} onChange={handleInputChange} />
+        {/* Modal */}
+        {showModal && (
+          <div className="modal show fade d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Editar Perfil</h5>
+                  <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Apellido</label>
-                  <input type="text" className="form-control" name="apellido" value={formData.apellido} onChange={handleInputChange} />
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label className="form-label">Nombre</label>
+                    <input type="text" className="form-control" name="nombre" value={formData.nombre} onChange={handleInputChange} />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Apellido</label>
+                    <input type="text" className="form-control" name="apellido" value={formData.apellido} onChange={handleInputChange} />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Correo</label>
+                    <input type="email" className="form-control" name="correo" value={formData.correo} onChange={handleInputChange} />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Teléfono</label>
+                    <input type="text" className="form-control" name="telefono" value={formData.telefono} onChange={handleInputChange} />
+                  </div>
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Correo</label>
-                  <input type="email" className="form-control" name="correo" value={formData.correo} onChange={handleInputChange} />
+                <div className="modal-footer">
+                  <Button className="btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</Button>
+                  <Button variant="success" onClick={handleGuardar}>Guardar cambios</Button>
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Teléfono</label>
-                  <input type="text" className="form-control" name="telefono" value={formData.telefono} onChange={handleInputChange} />
-                </div>
-              </div>
-              <div className="modal-footer">
-                <Button className="btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</Button>
-                <Button variant="success" onClick={handleGuardar}>Guardar cambios</Button>
               </div>
             </div>
           </div>
-        </div>
-      )}
-
+        )}
+      </div>
+      
       {/* Footer */}
-      <footer className="footer mt-4">
-        <p className="mb-0">📬 Info contacto empresa y administradores</p>
+      <footer className="footer">
+        <h4>📬 BonusGo - 2025</h4>
+        <div className="d-flex justify-content-center gap-4">
+          <span>
+            Manual de usuario -{" "}
+            <a
+              href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Notion BonusGo
+            </a>
+          </span>
+          <span>
+            Contacto - <a href="mailto:BonusGo@BonusGo.es">BonusGo@BonusGo.es</a>
+          </span>
+        </div>
       </footer>
     </>
   );
