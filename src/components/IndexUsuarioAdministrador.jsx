@@ -63,7 +63,7 @@ export default function IndexUsuarioAdministrador() {
                         <Navbar.Toggle aria-controls="navbar-nav" />
                         <Navbar.Collapse id="navbar-nav" className="justify-content-between">
                             <Nav>
-                                <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
+                            <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
                                 <NavDropdown title="Gestión" id="gestion-dropdown">
                                     <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
                                     <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>

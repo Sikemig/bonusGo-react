@@ -222,20 +222,22 @@ export default function ModoAdministradorObjetivos() {
   const handleGestion = () => navigate('/modoAdministrador');
   const handleUsuarioObjetivos = () => navigate('/objetivos');
   const handleUsuarioProducto = () => navigate('/productos');
+  const handleIndexAdmin= () => navigate('/indexUsuarioAdministrador');
 
   return (
     <>
         {/* Navbar */}
         <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
           <Container fluid>
-            <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+          <Navbar.Brand onClick={handleIndexAdmin} className="d-flex align-items-center gap-2 clickable">
               <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
               <strong>BonusGo</strong>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav" className="justify-content-between">
               <Nav>
-                <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
+              <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
+              <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
                 <NavDropdown title="Gestión" id="gestion-dropdown">
                   <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
@@ -243,8 +245,7 @@ export default function ModoAdministradorObjetivos() {
                 <NavDropdown title="Ver" id="ver-dropdown">
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
-                </NavDropdown>
-                <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
+                </NavDropdown>   
               </Nav>
               <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
                 <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>

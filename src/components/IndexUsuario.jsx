@@ -49,6 +49,7 @@ export default function IndexUsuario() {
     const irPerfil = () => navigate('/perfil');
     const handleUsuarioObjetivos = () => navigate('/objetivos');
     const handleUsuarioProducto = () => navigate('/productos');
+    const handleIndexUsuario= () => navigate('/indexUsuario');
 
     return (
         <>
@@ -56,7 +57,7 @@ export default function IndexUsuario() {
                 {/* Navbar */}
                 <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
                     <Container fluid>
-                        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+                    <Navbar.Brand onClick={handleIndexUsuario} className="d-flex align-items-center gap-2 clickable">
                             <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
                             <strong>{monedas} PigCoins</strong>
                         </Navbar.Brand>
@@ -79,12 +80,13 @@ export default function IndexUsuario() {
                 </Navbar>
 
                 {/* Bienvenida */}
-                {/* Bienvenida */}
-                <div className="contenedor_principal">
+                <div className="contenedor_principal ">
                     <div className="bienvenida">
-                        <p>Hola, {usuario}, bienvenido.<br />Actualmente tienes {monedas} PigCoins.</p>
+                        <p>¡Hola {usuario}!</p>
+                        <p className="text-base text-gray-900">
+                        Actualmente tienes <strong className="font-semibold text-black">{monedas}</strong> PigCoins listos para usar
+                        </p>
                     </div>
-
                     <div className="container my-4">
                         <div className="row g-4">
                             {/* Sección de objetivos */}
@@ -96,7 +98,6 @@ export default function IndexUsuario() {
                                     </button>
                                 </div>
                             </div>
-
                             {/* Sección de productos */}
                             <div className="col-12 col-md-6">
                                 <div className="info-section section-appear">

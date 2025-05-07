@@ -44,6 +44,7 @@ export default function ModoAdministrador() {
   const handleGestionUsuarios = () => navigate('/modoAdministradorUsuarios');
   const handleUsuarioObjetivos = () => navigate('/objetivos');
   const handleUsuarioProducto = () => navigate('/productos');
+  const handleIndexAdmin= () => navigate('/indexUsuarioAdministrador');
 
   return (
     <>
@@ -51,7 +52,7 @@ export default function ModoAdministrador() {
         {/* Navbar */}
         <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
           <Container fluid>
-            <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+          <Navbar.Brand onClick={handleIndexAdmin} className="d-flex align-items-center gap-2 clickable">
               <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
               <strong>BonusGo Administración</strong>
             </Navbar.Brand>

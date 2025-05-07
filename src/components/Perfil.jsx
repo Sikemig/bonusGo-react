@@ -69,7 +69,6 @@ export default function Perfil() {
     navigate('/historial');
   };
 
-
   if (!detalleUsuario) return <p className="text-center mt-5">Cargando perfil...</p>;
 
   return (
@@ -85,8 +84,8 @@ export default function Perfil() {
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav" className="justify-content-between">
               <Nav>
-                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
-                  Inicio
+              <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                 Inicio
                 </Link>
               </Nav>
               <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">

@@ -90,6 +90,7 @@ export default function ModoUsuarioProductos() {
   const handleUsuarioObjetivos = () => navigate('/objetivos');
   const handleUsuarioProducto = () => navigate('/productos');
   const handleGestionObjetivos = () => navigate('/ModoAdministradorObjetivos');
+  const handleIndexUsuario= () => navigate('/indexUsuario');
 
 
   return (
@@ -97,7 +98,7 @@ export default function ModoUsuarioProductos() {
       <div className="contenido">
         <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
           <Container fluid>
-            <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+          <Navbar.Brand onClick={handleIndexUsuario} className="d-flex align-items-center gap-2 clickable">
               <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
               <strong>{monedas} PigCoins</strong>
             </Navbar.Brand>
@@ -114,13 +115,13 @@ export default function ModoUsuarioProductos() {
                     </NavDropdown>
                   </>
                 )}
+                 <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                  Inicio
+                </Link>
                 <NavDropdown title="Ver" id="ver-dropdown">
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
                 </NavDropdown>
-                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
-                  Inicio
-                </Link>
               </Nav>
               <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
                 <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
@@ -136,38 +137,58 @@ export default function ModoUsuarioProductos() {
         <div className="bienvenida">PRODUCTOS DISPONIBLES</div>
 
         {/* Tarjetas de productos */}
-        <div className="container mt-4">
-          <div className="row">
-            {productos.map((producto) => (
-              <div className="col-md-4 mb-4" key={producto.id_Producto}>
-                <div className={`card h-100 shadow-sm ${producto.canjeado ? 'disabled' : ''}`} style={producto.canjeado ? { opacity: 0.5 } : {}}>
-                  {producto.imagen && (
-                    <img
-                      src={producto.imagen}
-                      className="card-img-top"
-                      alt={producto.nombre}
-                    />
-                  )}
-                  <div className="card-body d-flex flex-column justify-content-between">
-                    <div>
-                      <h5 className="card-title">{producto.nombre}</h5>
-                      <p className="card-text">{producto.descripcion}</p>
-                      <p className="card-text"><strong>Coste:</strong> {producto.coste} PigCoins</p>
-                      <p className="card-text"><strong>Tipo:</strong> {producto.tipo}</p>
-                    </div>
-                    <button
-                      className="btn btn-success mt-3"
-                      onClick={() => handleCanjearProducto(producto.id_Producto)}
-                      disabled={producto.canjeado}
-                    >
-                      Canjear
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+      <div className="container mt-4">
+        <div className="row">
+          {productos.map((producto) => (
+            <div className="col-md-4 mb-4" key={producto.id_Producto}>
+              <div
+                className={`card h-100 border-0 shadow-sm position-relative ${producto.canjeado ? 'bg-light text-muted' : ''}`}
+                style={{
+                  opacity: producto.canjeado ? 0.6 : 1,
+                  cursor: producto.canjeado ? 'not-allowed' : 'default'
+                }}
+            >
+          {/* Imagen */}
+          {producto.imagen && (
+            <img
+              src={producto.imagen}
+              className="card-img-top"
+              alt={producto.nombre}
+              style={{ height: '200px', objectFit: 'cover' }}
+            />
+          )}
+
+          {/* Cuerpo */}
+          <div className="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 className="card-title fw-semibold">{producto.nombre}</h5>
+              <p className="card-text small">{producto.descripcion}</p>
+              <p className="card-text">
+                <strong>Coste:</strong> {producto.coste} <span className="text-warning">PigCoins</span>
+              </p>
+              <p className="card-text">
+                <strong>Tipo:</strong> {producto.tipo}
+              </p>
+            </div>
+            <button
+              className={`btn mt-3 w-100 fw-bold ${producto.canjeado ? 'btn-outline-secondary' : 'btn-success'}`}
+              onClick={() => handleCanjearProducto(producto.id_Producto)}
+              disabled={producto.canjeado}
+            >
+              {producto.canjeado ? '✅ Canjeado' : '🎁 Canjear'}
+            </button>
           </div>
+          {/* Badge de estado */}
+          {producto.canjeado && (
+            <span className="badge position-absolute top-0 end-0 m-2 bg-secondary">
+              Canjeado
+            </span>
+          )}
         </div>
+      </div>
+    ))}
+  </div>
+</div>
       </div>
 
       {/* Footer */}

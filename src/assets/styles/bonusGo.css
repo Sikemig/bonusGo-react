@@ -33,6 +33,10 @@ html, body, #root  {
   color: #DEA726 !important;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .btn-perfil {
   background-color: #DEA726 !important;
   color: #ffffff !important;
@@ -71,6 +75,15 @@ html, body, #root  {
 .btn-perfil:hover {
   background-color: #c9911b !important;
   transform: translateY(-2px);
+}
+
+.nav-btn-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 180px;
+  height: 40px;
+  text-align: center;
 }
 
 .footer {

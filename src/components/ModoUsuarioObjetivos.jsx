@@ -90,13 +90,14 @@ export default function ModoUsuarioObjetivos() {
   const handleUsuarioObjetivos = () => navigate('/objetivos');
   const handleUsuarioProducto = () => navigate('/productos');
   const handleGestionObjetivos = () => navigate('/ModoAdministradorObjetivos');
+  const handleIndexUsuario= () => navigate('/indexUsuario');
 
   return (
     <>
       <div className="contenido">
         <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
           <Container fluid>
-            <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+          <Navbar.Brand onClick={handleIndexUsuario} className="d-flex align-items-center gap-2 clickable">
               <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
               <strong>{monedas} PigCoins</strong>
             </Navbar.Brand>
@@ -113,13 +114,13 @@ export default function ModoUsuarioObjetivos() {
                     </NavDropdown>
                   </>
                 )}
+                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                 Inicio
+                </Link>
                 <NavDropdown title="Ver" id="ver-dropdown">
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
                 </NavDropdown>
-                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
-                  Inicio
-                </Link>
               </Nav>
               <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
                 <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
@@ -131,45 +132,63 @@ export default function ModoUsuarioObjetivos() {
           </Container>
         </Navbar>
 
-        {/* Título */}
-        <div className="bienvenida">OBJETIVOS DISPONIBLES</div>
+      {/* Título */}
+      <div className="bienvenida text-center fw-bold fs-3 my-4">OBJETIVOS DISPONIBLES</div>
+{/* Tarjetas */}
+<div className="container">
+  <div className="row">
+    {objetivos.map((objetivo) => {
+      const estaHabilitado = objetivosHabilitados.includes(objetivo.idObjetivo);
+      return (
+        <div className="col-md-4 mb-4" key={objetivo.idObjetivo}>
+          <div
+            className={`card h-100 border-0 shadow-sm position-relative ${!estaHabilitado ? 'bg-light text-muted' : ''}`}
+            style={{
+              opacity: estaHabilitado ? 1 : 0.6,
+              cursor: estaHabilitado ? 'default' : 'not-allowed'
+            }}
+          >
+            {/* Imagen */}
+            {objetivo.imagen && (
+              <img
+                src={objetivo.imagen}
+                className="card-img-top"
+                alt={objetivo.nombre}
+                style={{ height: '200px', objectFit: 'cover' }}
+              />
+            )}
 
-        {/* Tabla objetivos */}
-        <div className="container mt-4">
-          <div className="row">
-            {objetivos.map((objetivo) => {
-              const estaHabilitado = objetivosHabilitados.includes(objetivo.idObjetivo);
-              return (
-                <div className="col-md-4 mb-4" key={objetivo.idObjetivo}>
-                  <div className={`card h-100 shadow-sm ${!estaHabilitado ? 'disabled' : ''}`} style={!estaHabilitado ? { opacity: 0.5 } : {}}>
-                    {objetivo.imagen && (
-                      <img
-                        src={objetivo.imagen}
-                        className="card-img-top"
-                        alt={objetivo.nombre}
-                        style={{ opacity: !estaHabilitado ? 0.5 : 1 }}
-                      />
-                    )}
-                    <div className="card-body d-flex flex-column justify-content-between">
-                      <div>
-                        <h5 className="card-title">{objetivo.nombre}</h5>
-                        <p className="card-text">{objetivo.descripcion}</p>
-                        <p className="card-text"><strong>Coste:</strong> {objetivo.monedas} PigCoins</p>
-                      </div>
-                      <button
-                        className="btn btn-success mt-3"
-                        onClick={() => handleReclamarObjetivo(objetivo.idObjetivo)}
-                        disabled={!estaHabilitado}
-                      >
-                        Reclamar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {/* Cuerpo */}
+            <div className="card-body d-flex flex-column justify-content-between">
+              <div>
+                <h5 className="card-title fw-semibold">{objetivo.nombre}</h5>
+                <p className="card-text small">{objetivo.descripcion}</p>
+                <p className="card-text">
+                  <strong>Coste:</strong> {objetivo.monedas} <span className="text-warning">PigCoins</span>
+                </p>
+              </div>
+              <button
+                className={`btn mt-3 w-100 fw-bold ${estaHabilitado ? 'btn-success' : 'btn-outline-secondary'}`}
+                onClick={() => handleReclamarObjetivo(objetivo.idObjetivo)}
+                disabled={!estaHabilitado}
+              >
+                {estaHabilitado ? '🎁 Reclamar' : '🔒 Bloqueado'}
+              </button>
+            </div>
+
+            {/* Estado */}
+            <span
+              className={`badge position-absolute top-0 end-0 m-2 ${estaHabilitado ? 'bg-success' : 'bg-secondary'}`}
+            >
+              {estaHabilitado ? 'Disponible' : 'Bloqueado'}
+            </span>
           </div>
         </div>
+      );
+    })}
+  </div>
+</div>
+
       </div>
       {/* Footer */}
       <footer className="footer">
