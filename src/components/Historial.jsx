@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 export default function Historial() {
     const [usuario, setUsuario] = useState('');
     const [monedas, setMonedas] = useState(0);
+    const [rol, setRol] = useState(1);
     const [productosCanjeados, setProductosCanjeados] = useState([]);
     const navigate = useNavigate();
 
@@ -25,6 +26,7 @@ export default function Historial() {
             });
             setUsuario(response.data.nombre);
             setMonedas(response.data.moneda);
+            setRol(Number(response.data.rol.id_Rol));
         } catch (error) {
             console.error('Error al obtener usuario:', error);
         }
@@ -33,7 +35,7 @@ export default function Historial() {
     const fetchProductosCanjeados = async () => {
         const token = localStorage.getItem('token');
         const id = localStorage.getItem('id');
-    
+
         try {
             const response = await axios.get(`http://localhost:8080/transacciones/canjeados/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -43,61 +45,70 @@ export default function Historial() {
             console.error('Error al obtener productos canjeados:', error.response?.data || error.message);
         }
     };
-    
 
+    const irPerfil = () => navigate('/perfil');
 
     return (
         <>
-            {/* NAV */}
-            <nav className="navbar navbar-expand-lg custom-navbar">
-                <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">
-                        <img src={pigCoinLogo} width="50" height="50" alt="PigCoin Logo" /> {usuario} ({monedas} PigCoins)
-                    </Link>
+            <div className="contenido">
+                {/* NAV */}
+                <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+                    <Container fluid>
+                        <Navbar.Brand className="d-flex align-items-center gap-2">
+                            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+                            <strong>{monedas} PigCoins</strong>
+                        </Navbar.Brand>
+                        <Navbar.Toggle aria-controls="navbar-nav" />
+                        <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+                            <Nav>
+                                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                                    Inicio
+                                </Link>
+                            </Nav>
+                            <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                                <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
+                                <Button className="btn-perfil" onClick={irPerfil}>
+                                    Mi Perfil
+                                </Button>
+                            </div>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
 
-                    <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                        <div className="navbar-nav">
-                            <Link className="nav-link" to="/indexUsuario">Inicio</Link>
+                <Container className="mt-5 mb-5">
+                    <h2 className="bienvenida">Historial de Productos Canjeados</h2>
+                    {productosCanjeados.length === 0 ? (
+                        <p className="text-center">No has canjeado ningún producto todavía.</p>
+                    ) : (
+                        <div className="tabla-gestion">
+                            <div className="table-responsive">
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Descripción</th>
+                                            <th>Tipo</th>
+                                            <th>Coste</th>
+                                            <th>Imagen</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {productosCanjeados.map((producto, idx) => (
+                                            <tr key={idx}>
+                                                <td>{producto.nombre}</td>
+                                                <td>{producto.descripcion}</td>
+                                                <td>{producto.tipo}</td>
+                                                <td>{producto.coste} monedas</td>
+                                                <td>{producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </nav>
-
-
-            <Container className="mt-5 mb-5">
-                <h2 className="mb-4 text-center">Historial de Productos Canjeados</h2>
-                <div className="text-center mb-4">
-                    <Button variant="outline-secondary" onClick={() => navigate(-1)}>Volver al perfil</Button>
-                </div>
-
-                {productosCanjeados.length === 0 ? (
-                    <p className="text-center">No has canjeado ningún producto todavía.</p>
-                ) : (
-                    <Row xs={1} md={2} lg={3} className="g-4">
-                        {productosCanjeados.map((producto, idx) => (
-                            <Col key={idx}>
-                                <Card className="h-100 shadow-sm">
-                                    <Card.Img
-                                        variant="top"
-                                        src={producto.imagen}
-                                        alt={producto.nombre}
-                                        style={{ height: '200px', objectFit: 'cover' }}
-                                    />
-                                    <Card.Body>
-                                        <Card.Title>{producto.nombre}</Card.Title>
-                                        <Card.Text>{producto.descripcion}</Card.Text>
-                                        <ul className="list-unstyled mb-0">
-                                            <li><strong>Tipo:</strong> {producto.tipo}</li>
-                                            <li><strong>Coste:</strong> {producto.coste} monedas</li>
-                                        </ul>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                )}
-            </Container>
-
+                    )}
+                </Container>
+            </div>
 
             {/* Footer */}
             <footer className="footer mt-5">

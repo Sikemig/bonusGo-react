@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
 import '../assets/styles/perfil.css';
-
-import { Navbar, Container, Button } from 'react-bootstrap';
+import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 
 export default function Perfil() {
   const { user, logout, token } = useAuth();
@@ -13,6 +12,7 @@ export default function Perfil() {
   const [formData, setFormData] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [rol, setRol] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function Perfil() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDetalleUsuario(response.data);
+      setRol(Number(response.data.rol.id_Rol));
       setFormData({
         nombre: response.data.nombre,
         apellido: response.data.apellido,
@@ -68,24 +69,34 @@ export default function Perfil() {
     navigate('/historial');
   };
 
+
   if (!detalleUsuario) return <p className="text-center mt-5">Cargando perfil...</p>;
 
   return (
     <>
       <div className="contenido">
-        {/* Navbar */}
+        {/* NAV */}
         <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
           <Container fluid>
             <Navbar.Brand className="d-flex align-items-center gap-2">
               <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-              <strong>BonusGo</strong>
+              <strong>{detalleUsuario.moneda} PigCoins</strong>
             </Navbar.Brand>
-            <div className="d-flex align-items-center gap-3">
-              <span className="text-white fw-semibold">Hola, {detalleUsuario.nombre}</span>
-              <Button className="btn-perfil" onClick={handleLogout}>Cerrar sesión</Button>
-            </div>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+              <Nav>
+                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                  Inicio
+                </Link>
+              </Nav>
+              <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                <span className="text-white fw-semibold m-0">¡Hola, {detalleUsuario.nombre || 'Usuario'}!</span>
+                <Button className="btn-perfil" onClick={handleLogout}>Cerrar sesión</Button>
+              </div>
+            </Navbar.Collapse>
           </Container>
         </Navbar>
+
 
         <div className="perfil-container">
           {/* Título */}
@@ -113,7 +124,7 @@ export default function Perfil() {
           {/* Botón Editar */}
           <div className="d-flex justify-content-center gap-3 my-4">
             <Button variant="primary" onClick={() => setShowModal(true)}>Editar Perfil</Button>
-            <Button variant="secondary" onClick={() => navigate('/historial')}>Consultar historial de productos</Button>
+            <Button variant="secondary" onClick={historial}>Consultar historial de productos</Button>
           </div>
         </div>
 
@@ -153,7 +164,7 @@ export default function Perfil() {
           </div>
         )}
       </div>
-      
+
       {/* Footer */}
       <footer className="footer">
         <h4>📬 BonusGo - 2025</h4>
