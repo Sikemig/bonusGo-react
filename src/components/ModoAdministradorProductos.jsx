@@ -29,13 +29,6 @@ export default function ModoAdministradorProductos() {
     fetchProductos();
   }, []);
 
-  const irPerfil = () => navigate('/perfil');
-  const handleGestionUsuarios = () => navigate('/ModoAdministradorUsuarios');
-  const handleGestionObjetivos = () => navigate('/ModoAdministradorObjetivos');
-  const handleGestion = () => navigate('/modoAdministrador');
-  const handleUsuarioObjetivos = () => navigate('/objetivos');
-  const handleUsuarioProducto = () => navigate('/producto');
-
   const fetchProductos = async () => {
     const token = localStorage.getItem('token');
     try {
@@ -138,6 +131,15 @@ export default function ModoAdministradorProductos() {
     setOrdenAsc(true);
   };
 
+
+  const irPerfil = () => navigate('/perfil');
+  const handleGestionUsuarios = () => navigate('/ModoAdministradorUsuarios');
+  const handleGestionObjetivos = () => navigate('/ModoAdministradorObjetivos');
+  const handleGestion = () => navigate('/modoAdministrador');
+  const handleUsuarioObjetivos = () => navigate('/objetivos');
+  const handleUsuarioProducto = () => navigate('/producto');
+
+
   return (
     <>
       {/* Navbar */}
@@ -159,6 +161,7 @@ export default function ModoAdministradorProductos() {
                 <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
               </NavDropdown>
+              <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
             </Nav>
             <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
               <span className="text-white fw-semibold">¡Hola, {usuario || 'Usuario'}!</span>

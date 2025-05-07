@@ -184,6 +184,7 @@ export default function ModoAdministradorUsuarios() {
                 <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
               </NavDropdown>
+              <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
             </Nav>
             <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
               <span className="text-white fw-semibold">¡Hola, {adminNombre || 'Usuario'}!</span>
