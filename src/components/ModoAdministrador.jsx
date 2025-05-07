@@ -77,15 +77,15 @@ export default function ModoAdministrador() {
         </Navbar>
 
         {/* Contenido principal */}
-        <div className="container-fluid align-items-center px-4">
-          <div className="bienvenida text-center">
+        <div className="container-fluid align-items-center">
+          <div className="bienvenida text-center mb-5">
             <h1 className="fw-bold">
               🛠 Estás en el <span className="texto-admin">Modo Administrador</span>
             </h1>
             <p className="descripcion-admin">Desde aquí puedes gestionar usuarios, objetivos y recompensas del sistema BonusGo.</p>
           </div>
 
-          <div className="row w-100 justify-content-center g-4">
+          <div className="row w-100 justify-content-center g-4 mt-5">
             <div className="col-md-3 section-appear">
               <div className="card-admin bg-light-blue p-4 h-100" onClick={handleGestionObjetivos} role="button">
                 <h4 className="card-title fw-bold">🎯 Gestionar Objetivos</h4>
