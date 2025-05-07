@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
 
@@ -7,6 +8,7 @@ export default function ModoUsuarioObjetivos() {
   const [objetivos, setObjetivos] = useState([]);
   const [usuario, setUsuario] = useState('');
   const [monedas, setMonedas] = useState(0);
+  const [rol, setRol] = useState(1);
   const [objetivosHabilitados, setObjetivosHabilitados] = useState([]);
   const navigate = useNavigate();
 
@@ -38,6 +40,7 @@ export default function ModoUsuarioObjetivos() {
       });
       setUsuario(response.data.nombre);
       setMonedas(response.data.moneda);
+      setRol(Number(response.data.rol.id_Rol));
     } catch (error) {
       console.error('Error al obtener usuario:', error);
     }
@@ -48,7 +51,7 @@ export default function ModoUsuarioObjetivos() {
     const idUsuario = localStorage.getItem('id');
     try {
       const habilitados = [];
-  
+
       for (const obj of listaObjetivos) {
         const response = await axios.get(`http://localhost:8080/ganancia/habilitados?idObjetivo=${obj.idObjetivo}`, {
           headers: { Authorization: `Bearer ${token}` }
@@ -57,7 +60,7 @@ export default function ModoUsuarioObjetivos() {
           habilitados.push(obj.idObjetivo);
         }
       }
-  
+
       setObjetivosHabilitados(habilitados);
     } catch (error) {
       console.error('Error al verificar objetivos habilitados para usuario:', error);
@@ -80,74 +83,111 @@ export default function ModoUsuarioObjetivos() {
     }
   };
 
-  const irPerfil = () => {
-    navigate('/perfil');
-  };
+  const irPerfil = () => navigate('/perfil');
+  const handleGestionUsuarios = () => navigate('/ModoAdministradorUsuarios');
+  const handleGestionProductos = () => navigate('/modoAdministradorProductos');
+  const handleGestion = () => navigate('/modoAdministrador');
+  const handleUsuarioObjetivos = () => navigate('/objetivos');
+  const handleUsuarioProducto = () => navigate('/productos');
+  const handleGestionObjetivos = () => navigate('/ModoAdministradorObjetivos');
 
   return (
     <>
-      {/* NAV */}
-      <nav className="navbar navbar-expand-lg custom-navbar">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
-            <img src={pigCoinLogo} width="50" height="50" alt="PigCoin Logo" /> {usuario} ({monedas} PigCoins)
-          </Link>
+      <div className="contenido">
+        <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+          <Container fluid>
+            <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+              <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+              <strong>{monedas} PigCoins</strong>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+              <Nav>
+                {rol === 2 && (
+                  <>
+                    <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
+                    <NavDropdown title="Gestión" id="gestion-dropdown">
+                      <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
+                      <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
+                      <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
+                    </NavDropdown>
+                  </>
+                )}
+                <NavDropdown title="Ver" id="ver-dropdown">
+                  <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
+                </NavDropdown>
+                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                  Inicio
+                </Link>
+              </Nav>
+              <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
+                <Button className="btn-perfil" onClick={irPerfil}>
+                  Mi Perfil
+                </Button>
+              </div>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
 
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
-              <Link className="nav-link" to="/indexUsuario">Inicio</Link>
-            </div>
+        {/* Título */}
+        <div className="bienvenida">OBJETIVOS DISPONIBLES</div>
 
-            <div className="d-flex ms-auto">
-              <button className="icon-btn" title="Perfil" onClick={irPerfil}>👤</button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Título */}
-      <div className="bienvenida">OBJETIVOS DISPONIBLES</div>
-
-      {/* Tabla objetivos */}
-      <div className="container mt-4">
-        <div className="row">
-          {objetivos.map((objetivo) => {
-            const estaHabilitado = objetivosHabilitados.includes(objetivo.idObjetivo);
-            return (
-              <div className="col-md-4 mb-4" key={objetivo.idObjetivo}>
-                <div className={`card h-100 shadow-sm ${!estaHabilitado ? 'disabled' : ''}`} style={!estaHabilitado? { opacity: 0.5 } : {}}>
-                  {objetivo.imagen && (
-                    <img
-                      src={objetivo.imagen}
-                      className="card-img-top"
-                      alt={objetivo.nombre}
-                      style={{ opacity: !estaHabilitado ? 0.5 : 1 }}
-                    />
-                  )}
-                  <div className="card-body d-flex flex-column justify-content-between">
-                    <div>
-                      <h5 className="card-title">{objetivo.nombre}</h5>
-                      <p className="card-text">{objetivo.descripcion}</p>
-                      <p className="card-text"><strong>Coste:</strong> {objetivo.monedas} PigCoins</p>
+        {/* Tabla objetivos */}
+        <div className="container mt-4">
+          <div className="row">
+            {objetivos.map((objetivo) => {
+              const estaHabilitado = objetivosHabilitados.includes(objetivo.idObjetivo);
+              return (
+                <div className="col-md-4 mb-4" key={objetivo.idObjetivo}>
+                  <div className={`card h-100 shadow-sm ${!estaHabilitado ? 'disabled' : ''}`} style={!estaHabilitado ? { opacity: 0.5 } : {}}>
+                    {objetivo.imagen && (
+                      <img
+                        src={objetivo.imagen}
+                        className="card-img-top"
+                        alt={objetivo.nombre}
+                        style={{ opacity: !estaHabilitado ? 0.5 : 1 }}
+                      />
+                    )}
+                    <div className="card-body d-flex flex-column justify-content-between">
+                      <div>
+                        <h5 className="card-title">{objetivo.nombre}</h5>
+                        <p className="card-text">{objetivo.descripcion}</p>
+                        <p className="card-text"><strong>Coste:</strong> {objetivo.monedas} PigCoins</p>
+                      </div>
+                      <button
+                        className="btn btn-success mt-3"
+                        onClick={() => handleReclamarObjetivo(objetivo.idObjetivo)}
+                        disabled={!estaHabilitado}
+                      >
+                        Reclamar
+                      </button>
                     </div>
-                    <button
-                      className="btn btn-success mt-3"
-                      onClick={() => handleReclamarObjetivo(objetivo.idObjetivo)}
-                      disabled={!estaHabilitado}
-                    >
-                      Reclamar
-                    </button>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
-
       {/* Footer */}
       <footer className="footer">
-        <p>📬 Info contacto empresa y administradores</p>
+        <h4>📬 BonusGo - 2025</h4>
+        <div className="d-flex justify-content-center gap-4">
+          <span>
+            Manual de usuario -{" "}
+            <a
+              href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+              target="_blank"
+            >
+              Notion BonusGo
+            </a>
+          </span>
+          <span>
+            Contacto - <a href="mailto:BonusGo@BonusGo.es">BonusGo@BonusGo.es</a>
+          </span>
+        </div>
       </footer>
     </>
   );
