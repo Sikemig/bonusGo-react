@@ -40,8 +40,8 @@ export default function ModoAdministrador() {
   const handleGestionObjetivos = () => navigate('/modoAdministradorObjetivos');
   const handleGestionProductos = () => navigate('/modoAdministradorProductos');
   const handleGestionUsuarios = () => navigate('/modoAdministradorUsuarios');
-  const handleUsuarioObjetivos = () => navigate('/modoUsuarioObjetivos');
-  const handleUsuarioProducto = () => navigate('/modoUsuarioProducto');
+  const handleUsuarioObjetivos = () => navigate('/objetivos');
+  const handleUsuarioProducto = () => navigate('/productos');
 
   return (
     <>

@@ -39,8 +39,8 @@ export default function ModoAdministradorObjetivos() {
   const handleGestionUsuarios = () => navigate('/ModoAdministradorUsuarios');
   const handleGestionProductos = () => navigate('/modoAdministradorProductos');
   const handleGestion = () => navigate('/modoAdministrador');
-  const handleUsuarioObjetivos = () => navigate('/modoUsuarioObjetivos');
-  const handleUsuarioProducto = () => navigate('/modoUsuarioProducto');
+  const handleUsuarioObjetivos = () => navigate('/objetivos');
+  const handleUsuarioProducto = () => navigate('/productos');
 
   const fetchUsuario = async () => {
     const token = localStorage.getItem('token');

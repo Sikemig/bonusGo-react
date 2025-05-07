@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
+import '../assets/styles/IndexUsuarios.css';
 
 export default function IndexUsuarioAdministrador() {
     const [usuario, setUsuario] = useState('');
@@ -40,71 +42,47 @@ export default function IndexUsuarioAdministrador() {
         });
     }, []);
 
-    const irModoAdministrador = () => {
-        navigate('/modoAdministrador');
-    };
-
-    const irPerfil = () => {
-        navigate('/perfil');
-    };
-
-    const handleConsultarObjetivos = () => {
-        navigate('/objetivos')
-    };
-
-    const handleConsultarProductos = () => {
-        navigate('/productos')
-    };
+    const irPerfil = () => navigate('/perfil');
+    const handleGestionUsuarios = () => navigate('/ModoAdministradorUsuarios');
+    const handleGestionProductos = () => navigate('/modoAdministradorProductos');
+    const handleGestion = () => navigate('/modoAdministrador');
+    const handleUsuarioObjetivos = () => navigate('/objetivos');
+    const handleUsuarioProducto = () => navigate('/productos');
+    const handleGestionObjetivos = () => navigate('/ModoAdministradorObjetivos');
 
     return (
         <>
-            <div>
-                {/* Barra de navegación */}
-                <nav className="navbar navbar-expand-lg custom-navbar">
-                    <div className="container-fluid">
-                        <Link className="navbar-brand" to="/">
-                            <img src={pigCoinLogo} width="50" height="50" alt="BonusGo Logo" className="d-inline-block align-top" /> {monedas} PigCoins
-                        </Link>
-
-                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
-
-                        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                            <div className="navbar-nav">
-                                <a className="nav-link" href="/registro" target="_blank">REGISTRO</a>
-                                <a className="nav-link" href="/login" target="_blank">LOGIN</a>
-                                <a className="nav-link" href="/index_usuario" target="_blank">RODAJE</a>
-                                <a className="nav-link" href="/index_usuario_administrador" target="_blank">usuario</a>
-                                <a className="nav-link" href="/index_modo_administrador" target="_blank">admin</a>
-                                <a className="nav-link" href="/mi_perfil" target="_blank">MI PERFIL</a>
-                                <a className="nav-link" href="/modo_administrador_objetivo" target="_blank">objetivo</a>
-                                <a className="nav-link" href="/modo_administrador_productos" target="_blank">productos</a>
-                                <a className="nav-link" href="/catalogo_objetivos" target="_blank">CATÁLOGO</a>
-                                <a className="nav-link" href="/historico_transacciones" target="_blank">HISTÓRICO</a>
-                                <a className="nav-link" href="/productos" target="_blank">PRODUCTOS</a>
-                                <a className="nav-link" href="/carrito" target="_blank">CARRITO</a>
-                                <button className="nav-link admin" onClick={irModoAdministrador}>
-                                    MODO ADMINISTRADOR
-                                </button>
+            <div className="contenido">
+                {/* Navbar */}
+                <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+                    <Container fluid>
+                        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+                            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+                            <strong>{monedas} PigCoins</strong>
+                        </Navbar.Brand>
+                        <Navbar.Toggle aria-controls="navbar-nav" />
+                        <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+                            <Nav>
+                                <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
+                                <NavDropdown title="Gestión" id="gestion-dropdown">
+                                    <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
+                                </NavDropdown>
+                                <NavDropdown title="Ver" id="ver-dropdown">
+                                    <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
+                                </NavDropdown>
+                            </Nav>
+                            <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                                <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
+                                <Button className="btn-perfil" onClick={irPerfil}>
+                                    Mi Perfil
+                                </Button>
                             </div>
-
-                            {/* Barra de búsqueda */}
-                            <form className="form-inline mt-3 ms-3">
-                                <input className="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar" />
-                                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-                            </form>
-
-                            {/* Saludo y botón de perfil */}
-                            <span class="saludo">Hola, {usuario}</span>
-                            <div className="d-flex flex-column align-items-center justify-content-center">
-
-                                <button className="icon-btn" title="Perfil" id="profileBtn" onClick={irPerfil}>👤</button>
-                                <div className="text-white">Perfil</div>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
 
                 {/* Bienvenida */}
                 <div className="contenedor_principal">
@@ -115,45 +93,48 @@ export default function IndexUsuarioAdministrador() {
                     <div className="container my-4">
                         <div className="row g-4">
                             {/* Sección de objetivos */}
-                            <div className="col-12 col-md-6">
+                            <div className="col-12 col-md-6 h-100">
                                 <div className="info-section section-appear">
-                                    <button className="btn-info" onClick={handleConsultarObjetivos}></button>
-                                    <h3>🎯 CONSULTAR OBJETIVOS</h3>
-                                    <p>¡Échale un vistazo a los objetivos disponibles en tu empresa y reclama tus PigCoins!</p>
+                                    <button type="button" className="btn-info" onClick={handleUsuarioObjetivos}>
+                                        <h4 className="card-title fw-bold">🎯 CONSULTAR OBJETIVOS</h4>
+                                        <p className="card-text fs-5">¡Échale un vistazo a los objetivos disponibles en tu empresa y reclama tus PigCoins!</p>
+                                    </button>
                                 </div>
                             </div>
 
                             {/* Sección de productos */}
                             <div className="col-12 col-md-6">
                                 <div className="info-section section-appear">
-                                    <button className="btn-info" onClick={handleConsultarProductos}></button>
-                                    <h3>📦 CONSULTAR PRODUCTOS</h3>
-                                    <p>¡Empieza a canjear todos esos PigCoins que has ido almacenando al cumplir objetivos!</p>
+                                    <button type="button" className="btn-info" onClick={handleUsuarioProducto}>
+                                        <h4 className="card-title fw-bold">📦 CONSULTAR PRODUCTOS</h4>
+                                        <p className="card-text fs-5">¡Empieza a canjear todos esos PigCoins que has ido almacenando al cumplir objetivos!</p>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                {/* Footer */}
-                <footer className="footer">
-                    <h4>📬 BonusGo - 2025</h4>
-                    <div className="d-flex justify-content-center gap-4">
-                        <span>
-                            Manual de usuario -{" "}
-                            <a
-                                href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
-                                target="_blank"
-                            >
-                                Notion BonusGo
-                            </a>
-                        </span>
-                        <span>
-                            Contacto - <a href="mailto:BonusGo@BonusGo.es">BonusGo@BonusGo.es</a>
-                        </span>
-                    </div>
-                </footer>
             </div>
+
+
+            {/* Footer */}
+            <footer className="footer">
+                <h4>📬 BonusGo - 2025</h4>
+                <div className="d-flex justify-content-center gap-4">
+                    <span>
+                        Manual de usuario -{" "}
+                        <a
+                            href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+                            target="_blank"
+                        >
+                            Notion BonusGo
+                        </a>
+                    </span>
+                    <span>
+                        Contacto - <a href="mailto:BonusGo@BonusGo.es">BonusGo@BonusGo.es</a>
+                    </span>
+                </div>
+            </footer>
         </>
     );
 }

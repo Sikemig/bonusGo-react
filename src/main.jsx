@@ -12,7 +12,7 @@ import './assets/styles/bonusGo.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AuthProvider> {/* <-- ENVOLVEMOS */}
+    <AuthProvider> {}
       <App />
     </AuthProvider>
   </React.StrictMode>
