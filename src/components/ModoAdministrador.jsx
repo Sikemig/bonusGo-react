@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
-import '../assets/styles/modoadministrador.css';
+import '../assets/styles/ModoAdministrador.css';
 import { Navbar, Nav, NavDropdown, Container, Form, Button, Row, Col } from 'react-bootstrap';
 
 export default function ModoAdministrador() {
@@ -22,7 +22,7 @@ export default function ModoAdministrador() {
       return;
     }
 
-    axios.get(`http://localhost:8080/usuario/${userId}`, {
+    axios.get(`http://backend_bonusgo:8080/usuario/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(response => {

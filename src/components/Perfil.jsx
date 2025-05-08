@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import pigCoinLogo from "../assets/images/PigCoin_2.jpg";
-import '../assets/styles/perfil.css';
+import '../assets/styles/Perfil.css';
 import { Modal, Button, Form, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 
 export default function Perfil() {
@@ -23,7 +23,7 @@ export default function Perfil() {
 
   const fetchDetalleUsuario = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/usuario/${user.id}`, {
+      const response = await axios.get(`http://backend_bonusgo:8080/usuario/${user.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDetalleUsuario(response.data);
@@ -52,7 +52,7 @@ export default function Perfil() {
   const handleGuardar = async () => {
     try {
       await axios.put(
-        `http://localhost:8080/usuario/actualizarPerfil/${user.id}`,
+        `http://backend_bonusgo:8080/usuario/actualizarPerfil/${user.id}`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

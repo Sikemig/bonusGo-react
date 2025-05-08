@@ -21,7 +21,7 @@ export default function IndexUsuarioAdministrador() {
             return;
         }
 
-        axios.get(`http://localhost:8080/usuario/${userId}`, {
+        axios.get(`http://backend_bonusgo:8080/usuario/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {

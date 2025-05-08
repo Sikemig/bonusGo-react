@@ -21,13 +21,13 @@ export default function ModoUsuarioProductos() {
     const idUsuario = localStorage.getItem('id');
 
     try {
-      const responseProductos = await axios.get(`http://localhost:8080/producto/getall`, {
+      const responseProductos = await axios.get(`http://backend_bonusgo:8080/producto/getall`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const productos = responseProductos.data;
 
       // Verificar los productos canjeados del backend
-      const responseCanjeados = await axios.get(`http://localhost:8080/transacciones/canjeados/${idUsuario}`, {
+      const responseCanjeados = await axios.get(`http://backend_bonusgo:8080/transacciones/canjeados/${idUsuario}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -55,7 +55,7 @@ export default function ModoUsuarioProductos() {
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     try {
-      const response = await axios.get(`http://localhost:8080/usuario/${id}`, {
+      const response = await axios.get(`http://backend_bonusgo:8080/usuario/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsuario(response.data.nombre);
@@ -70,7 +70,7 @@ export default function ModoUsuarioProductos() {
     const token = localStorage.getItem('token');
     const idUsuario = localStorage.getItem('id');
     try {
-      await axios.post(`http://localhost:8080/transacciones/canjear?idProducto=${id_Producto}&idUsuario=${idUsuario}`, {}, {
+      await axios.post(`http://backend_bonusgo:8080/transacciones/canjear?idProducto=${id_Producto}&idUsuario=${idUsuario}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('¡Producto canjeado con éxito!');
