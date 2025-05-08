@@ -222,22 +222,23 @@ export default function ModoAdministradorObjetivos() {
   const handleGestion = () => navigate('/modoAdministrador');
   const handleUsuarioObjetivos = () => navigate('/objetivos');
   const handleUsuarioProducto = () => navigate('/productos');
-  const handleIndexAdmin= () => navigate('/indexUsuarioAdministrador');
+  const handleIndexAdmin = () => navigate('/indexUsuarioAdministrador');
 
   return (
     <>
+      <div className="contenido">
         {/* Navbar */}
         <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
           <Container fluid>
-          <Navbar.Brand onClick={handleIndexAdmin} className="d-flex align-items-center gap-2 clickable">
+            <Navbar.Brand onClick={handleIndexAdmin} className="d-flex align-items-center gap-2 clickable">
               <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
               <strong>BonusGo</strong>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav" className="justify-content-between">
               <Nav>
-              <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
-              <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
+                <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
+                <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
                 <NavDropdown title="Gestión" id="gestion-dropdown">
                   <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
@@ -245,7 +246,7 @@ export default function ModoAdministradorObjetivos() {
                 <NavDropdown title="Ver" id="ver-dropdown">
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
-                </NavDropdown>   
+                </NavDropdown>
               </Nav>
               <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
                 <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
@@ -257,7 +258,7 @@ export default function ModoAdministradorObjetivos() {
           </Container>
         </Navbar>
         <div className="admin-usuarios-wrapper">
-          <div className="bienvenida mt-5">MODO ADMINISTRADOR - OBJETIVOS</div>
+          <div className="bienvenida">MODO ADMINISTRADOR - OBJETIVOS</div>
 
           {/* Controles */}
           <div className="busqueda-filtros">
@@ -317,9 +318,9 @@ export default function ModoAdministradorObjetivos() {
                       <td>{objetivo.monedas}</td>
                       <td>{objetivo.imagen && <img src={objetivo.imagen} alt={objetivo.nombre} width="80" />}</td>
                       <td>
-                        <button className="btn btn-primary" onClick={() => { handlePrepararEdicion(objetivo); setShowModal(true) }}>Editar</button>
-                        <button className="btn btn-danger ms-2" onClick={() => handlePrepararBorrado(objetivo)}>Borrar</button>
-                        <button className="btn btn-warning ms-2" onClick={() => abrirModalHabilitar(objetivo)}>Habilitar</button>
+                        <button className="btn btn-primary btn-sm" onClick={() => { handlePrepararEdicion(objetivo); setShowModal(true) }}>Editar</button>
+                        <button className="btn btn-danger btn-sm ms-2" onClick={() => handlePrepararBorrado(objetivo)}>Borrar</button>
+                        <button className="btn btn-warning btn-sm ms-2" onClick={() => abrirModalHabilitar(objetivo)}>Habilitar</button>
                       </td>
                     </tr>
                   ))}
@@ -328,99 +329,99 @@ export default function ModoAdministradorObjetivos() {
             </div>
           </div>
         </div>
-     
 
-      <Modal show={showModal} onHide={() => { setShowModal(false); resetearFormulario(); }}>
-        <Form onSubmit={handleAnadirEditar}>
+
+        <Modal show={showModal} onHide={() => { setShowModal(false); resetearFormulario(); }}>
+          <Form onSubmit={handleAnadirEditar}>
+            <Modal.Header closeButton>
+              <Modal.Title>{editarId ? 'Editar Objetivo' : 'Añadir Objetivo'}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Nombre</Form.Label>
+                <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Descripción</Form.Label>
+                <Form.Control as="textarea" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Categoría</Form.Label>
+                <Form.Select value={categoria} onChange={e => setCategoria(e.target.value)} required>
+                  <option value="">Seleccione una</option>
+                  <option value="ORO">ORO</option>
+                  <option value="PLATA">PLATA</option>
+                  <option value="BRONCE">BRONCE</option>
+                </Form.Select>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Recompensa</Form.Label>
+                <Form.Control type="number" value={monedasObjetivo} onChange={e => setMonedasObjetivo(parseInt(e.target.value))} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Imagen (URL)</Form.Label>
+                <Form.Control type="text" value={imagen} onChange={e => setImagen(e.target.value)} />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+              <Button type="submit" variant="success">Guardar</Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+
+        <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{editarId ? 'Editar Objetivo' : 'Añadir Objetivo'}</Modal.Title>
+            <Modal.Title>Confirmar Borrado</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group className="mb-3">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Descripción</Form.Label>
-              <Form.Control as="textarea" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Categoría</Form.Label>
-              <Form.Select value={categoria} onChange={e => setCategoria(e.target.value)} required>
-                <option value="">Seleccione una</option>
-                <option value="ORO">ORO</option>
-                <option value="PLATA">PLATA</option>
-                <option value="BRONCE">BRONCE</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Recompensa</Form.Label>
-              <Form.Control type="number" value={monedasObjetivo} onChange={e => setMonedasObjetivo(parseInt(e.target.value))} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Imagen (URL)</Form.Label>
-              <Form.Control type="text" value={imagen} onChange={e => setImagen(e.target.value)} />
-            </Form.Group>
+            ¿Estás seguro de que deseas borrar el objetivo "<strong>{objetivoAEliminar?.nombre}</strong>"?
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-            <Button type="submit" variant="success">Guardar</Button>
+            <Button variant="danger" onClick={handleConfirmarBorrado}>Borrar</Button>
+            <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
           </Modal.Footer>
-        </Form>
-      </Modal>
-
-      <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmar Borrado</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          ¿Estás seguro de que deseas borrar el objetivo "<strong>{objetivoAEliminar?.nombre}</strong>"?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleConfirmarBorrado}>Borrar</Button>
-          <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
-        </Modal.Footer>
-      </Modal>
+        </Modal>
 
 
-      <Modal show={showModalHabilitar} onHide={() => { setShowModalHabilitar(false); setMensajeError(''); }} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Habilitar/Deshabilitar el objetivo "{objetivoActivo?.nombre}" para usuarios</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input
-            type="text"
-            className="form-control mb-3"
-            placeholder="Buscar usuario por nombre o correo"
-            value={busquedaUsuario}
-            onChange={handleBusquedaUsuarios}
-          />
+        <Modal show={showModalHabilitar} onHide={() => { setShowModalHabilitar(false); setMensajeError(''); }} size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>Habilitar/Deshabilitar el objetivo "{objetivoActivo?.nombre}" para usuarios</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              type="text"
+              className="form-control mb-3"
+              placeholder="Buscar usuario por nombre o correo"
+              value={busquedaUsuario}
+              onChange={handleBusquedaUsuarios}
+            />
 
-          {mensajeError && (
-            <div className="alert alert-danger" role="alert">
-              {mensajeError}
-            </div>
-          )}
+            {mensajeError && (
+              <div className="alert alert-danger" role="alert">
+                {mensajeError}
+              </div>
+            )}
 
-          {usuariosFiltrados.map(usuario => (
-            <div key={usuario.id_Usuario} className="form-check form-switch border p-2 mb-2 d-flex justify-content-between align-items-center">
-              <label className="form-check-label mb-0">
-                <strong>{usuario.nombre}</strong> - {usuario.correo}
-              </label>
-              <input
-                type="checkbox"
-                className="form-check-input"
-                checked={usuariosHabilitados.includes(usuario.id_Usuario)}
-                onChange={(e) => toggleHabilitacionObjetivo(usuario.id_Usuario, e.target.checked)}
-              />
-            </div>
-          ))}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModalHabilitar(false)}>Cerrar</Button>
-        </Modal.Footer>
-      </Modal>
-
+            {usuariosFiltrados.map(usuario => (
+              <div key={usuario.id_Usuario} className="form-check form-switch border p-2 mb-2 d-flex justify-content-between align-items-center">
+                <label className="form-check-label mb-0">
+                  <strong>{usuario.nombre}</strong> - {usuario.correo}
+                </label>
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  checked={usuariosHabilitados.includes(usuario.id_Usuario)}
+                  onChange={(e) => toggleHabilitacionObjetivo(usuario.id_Usuario, e.target.checked)}
+                />
+              </div>
+            ))}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModalHabilitar(false)}>Cerrar</Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
 
 
       {/* Footer */}

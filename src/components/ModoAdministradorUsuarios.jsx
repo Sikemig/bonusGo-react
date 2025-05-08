@@ -162,162 +162,164 @@ export default function ModoAdministradorUsuarios() {
   const handleGestion = () => navigate('/modoAdministrador');
   const handleUsuarioObjetivos = () => navigate('/objetivos');
   const handleUsuarioProducto = () => navigate('/productos');
-  const handleIndexAdmin= () => navigate('/indexUsuarioAdministrador');
+  const handleIndexAdmin = () => navigate('/indexUsuarioAdministrador');
 
   return (
     <>
-      {/* Navbar */}
-      <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="shadow-sm">
-        <Container fluid>
-          <Navbar.Brand onClick={handleIndexAdmin} className="d-flex align-items-center gap-2 clickable">
-            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-            <strong>BonusGo</strong>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbar-nav" />
-          <Navbar.Collapse id="navbar-nav" className="justify-content-between">
-            <Nav>
-            <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
-             <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
-              <NavDropdown title="Gestión" id="gestion-dropdown">
-                <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
-                <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown title="Ver" id="ver-dropdown">
-                <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
-                <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-            <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
-              <span className="text-white fw-semibold">¡Hola, {adminNombre || 'Usuario'}!</span>
-              <Button className="btn-perfil" onClick={irPerfil}>
-                Mi Perfil
-              </Button>
-            </div>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <div className="contenido">
+        {/* Navbar */}
+        <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+          <Container fluid>
+            <Navbar.Brand onClick={handleIndexAdmin} className="d-flex align-items-center gap-2 clickable">
+              <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+              <strong>BonusGo</strong>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+              <Nav>
+                <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
+                <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
+                <NavDropdown title="Gestión" id="gestion-dropdown">
+                  <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown title="Ver" id="ver-dropdown">
+                  <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+              <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                <span className="text-white fw-semibold">¡Hola, {adminNombre || 'Usuario'}!</span>
+                <Button className="btn-perfil" onClick={irPerfil}>
+                  Mi Perfil
+                </Button>
+              </div>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
 
-      {/* Contenido principal */}
-      <div className="admin-usuarios-wrapper">
-        <div className="bienvenida">MODO ADMINISTRADOR - USUARIOS</div>
+        {/* Contenido principal */}
+        <div className="admin-usuarios-wrapper">
+          <div className="bienvenida">MODO ADMINISTRADOR - USUARIOS</div>
 
-        <div className="busqueda-filtros">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Buscar usuario por correo"
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-          <select
-            className="form-select"
-            value={filtroRol}
-            onChange={(e) => setFiltroRol(e.target.value)}
-          >
-            <option value="">Todos los roles</option>
-            <option value="ROLE_USER">Usuarios</option>
-            <option value="ROLE_ADMIN">Administradores</option>
-          </select>
-        </div>
+          <div className="busqueda-filtros">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Buscar usuario por correo"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+            />
+            <select
+              className="form-select"
+              value={filtroRol}
+              onChange={(e) => setFiltroRol(e.target.value)}
+            >
+              <option value="">Todos los roles</option>
+              <option value="ROLE_USER">Usuarios</option>
+              <option value="ROLE_ADMIN">Administradores</option>
+            </select>
+          </div>
 
-        <div className="tabla-gestion">
-          <div className="table-responsive">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Correo</th>
-                  <th>Teléfono</th>
-                  <th>Rol</th>
-                  <th>Monedas</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {usuariosFiltrados.length > 0 ? (
-                  usuariosFiltrados.map(usuario => (
-                    <tr key={usuario.id_Usuario}>
-                      <td>{usuario.nombre}</td>
-                      <td>{usuario.apellido}</td>
-                      <td>{usuario.correo}</td>
-                      <td>{usuario.telefono}</td>
-                      <td>{obtenerNombreRol(usuario.rol)}</td>
-                      <td>{usuario.moneda}</td>
-                      <td>
-                        <button className="btn btn-primary btn-sm me-2" onClick={() => prepararEdicion(usuario)}>Editar</button>
-                        <button className="btn btn-danger btn-sm" onClick={() => prepararBorrado(usuario)}>Eliminar</button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
+          <div className="tabla-gestion">
+            <div className="table-responsive">
+              <table className="table table-hover">
+                <thead>
                   <tr>
-                    <td colSpan="7" className="text-center text-muted">No se encontraron usuarios.</td>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Rol</th>
+                    <th>Monedas</th>
+                    <th>Acciones</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {usuariosFiltrados.length > 0 ? (
+                    usuariosFiltrados.map(usuario => (
+                      <tr key={usuario.id_Usuario}>
+                        <td>{usuario.nombre}</td>
+                        <td>{usuario.apellido}</td>
+                        <td>{usuario.correo}</td>
+                        <td>{usuario.telefono}</td>
+                        <td>{obtenerNombreRol(usuario.rol)}</td>
+                        <td>{usuario.moneda}</td>
+                        <td>
+                          <button className="btn btn-primary btn-sm me-2" onClick={() => prepararEdicion(usuario)}>Editar</button>
+                          <button className="btn btn-danger btn-sm" onClick={() => prepararBorrado(usuario)}>Eliminar</button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="7" className="text-center text-muted">No se encontraron usuarios.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-      {/* Modal edición */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Form onSubmit={handleGuardar}>
+        {/* Modal edición */}
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+          <Form onSubmit={handleGuardar}>
+            <Modal.Header closeButton>
+              <Modal.Title>Editar Usuario</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Nombre</Form.Label>
+                <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Apellido</Form.Label>
+                <Form.Control type="text" value={apellido} onChange={e => setApellido(e.target.value)} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Correo</Form.Label>
+                <Form.Control type="email" value={correo} onChange={e => setCorreo(e.target.value)} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Teléfono</Form.Label>
+                <Form.Control type="text" value={telefono} onChange={e => setTelefono(e.target.value)} />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Monedas</Form.Label>
+                <Form.Control type="number" value={monedas} onChange={e => setMonedas(parseInt(e.target.value))} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Rol</Form.Label>
+                <Form.Select value={rolSeleccionado} onChange={e => setRolSeleccionado(e.target.value)} required>
+                  {roles.map(rol => (
+                    <option key={rol.id_Rol} value={rol.id_Rol.toString()}>
+                      {obtenerNombreRol(rol)}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+              <Button type="submit" variant="success">Guardar</Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+
+        {/* Modal Confirmación */}
+        <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)} centered>
           <Modal.Header closeButton>
-            <Modal.Title>Editar Usuario</Modal.Title>
+            <Modal.Title>Confirmar eliminación</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group className="mb-3">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Apellido</Form.Label>
-              <Form.Control type="text" value={apellido} onChange={e => setApellido(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Correo</Form.Label>
-              <Form.Control type="email" value={correo} onChange={e => setCorreo(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Teléfono</Form.Label>
-              <Form.Control type="text" value={telefono} onChange={e => setTelefono(e.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Monedas</Form.Label>
-              <Form.Control type="number" value={monedas} onChange={e => setMonedas(parseInt(e.target.value))} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Rol</Form.Label>
-              <Form.Select value={rolSeleccionado} onChange={e => setRolSeleccionado(e.target.value)} required>
-                {roles.map(rol => (
-                  <option key={rol.id_Rol} value={rol.id_Rol.toString()}>
-                    {obtenerNombreRol(rol)}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+            ¿Estás seguro de que deseas eliminar a <strong>{usuarioAEliminar?.nombre}</strong>?
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-            <Button type="submit" variant="success">Guardar</Button>
+            <Button variant="danger" onClick={confirmarBorrado}>Eliminar</Button>
+            <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
           </Modal.Footer>
-        </Form>
-      </Modal>
-
-      {/* Modal Confirmación */}
-      <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmar eliminación</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          ¿Estás seguro de que deseas eliminar a <strong>{usuarioAEliminar?.nombre}</strong>?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={confirmarBorrado}>Eliminar</Button>
-          <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
-        </Modal.Footer>
-      </Modal>
+        </Modal>
+      </div>
 
       {/* Footer */}
       <footer className="footer mt-5">

@@ -138,162 +138,165 @@ export default function ModoAdministradorProductos() {
   const handleGestion = () => navigate('/modoAdministrador');
   const handleUsuarioObjetivos = () => navigate('/objetivos');
   const handleUsuarioProducto = () => navigate('/producto');
-  const handleIndexAdmin= () => navigate('/indexUsuarioAdministrador');
+  const handleIndexAdmin = () => navigate('/indexUsuarioAdministrador');
 
 
   return (
     <>
-      {/* Navbar */}
-      <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
-        <Container fluid>
-        <Navbar.Brand onClick={handleIndexAdmin} className="d-flex align-items-center gap-2 clickable">
-            <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
-            <strong>BonusGo</strong>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbar-nav" />
-          <Navbar.Collapse id="navbar-nav" className="justify-content-between">
-            <Nav>
-            <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
-            <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
-              <NavDropdown title="Gestión" id="gestion-dropdown">
-                <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
-                <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown title="Ver" id="ver-dropdown">
-                <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
-                <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-            <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
-              <span className="text-white fw-semibold">¡Hola, {usuario || 'Usuario'}!</span>
-              <Button className="btn-perfil" onClick={irPerfil}>
-                Mi Perfil
-              </Button>
-            </div>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <div className="contenido">
+        {/* Navbar */}
+        <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
+          <Container fluid>
+            <Navbar.Brand onClick={handleIndexAdmin} className="d-flex align-items-center gap-2 clickable">
+              <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
+              <strong>BonusGo</strong>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav" className="justify-content-between">
+              <Nav>
+                <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
+                <Link className="nav-link" to="/indexUsuarioAdministrador">Inicio</Link>
+                <NavDropdown title="Gestión" id="gestion-dropdown">
+                  <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown title="Ver" id="ver-dropdown">
+                  <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+              <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
+                <span className="text-white fw-semibold">¡Hola, {usuario || 'Usuario'}!</span>
+                <Button className="btn-perfil" onClick={irPerfil}>
+                  Mi Perfil
+                </Button>
+              </div>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
 
-      <div className="admin-usuarios-wrapper">
-        <div className="bienvenida mt-5">MODO ADMINISTRADOR - PRODUCTOS</div>
+        <div className="admin-usuarios-wrapper">
+          <div className="bienvenida">MODO ADMINISTRADOR - PRODUCTOS</div>
 
-        <div className="busqueda-filtros">
-          <input
-            type="text"
-            className="form-control me-2"
-            placeholder="Buscar por nombre"
-            value={busquedaNombre}
-            onChange={(e) => setBusquedaNombre(e.target.value)}
-            style={{ maxWidth: '200px' }}
-          />
-          <select
-            className="form-select me-2"
-            value={filtroTipo}
-            onChange={(e) => setFiltroTipo(e.target.value)}
-            style={{ maxWidth: '200px' }}
-          >
-            <option value="">Todos los tipos</option>
-            <option value="EXPERIENCIA">EXPERIENCIA</option>
-            <option value="ROPA">ROPA</option>
-            <option value="TARJETAS">TARJETAS</option>
-          </select>
-          <button
-            className="btn btn-outline-primary me-2"
-            onClick={() => setOrdenAsc(!ordenAsc)}
-          >
-            Ordenar por coste {ordenAsc ? '⬆️' : '⬇️'}
-          </button>
-          <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
-            Restablecer filtros
-          </button>
-          <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
-            Añadir Producto
-          </button>
-        </div>
+          <div className="busqueda-filtros">
+            <input
+              type="text"
+              className="form-control me-2"
+              placeholder="Buscar por nombre"
+              value={busquedaNombre}
+              onChange={(e) => setBusquedaNombre(e.target.value)}
+              style={{ maxWidth: '200px' }}
+            />
+            <select
+              className="form-select me-2"
+              value={filtroTipo}
+              onChange={(e) => setFiltroTipo(e.target.value)}
+              style={{ maxWidth: '200px' }}
+            >
+              <option value="">Todos los tipos</option>
+              <option value="EXPERIENCIA">EXPERIENCIA</option>
+              <option value="ROPA">ROPA</option>
+              <option value="TARJETAS">TARJETAS</option>
+            </select>
+            <button
+              className="btn btn-outline-primary me-2"
+              onClick={() => setOrdenAsc(!ordenAsc)}
+            >
+              Ordenar por coste {ordenAsc ? '⬆️' : '⬇️'}
+            </button>
+            <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
+              Restablecer filtros
+            </button>
+            <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
+              Añadir Producto
+            </button>
+          </div>
 
-        <div className="tabla-gestion">
-          <div className="table-responsive">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Tipo</th>
-                  <th>Coste</th>
-                  <th>Imagen</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {productosFiltrados.map(producto => (
-                  <tr key={producto.id_Producto}>
-                    <td>{producto.nombre}</td>
-                    <td>{producto.descripcion}</td>
-                    <td>{producto.tipo}</td>
-                    <td>{producto.coste}</td>
-                    <td>{producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}</td>
-                    <td>
-                      <button className="btn btn-primary me-2" onClick={() => handlePrepararEdicion(producto)}>Editar</button>
-                      <button className="btn btn-danger" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
-                    </td>
+          <div className="tabla-gestion">
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Tipo</th>
+                    <th>Coste</th>
+                    <th>Imagen</th>
+                    <th>Acciones</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {productosFiltrados.map(producto => (
+                    <tr key={producto.id_Producto}>
+                      <td>{producto.nombre}</td>
+                      <td>{producto.descripcion}</td>
+                      <td>{producto.tipo}</td>
+                      <td>{producto.coste}</td>
+                      <td>{producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}</td>
+                      <td>
+                        <button className="btn btn-primary btn-sm me-2" onClick={() => handlePrepararEdicion(producto)}>Editar</button>
+                        <button className="btn btn-danger btn-sm" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Form onSubmit={handleAnadirEditar}>
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Form onSubmit={handleAnadirEditar}>
+            <Modal.Header closeButton>
+              <Modal.Title>{editarId ? 'Editar Producto' : 'Añadir Producto'}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Nombre</Form.Label>
+                <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Descripción</Form.Label>
+                <Form.Control as="textarea" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Tipo</Form.Label>
+                <Form.Select value={tipo} onChange={e => setTipo(e.target.value)} required>
+                  <option value="EXPERIENCIA">EXPERIENCIA</option>
+                  <option value="ROPA">ROPA</option>
+                  <option value="TARJETAS">TARJETAS</option>
+                </Form.Select>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Coste</Form.Label>
+                <Form.Control type="number" value={coste} onChange={e => setCoste(parseInt(e.target.value))} required />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Imagen (URL)</Form.Label>
+                <Form.Control type="text" value={imagen} onChange={e => setImagen(e.target.value)} />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+              <Button type="submit" variant="success">Guardar</Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+
+        <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{editarId ? 'Editar Producto' : 'Añadir Producto'}</Modal.Title>
+            <Modal.Title>Confirmar Borrado</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group className="mb-3">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Descripción</Form.Label>
-              <Form.Control as="textarea" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Tipo</Form.Label>
-              <Form.Select value={tipo} onChange={e => setTipo(e.target.value)} required>
-                <option value="EXPERIENCIA">EXPERIENCIA</option>
-                <option value="ROPA">ROPA</option>
-                <option value="TARJETAS">TARJETAS</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Coste</Form.Label>
-              <Form.Control type="number" value={coste} onChange={e => setCoste(parseInt(e.target.value))} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Imagen (URL)</Form.Label>
-              <Form.Control type="text" value={imagen} onChange={e => setImagen(e.target.value)} />
-            </Form.Group>
+            ¿Estás seguro de que deseas borrar el producto "<strong>{productoAEliminar?.nombre}</strong>"?
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-            <Button type="submit" variant="success">Guardar</Button>
+            <Button variant="danger" onClick={handleConfirmarBorrado}>Borrar</Button>
+            <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
           </Modal.Footer>
-        </Form>
-      </Modal>
+        </Modal>
+      </div>
 
-      <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmar Borrado</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          ¿Estás seguro de que deseas borrar el producto "<strong>{productoAEliminar?.nombre}</strong>"?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleConfirmarBorrado}>Borrar</Button>
-          <Button variant="secondary" onClick={() => setMostrarConfirmacion(false)}>Cancelar</Button>
-        </Modal.Footer>
-      </Modal>
 
       {/* Footer */}
       <footer className="footer mt-5">
