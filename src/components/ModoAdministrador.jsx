@@ -59,6 +59,9 @@ export default function ModoAdministrador() {
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav" className="justify-content-between">
               <Nav>
+              <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                  Inicio
+                </Link>
                 <NavDropdown title="Gestión" id="gestion-dropdown">
                   <NavDropdown.Item onClick={handleGestionObjetivos}>Gestionar Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
@@ -68,9 +71,6 @@ export default function ModoAdministrador() {
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
                 </NavDropdown>
-                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
-                  Inicio
-                </Link>
               </Nav>
               <div className="d-flex align-items-center gap-3 flex-wrap perfil-navbar">
                 <span className="text-white fw-semibold m-0">¡Hola, {usuario || 'Usuario'}!</span>
@@ -112,6 +112,7 @@ export default function ModoAdministrador() {
             </div>
           </div>
         </div>
+        
       </div>
       {/* Footer */}
       <footer className="footer">

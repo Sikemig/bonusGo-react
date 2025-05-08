@@ -260,52 +260,58 @@ export default function ModoAdministradorUsuarios() {
               </table>
             </div>
           </div>
+          
         </div>
-        {/* Modal edición */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-          <Form onSubmit={handleGuardar}>
-            <Modal.Header closeButton>
-              <Modal.Title>Editar Usuario</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form.Group className="mb-3">
-                <Form.Label>Nombre</Form.Label>
-                <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Apellido</Form.Label>
-                <Form.Control type="text" value={apellido} onChange={e => setApellido(e.target.value)} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Correo</Form.Label>
-                <Form.Control type="email" value={correo} onChange={e => setCorreo(e.target.value)} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Teléfono</Form.Label>
-                <Form.Control type="text" value={telefono} onChange={e => setTelefono(e.target.value)} />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Monedas</Form.Label>
-                <Form.Control type="number" value={monedas} onChange={e => setMonedas(parseInt(e.target.value))} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Rol</Form.Label>
-                <Form.Select value={rolSeleccionado} onChange={e => setRolSeleccionado(e.target.value)} required>
-                  {roles.map(rol => (
-                    <option key={rol.id_Rol} value={rol.id_Rol.toString()}>
-                      {obtenerNombreRol(rol)}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-              <Button type="submit" variant="success">Guardar</Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
-
+        {showModal && (
+        <div className="modal show fade d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <form onSubmit={handleGuardar}>
+                <div className="modal-header">
+                  <h5 className="modal-title">Editar Usuario</h5>
+                  <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                </div>
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label className="form-label">Nombre</label>
+                    <input type="text" className="form-control" value={nombre} onChange={e => setNombre(e.target.value)} required />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Apellido</label>
+                    <input type="text" className="form-control" value={apellido} onChange={e => setApellido(e.target.value)} required />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Correo</label>
+                    <input type="email" className="form-control" value={correo} onChange={e => setCorreo(e.target.value)} required />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Teléfono</label>
+                    <input type="text" className="form-control" value={telefono} onChange={e => setTelefono(e.target.value)} />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Monedas</label>
+                    <input type="number" className="form-control" value={monedas} onChange={e => setMonedas(parseInt(e.target.value))} required />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Rol</label>
+                    <select className="form-select" value={rolSeleccionado} onChange={e => setRolSeleccionado(e.target.value)} required>
+                      {roles.map(rol => (
+                        <option key={rol.id_Rol} value={rol.id_Rol.toString()}>
+                          {obtenerNombreRol(rol)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</button>
+                  <button type="submit" className="btn btn-success">Guardar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
         {/* Modal Confirmación */}
         <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)} centered>
           <Modal.Header closeButton>

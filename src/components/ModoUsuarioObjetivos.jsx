@@ -106,7 +106,10 @@ export default function ModoUsuarioObjetivos() {
               <Nav>
                 {rol === 2 && (
                   <>
-                    <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
+                    <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
+                    <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                                      Inicio
+                                    </Link>
                     <NavDropdown title="Gestión" id="gestion-dropdown">
                       <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
                       <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
@@ -114,9 +117,6 @@ export default function ModoUsuarioObjetivos() {
                     </NavDropdown>
                   </>
                 )}
-                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
-                 Inicio
-                </Link>
                 <NavDropdown title="Ver" id="ver-dropdown">
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
@@ -133,7 +133,7 @@ export default function ModoUsuarioObjetivos() {
         </Navbar>
 
       {/* Título */}
-      <div className="bienvenida text-center fw-bold fs-3 my-4">OBJETIVOS DISPONIBLES</div>
+      <div className="bienvenida">OBJETIVOS DISPONIBLES</div>
 {/* Tarjetas */}
 <div className="container">
   <div className="row">

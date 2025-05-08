@@ -107,7 +107,10 @@ export default function ModoUsuarioProductos() {
               <Nav>
                 {rol === 2 && (
                   <>
-                    <Nav.Link className="btn-perfil" onClick={handleGestion}>Menú Administrador</Nav.Link>
+                    <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
+                    <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                  Inicio
+                </Link>
                     <NavDropdown title="Gestión" id="gestion-dropdown">
                       <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
                       <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
@@ -115,9 +118,6 @@ export default function ModoUsuarioProductos() {
                     </NavDropdown>
                   </>
                 )}
-                 <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
-                  Inicio
-                </Link>
                 <NavDropdown title="Ver" id="ver-dropdown">
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>

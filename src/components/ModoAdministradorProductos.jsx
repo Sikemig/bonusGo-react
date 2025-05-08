@@ -174,115 +174,172 @@ export default function ModoAdministradorProductos() {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-
-        <div className="admin-usuarios-wrapper">
+       
+  <div className="admin-usuarios-wrapper">
           <div className="bienvenida">MODO ADMINISTRADOR - PRODUCTOS</div>
+   <div className="busqueda-filtros d-flex flex-wrap align-items-center gap-3 mb-4">
+  
+  {/* Campo de búsqueda */}
+  <div style={{ maxWidth: '200px' }}>
+    <label htmlFor="buscarNombre" className="visually-hidden">Buscar por nombre</label>
+    <input
+      id="buscarNombre"
+      type="text"
+      className="form-control"
+      placeholder="🔍 Buscar por nombre"
+      value={busquedaNombre}
+      onChange={(e) => setBusquedaNombre(e.target.value)}
+      aria-label="Buscar por nombre"
+    />
+  </div>
 
-          <div className="busqueda-filtros">
-            <input
-              type="text"
-              className="form-control me-2"
-              placeholder="Buscar por nombre"
-              value={busquedaNombre}
-              onChange={(e) => setBusquedaNombre(e.target.value)}
-              style={{ maxWidth: '200px' }}
-            />
-            <select
-              className="form-select me-2"
-              value={filtroTipo}
-              onChange={(e) => setFiltroTipo(e.target.value)}
-              style={{ maxWidth: '200px' }}
-            >
-              <option value="">Todos los tipos</option>
-              <option value="EXPERIENCIA">EXPERIENCIA</option>
-              <option value="ROPA">ROPA</option>
-              <option value="TARJETAS">TARJETAS</option>
-            </select>
-            <button
-              className="btn btn-outline-primary me-2"
-              onClick={() => setOrdenAsc(!ordenAsc)}
-            >
-              Ordenar por coste {ordenAsc ? '⬆️' : '⬇️'}
-            </button>
-            <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
-              Restablecer filtros
-            </button>
-            <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
-              Añadir Producto
-            </button>
+      {/* Filtro por tipo */}
+      <div style={{ maxWidth: '200px' }}>
+        <label htmlFor="filtroTipo" className="visually-hidden">Tipo</label>
+        <select
+          id="filtroTipo"
+          className="form-select"
+          value={filtroTipo}
+          onChange={(e) => setFiltroTipo(e.target.value)}
+          aria-label="Filtrar por tipo"
+        >
+          <option value="">🗂️ Tipo</option>
+          <option value="EXPERIENCIA">🎯 EXPERIENCIA</option>
+          <option value="ROPA">👕 ROPA</option>
+          <option value="TARJETAS">💳 TARJETAS</option>
+        </select>
+      </div>
+
+      {/* Botón de orden */}
+      <button
+        type="button"
+        className={`btn ${ordenAsc ? 'btn-primary' : 'btn-secondary'}`}
+        onClick={() => setOrdenAsc(!ordenAsc)}
+        aria-label="Ordenar por coste"
+      >
+        Ordenar por coste {ordenAsc ? '⬆️' : '⬇️'}
+      </button>
+      {/* Botón de reset */}
+      <button
+        type="button"
+        className="btn btn-dark"
+        onClick={resetearFiltros}
+        aria-label="Restablecer filtros"
+      >
+        ♻️ Restablecer filtros
+      </button>
+
+      {/* Botón para añadir producto */}
+      <button
+        type="button"
+        className="btn btn-success"
+        onClick={() => {
+          resetearFormulario();
+          setShowModal(true);
+        }}
+        aria-label="Añadir nuevo producto"
+      >
+        ➕ Añadir Producto
+      </button>
+    </div>
+
+  <div className="tabla-gestion">
+    <div className="table-responsive">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Coste</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {productosFiltrados.map((producto) => (
+            <tr key={producto.id_Producto}>
+              <td>{producto.nombre}</td>
+              <td>{producto.descripcion}</td>
+              <td>{producto.tipo}</td>
+              <td>{producto.coste}</td>
+              <td>
+                {producto.imagen && (
+                  <img
+                    src={producto.imagen}
+                    alt={producto.nombre}
+                    width="80"
+                    className="rounded shadow-sm"
+                  />
+                )}
+              </td>
+              <td>
+                <button
+                  className="btn btn-primary btn-sm me-2"
+                  onClick={() => handlePrepararEdicion(producto)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handlePrepararBorrado(producto)}
+                >
+                  Borrar
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{showModal && (
+  <div className="modal show fade d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+    <div className="modal-dialog">
+      <div className="modal-content">
+        <form onSubmit={handleAnadirEditar}>
+          <div className="modal-header">
+            <h5 className="modal-title">{editarId ? 'Editar Producto' : 'Añadir Producto'}</h5>
+            <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
           </div>
-
-          <div className="tabla-gestion">
-            <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Tipo</th>
-                    <th>Coste</th>
-                    <th>Imagen</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {productosFiltrados.map(producto => (
-                    <tr key={producto.id_Producto}>
-                      <td>{producto.nombre}</td>
-                      <td>{producto.descripcion}</td>
-                      <td>{producto.tipo}</td>
-                      <td>{producto.coste}</td>
-                      <td>{producto.imagen && <img src={producto.imagen} alt={producto.nombre} width="80" />}</td>
-                      <td>
-                        <button className="btn btn-primary btn-sm me-2" onClick={() => handlePrepararEdicion(producto)}>Editar</button>
-                        <button className="btn btn-danger btn-sm" onClick={() => handlePrepararBorrado(producto)}>Borrar</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <div className="modal-body">
+            <div className="mb-3">
+              <label className="form-label">Nombre</label>
+              <input type="text" className="form-control" value={nombre} onChange={e => setNombre(e.target.value)} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Descripción</label>
+              <textarea className="form-control" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Tipo</label>
+              <select className="form-select" value={tipo} onChange={e => setTipo(e.target.value)} required>
+                <option value="EXPERIENCIA">EXPERIENCIA</option>
+                <option value="ROPA">ROPA</option>
+                <option value="TARJETAS">TARJETAS</option>
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Coste</label>
+              <input type="number" className="form-control" value={coste} onChange={e => setCoste(parseInt(e.target.value))} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Imagen (URL)</label>
+              <input type="text" className="form-control" value={imagen} onChange={e => setImagen(e.target.value)} />
             </div>
           </div>
-        </div>
-
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
-          <Form onSubmit={handleAnadirEditar}>
-            <Modal.Header closeButton>
-              <Modal.Title>{editarId ? 'Editar Producto' : 'Añadir Producto'}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form.Group className="mb-3">
-                <Form.Label>Nombre</Form.Label>
-                <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Descripción</Form.Label>
-                <Form.Control as="textarea" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Tipo</Form.Label>
-                <Form.Select value={tipo} onChange={e => setTipo(e.target.value)} required>
-                  <option value="EXPERIENCIA">EXPERIENCIA</option>
-                  <option value="ROPA">ROPA</option>
-                  <option value="TARJETAS">TARJETAS</option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Coste</Form.Label>
-                <Form.Control type="number" value={coste} onChange={e => setCoste(parseInt(e.target.value))} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Imagen (URL)</Form.Label>
-                <Form.Control type="text" value={imagen} onChange={e => setImagen(e.target.value)} />
-              </Form.Group>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-              <Button type="submit" variant="success">Guardar</Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
-
+          <div className="modal-footer">
+            <button type="button" className="btn btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</button>
+            <button type="submit" className="btn btn-success">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
         <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Confirmar Borrado</Modal.Title>

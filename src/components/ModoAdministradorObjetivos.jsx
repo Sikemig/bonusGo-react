@@ -259,42 +259,72 @@ export default function ModoAdministradorObjetivos() {
         </Navbar>
         <div className="admin-usuarios-wrapper">
           <div className="bienvenida">MODO ADMINISTRADOR - OBJETIVOS</div>
-
-          {/* Controles */}
-          <div className="busqueda-filtros">
+          <div className="busqueda-filtros d-flex flex-wrap align-items-center gap-3 mb-4">
+          
+          {/* Campo de búsqueda */}
+          <div style={{ maxWidth: '200px' }}>
+            <label htmlFor="buscarNombre" className="visually-hidden">Buscar por nombre</label>
             <input
+              id="buscarNombre"
               type="text"
-              className="form-control me-2"
-              placeholder="Buscar por nombre"
+              className="form-control"
+              placeholder="🔍 Buscar por nombre"
               value={busquedaNombre}
               onChange={(e) => setBusquedaNombre(e.target.value)}
-              style={{ maxWidth: '200px' }}
+              aria-label="Buscar por nombre"
             />
-            <select
-              className="form-select me-2"
-              value={filtroCategoria}
-              onChange={(e) => setFiltroCategoria(e.target.value)}
-              style={{ maxWidth: '200px' }}
-            >
-              <option value="">Todas las categorías</option>
-              <option value="ORO">ORO</option>
-              <option value="PLATA">PLATA</option>
-              <option value="BRONCE">BRONCE</option>
-            </select>
-            <button
-              className="btn btn-outline-primary me-2"
-              onClick={() => setOrdenAsc(!ordenAsc)}
-            >
-              Ordenar por recompensa {ordenAsc ? '⬆️' : '⬇️'}
-            </button>
-            <button className="btn btn-secondary me-2" onClick={resetearFiltros}>
-              Restablecer filtros
-            </button>
-            <button className="btn btn-success" onClick={() => { resetearFormulario(); setShowModal(true); }}>
-              Añadir Objetivo
-            </button>
           </div>
 
+          {/* Filtro por categoría */}
+          <div style={{ maxWidth: '200px' }}>
+            <label htmlFor="filtroCategoria" className="visually-hidden">Categoría</label>
+            <select
+              id="filtroCategoria"
+              className="form-select"
+              value={filtroCategoria}
+              onChange={(e) => setFiltroCategoria(e.target.value)}
+              aria-label="Filtrar por categoría"
+            >
+              <option value="">🏷️ Categorías</option>
+              <option value="ORO">🥇 ORO</option>
+              <option value="PLATA">🥈 PLATA</option>
+              <option value="BRONCE">🥉 BRONCE</option>
+            </select>
+          </div>
+
+          {/* Botón de orden */}
+          <button
+            type="button"
+            className={`btn ${ordenAsc ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => setOrdenAsc(!ordenAsc)}
+            aria-label="Ordenar por recompensa"
+          >
+            Ordenar por recompensa {ordenAsc ? '⬆️' : '⬇️'}
+          </button>
+
+          {/* Botón de reset */}
+          <button
+            type="button"
+            className="btn btn-dark"
+            onClick={resetearFiltros}
+            aria-label="Restablecer filtros"
+          >
+            ♻️ Restablecer filtros
+          </button>
+
+          {/* Botón para añadir objetivo */}
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => {
+              resetearFormulario();
+              setShowModal(true);
+            }}
+            aria-label="Añadir nuevo objetivo"
+          >
+            ➕ Añadir Objetivo
+          </button>
+        </div>
 
           <div className="tabla-gestion">
             <div className="table-responsive">
@@ -331,44 +361,59 @@ export default function ModoAdministradorObjetivos() {
         </div>
 
 
-        <Modal show={showModal} onHide={() => { setShowModal(false); resetearFormulario(); }}>
-          <Form onSubmit={handleAnadirEditar}>
-            <Modal.Header closeButton>
-              <Modal.Title>{editarId ? 'Editar Objetivo' : 'Añadir Objetivo'}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form.Group className="mb-3">
-                <Form.Label>Nombre</Form.Label>
-                <Form.Control type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Descripción</Form.Label>
-                <Form.Control as="textarea" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Categoría</Form.Label>
-                <Form.Select value={categoria} onChange={e => setCategoria(e.target.value)} required>
-                  <option value="">Seleccione una</option>
-                  <option value="ORO">ORO</option>
-                  <option value="PLATA">PLATA</option>
-                  <option value="BRONCE">BRONCE</option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Recompensa</Form.Label>
-                <Form.Control type="number" value={monedasObjetivo} onChange={e => setMonedasObjetivo(parseInt(e.target.value))} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Imagen (URL)</Form.Label>
-                <Form.Control type="text" value={imagen} onChange={e => setImagen(e.target.value)} />
-              </Form.Group>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-              <Button type="submit" variant="success">Guardar</Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
+        {showModal && (
+        <div className="modal show fade d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <form onSubmit={handleAnadirEditar}>
+                <div className="modal-header">
+                  <h5 className="modal-title">{editarId ? 'Editar Objetivo' : 'Añadir Objetivo'}</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => {
+                      setShowModal(false);
+                      resetearFormulario();
+                    }}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label className="form-label">Nombre</label>
+                    <input type="text" className="form-control" value={nombre} onChange={e => setNombre(e.target.value)} required />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Descripción</label>
+                    <textarea className="form-control" value={descripcion} onChange={e => setDescripcion(e.target.value)} required />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Categoría</label>
+                    <select className="form-select" value={categoria} onChange={e => setCategoria(e.target.value)} required>
+                      <option value="">Seleccione una</option>
+                      <option value="ORO">ORO</option>
+                      <option value="PLATA">PLATA</option>
+                      <option value="BRONCE">BRONCE</option>
+                    </select>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Recompensa</label>
+                    <input type="number" className="form-control" value={monedasObjetivo} onChange={e => setMonedasObjetivo(parseInt(e.target.value))} required />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Imagen (URL)</label>
+                    <input type="text" className="form-control" value={imagen} onChange={e => setImagen(e.target.value)} />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</button>
+                  <button type="submit" className="btn btn-success">Guardar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+)}
+
 
         <Modal show={mostrarConfirmacion} onHide={() => setMostrarConfirmacion(false)}>
           <Modal.Header closeButton>
