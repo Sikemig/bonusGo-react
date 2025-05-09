@@ -40,7 +40,7 @@ export default function ModoAdministradorObjetivos() {
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     try {
-      const response = await axios.get(`http://backend_bonusgo:8080/usuario/${id}`, {
+      const response = await axios.get(`/usuario/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const user = response.data;
@@ -54,7 +54,7 @@ export default function ModoAdministradorObjetivos() {
   const fetchObjetivos = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://backend_bonusgo:8080/objetivos/getall', {
+      const response = await axios.get('/objetivos/getall', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setObjetivos(response.data);
@@ -67,7 +67,7 @@ export default function ModoAdministradorObjetivos() {
   const fetchUsuarios = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get("http://backend_bonusgo:8080/usuario/getTodos", {
+      const response = await axios.get("/usuario/getTodos", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsuarios(response.data);
@@ -81,7 +81,7 @@ export default function ModoAdministradorObjetivos() {
   const fetchUsuariosHabilitados = async (idObjetivo) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`http://backend_bonusgo:8080/ganancia/habilitados?idObjetivo=${idObjetivo}`, {
+      const response = await axios.get(`/ganancia/habilitados?idObjetivo=${idObjetivo}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsuariosHabilitados(response.data);
@@ -104,11 +104,11 @@ export default function ModoAdministradorObjetivos() {
 
     try {
       if (editarId === null) {
-        await axios.post('http://backend_bonusgo:8080/objetivos/registrar', objetivoData, {
+        await axios.post('/objetivos/registrar', objetivoData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.put(`http://backend_bonusgo:8080/objetivos/actualizar/${editarId}`, objetivoData, {
+        await axios.put(`/objetivos/actualizar/${editarId}`, objetivoData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
@@ -147,7 +147,7 @@ export default function ModoAdministradorObjetivos() {
   const handleConfirmarBorrado = async () => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://backend_bonusgo:8080/objetivos/eliminar/${objetivoAEliminar.idObjetivo}`, {
+      await axios.delete(`/objetivos/eliminar/${objetivoAEliminar.idObjetivo}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchObjetivos();
@@ -187,7 +187,7 @@ export default function ModoAdministradorObjetivos() {
         habilitado: habilitar
       };
 
-      await axios.post(`http://backend_bonusgo:8080/ganancia/habilitar`, body, {
+      await axios.post(`/ganancia/habilitar`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

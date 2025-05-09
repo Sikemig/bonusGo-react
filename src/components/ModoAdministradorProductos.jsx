@@ -32,7 +32,7 @@ export default function ModoAdministradorProductos() {
   const fetchProductos = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://backend_bonusgo:8080/producto/getall', {
+      const response = await axios.get('/producto/getall', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProductos(response.data);
@@ -45,7 +45,7 @@ export default function ModoAdministradorProductos() {
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     try {
-      const response = await axios.get(`http://backend_bonusgo:8080/usuario/${id}`, {
+      const response = await axios.get(`/usuario/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const user = response.data;
@@ -64,11 +64,11 @@ export default function ModoAdministradorProductos() {
 
     try {
       if (editarId === null) {
-        await axios.post('http://backend_bonusgo:8080/producto/registrar', productoData, {
+        await axios.post('/producto/registrar', productoData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.put(`http://backend_bonusgo:8080/producto/actualizar/${editarId}`, productoData, {
+        await axios.put(`/producto/actualizar/${editarId}`, productoData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
@@ -107,7 +107,7 @@ export default function ModoAdministradorProductos() {
   const handleConfirmarBorrado = async () => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://backend_bonusgo:8080/producto/eliminar/${productoAEliminar.id_Producto}`, {
+      await axios.delete(`/producto/eliminar/${productoAEliminar.id_Producto}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchProductos();

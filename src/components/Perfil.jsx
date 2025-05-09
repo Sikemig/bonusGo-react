@@ -23,7 +23,7 @@ export default function Perfil() {
 
   const fetchDetalleUsuario = async () => {
     try {
-      const response = await axios.get(`http://backend_bonusgo:8080/usuario/${user.id}`, {
+      const response = await axios.get(`/usuario/${user.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDetalleUsuario(response.data);
@@ -52,7 +52,7 @@ export default function Perfil() {
   const handleGuardar = async () => {
     try {
       await axios.put(
-        `http://backend_bonusgo:8080/usuario/actualizarPerfil/${user.id}`,
+        `/usuario/actualizarPerfil/${user.id}`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

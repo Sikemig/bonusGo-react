@@ -21,7 +21,7 @@ export default function Historial() {
         const id = localStorage.getItem('id');
 
         try {
-            const response = await axios.get(`http://backend_bonusgo:8080/usuario/${id}`, {
+            const response = await axios.get(`/usuario/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUsuario(response.data.nombre);
@@ -37,7 +37,7 @@ export default function Historial() {
         const id = localStorage.getItem('id');
 
         try {
-            const response = await axios.get(`http://backend_bonusgo:8080/transacciones/canjeados/${id}`, {
+            const response = await axios.get(`/transacciones/canjeados/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setProductosCanjeados(response.data);

@@ -20,7 +20,7 @@ export default function ModoUsuarioObjetivos() {
   const fetchObjetivos = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://backend_bonusgo:8080/objetivos/getall', {
+      const response = await axios.get('/objetivos/getall', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setObjetivos(response.data);
@@ -35,7 +35,7 @@ export default function ModoUsuarioObjetivos() {
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     try {
-      const response = await axios.get(`http://backend_bonusgo:8080/usuario/${id}`, {
+      const response = await axios.get(`/usuario/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsuario(response.data.nombre);
@@ -53,7 +53,7 @@ export default function ModoUsuarioObjetivos() {
       const habilitados = [];
 
       for (const obj of listaObjetivos) {
-        const response = await axios.get(`http://backend_bonusgo:8080/ganancia/habilitados?idObjetivo=${obj.idObjetivo}`, {
+        const response = await axios.get(`/ganancia/habilitados?idObjetivo=${obj.idObjetivo}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.includes(parseInt(idUsuario))) {
@@ -71,7 +71,7 @@ export default function ModoUsuarioObjetivos() {
     const token = localStorage.getItem('token');
     const idUsuario = localStorage.getItem('id');
     try {
-      await axios.post(`http://backend_bonusgo:8080/ganancia/reclamar?idObjetivo=${idObjetivo}&idUsuario=${idUsuario}`, {}, {
+      await axios.post(`/ganancia/reclamar?idObjetivo=${idObjetivo}&idUsuario=${idUsuario}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Objetivo canjeado con éxito!');

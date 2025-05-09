@@ -40,7 +40,7 @@ export default function ModoAdministradorUsuarios() {
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     try {
-      const res = await axios.get(`http://backend_bonusgo:8080/usuario/${id}`, {
+      const res = await axios.get(`/usuario/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAdminNombre(res.data.nombre);
@@ -52,7 +52,7 @@ export default function ModoAdministradorUsuarios() {
   const fetchUsuarios = async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get('http://backend_bonusgo:8080/usuario/getTodos', {
+      const res = await axios.get('/usuario/getTodos', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsuarios(res.data);
@@ -64,7 +64,7 @@ export default function ModoAdministradorUsuarios() {
   const fetchRoles = async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get('http://backend_bonusgo:8080/roles/getAll', {
+      const res = await axios.get('/roles/getAll', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRoles(res.data);
@@ -116,7 +116,7 @@ export default function ModoAdministradorUsuarios() {
     const token = localStorage.getItem('token');
     try {
       await axios.put(
-        `http://backend_bonusgo:8080/usuario/actualizar/${editarId}`,
+        `/usuario/actualizar/${editarId}`,
         {
           nombre,
           apellido,
@@ -145,7 +145,7 @@ export default function ModoAdministradorUsuarios() {
   const confirmarBorrado = async () => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://backend_bonusgo:8080/usuario/eliminar/${usuarioAEliminar.id_Usuario}`, {
+      await axios.delete(`/usuario/eliminar/${usuarioAEliminar.id_Usuario}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchUsuarios();
