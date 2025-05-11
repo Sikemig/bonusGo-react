@@ -476,7 +476,7 @@ export default function ModoAdministradorObjetivos() {
           <span>
             Manual de usuario -{" "}
             <a
-              href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+              href="https://www.notion.so/Manual-de-Uso-de-BonusGo-1e98c574388f80908278ef5ff7136d67"
               target="_blank"
               rel="noopener noreferrer"
             >

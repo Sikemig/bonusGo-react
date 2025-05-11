@@ -79,7 +79,8 @@ export default function ModoUsuarioProductos() {
       fetchProductosCanjeados();
     } catch (error) {
       console.error('Error al canjear producto:', error);
-      alert(error.response.data);
+      const mensaje = error?.response?.data || 'Ha ocurrido un error inesperado al canjear el producto.';
+      alert(mensaje);
     }
   };
 
@@ -90,7 +91,7 @@ export default function ModoUsuarioProductos() {
   const handleUsuarioObjetivos = () => navigate('/objetivos');
   const handleUsuarioProducto = () => navigate('/productos');
   const handleGestionObjetivos = () => navigate('/ModoAdministradorObjetivos');
-  const handleIndexUsuario= () => navigate('/indexUsuario');
+  const handleIndexUsuario = () => navigate('/indexUsuario');
 
 
   return (
@@ -98,7 +99,7 @@ export default function ModoUsuarioProductos() {
       <div className="contenido">
         <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
           <Container fluid>
-          <Navbar.Brand onClick={handleIndexUsuario} className="d-flex align-items-center gap-2 clickable">
+            <Navbar.Brand onClick={handleIndexUsuario} className="d-flex align-items-center gap-2 clickable">
               <img src={pigCoinLogo} width="40" height="40" alt="PigCoin Logo" className="rounded-circle" />
               <strong>{monedas} PigCoins</strong>
             </Navbar.Brand>
@@ -108,9 +109,7 @@ export default function ModoUsuarioProductos() {
                 {rol === 2 && (
                   <>
                     <Nav.Link className="btn-perfil nav-btn-center" onClick={handleGestion}> Menú Administrador</Nav.Link>
-                    <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
-                  Inicio
-                </Link>
+
                     <NavDropdown title="Gestión" id="gestion-dropdown">
                       <NavDropdown.Item onClick={handleGestionUsuarios}>Gestionar Usuarios</NavDropdown.Item>
                       <NavDropdown.Item onClick={handleGestionProductos}>Gestionar Productos</NavDropdown.Item>
@@ -118,6 +117,9 @@ export default function ModoUsuarioProductos() {
                     </NavDropdown>
                   </>
                 )}
+                <Link className="nav-link" to={rol === 2 ? "/indexUsuarioAdministrador" : "/indexUsuario"}>
+                  Inicio
+                </Link>
                 <NavDropdown title="Ver" id="ver-dropdown">
                   <NavDropdown.Item onClick={handleUsuarioObjetivos}>Ver Objetivos</NavDropdown.Item>
                   <NavDropdown.Item onClick={handleUsuarioProducto}>Ver Productos</NavDropdown.Item>
@@ -137,58 +139,58 @@ export default function ModoUsuarioProductos() {
         <div className="bienvenida">PRODUCTOS DISPONIBLES</div>
 
         {/* Tarjetas de productos */}
-      <div className="container mt-4">
-        <div className="row">
-          {productos.map((producto) => (
-            <div className="col-md-4 mb-4" key={producto.id_Producto}>
-              <div
-                className={`card h-100 border-0 shadow-sm position-relative ${producto.canjeado ? 'bg-light text-muted' : ''}`}
-                style={{
-                  opacity: producto.canjeado ? 0.6 : 1,
-                  cursor: producto.canjeado ? 'not-allowed' : 'default'
-                }}
-            >
-          {/* Imagen */}
-          {producto.imagen && (
-            <img
-              src={producto.imagen}
-              className="card-img-top"
-              alt={producto.nombre}
-              style={{ height: '200px', objectFit: 'cover' }}
-            />
-          )}
+        <div className="container mt-4">
+          <div className="row">
+            {productos.map((producto) => (
+              <div className="col-md-4 mb-4" key={producto.id_Producto}>
+                <div
+                  className={`card h-100 border-0 shadow-sm position-relative ${producto.canjeado ? 'bg-light text-muted' : ''}`}
+                  style={{
+                    opacity: producto.canjeado ? 0.6 : 1,
+                    cursor: producto.canjeado ? 'not-allowed' : 'default'
+                  }}
+                >
+                  {/* Imagen */}
+                  {producto.imagen && (
+                    <img
+                      src={producto.imagen}
+                      className="card-img-top"
+                      alt={producto.nombre}
+                      style={{ height: '200px', objectFit: 'cover' }}
+                    />
+                  )}
 
-          {/* Cuerpo */}
-          <div className="card-body d-flex flex-column justify-content-between">
-            <div>
-              <h5 className="card-title fw-semibold">{producto.nombre}</h5>
-              <p className="card-text small">{producto.descripcion}</p>
-              <p className="card-text">
-                <strong>Coste:</strong> {producto.coste} <span className="text-warning">PigCoins</span>
-              </p>
-              <p className="card-text">
-                <strong>Tipo:</strong> {producto.tipo}
-              </p>
-            </div>
-            <button
-              className={`btn mt-3 w-100 fw-bold ${producto.canjeado ? 'btn-outline-secondary' : 'btn-success'}`}
-              onClick={() => handleCanjearProducto(producto.id_Producto)}
-              disabled={producto.canjeado}
-            >
-              {producto.canjeado ? '✅ Canjeado' : '🎁 Canjear'}
-            </button>
+                  {/* Cuerpo */}
+                  <div className="card-body d-flex flex-column justify-content-between">
+                    <div>
+                      <h5 className="card-title fw-semibold">{producto.nombre}</h5>
+                      <p className="card-text small">{producto.descripcion}</p>
+                      <p className="card-text">
+                        <strong>Coste:</strong> {producto.coste} <span className="text-warning">PigCoins</span>
+                      </p>
+                      <p className="card-text">
+                        <strong>Tipo:</strong> {producto.tipo}
+                      </p>
+                    </div>
+                    <button
+                      className={`btn mt-3 w-100 fw-bold ${producto.canjeado ? 'btn-outline-secondary' : 'btn-success'}`}
+                      onClick={() => handleCanjearProducto(producto.id_Producto)}
+                      disabled={producto.canjeado}
+                    >
+                      {producto.canjeado ? '✅ Canjeado' : '🎁 Canjear'}
+                    </button>
+                  </div>
+                  {/* Badge de estado */}
+                  {producto.canjeado && (
+                    <span className="badge position-absolute top-0 end-0 m-2 bg-secondary">
+                      Canjeado
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
-          {/* Badge de estado */}
-          {producto.canjeado && (
-            <span className="badge position-absolute top-0 end-0 m-2 bg-secondary">
-              Canjeado
-            </span>
-          )}
         </div>
-      </div>
-    ))}
-  </div>
-</div>
       </div>
 
       {/* Footer */}
@@ -198,7 +200,7 @@ export default function ModoUsuarioProductos() {
           <span>
             Manual de usuario -{" "}
             <a
-              href="https://www.notion.so/Estructura-de-trabajo-BonusGo-1e98c574388f806ba392fc3fe89f6912"
+              href="https://www.notion.so/Manual-de-Uso-de-BonusGo-1e98c574388f80908278ef5ff7136d67"
               target="_blank"
             >
               Notion BonusGo
